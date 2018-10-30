@@ -3,14 +3,17 @@ const {app, BrowserWindow} = require('electron')
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
   let win
-  
+
+
   function createWindow () {
+    //FUL SCREEN WIDTH AND HEIGHT
+      const {width,height} = require('electron').screen.getPrimaryDisplay().workAreaSize
     // Create the browser window.
     win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width:width,
+        height: height,
         title:'Stockler',
-        icon: './logosvg.png',
+        icon: './logo.png',
         webPreferences: {
             nodeIntegrationInWorker: true
         }

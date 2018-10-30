@@ -1,0 +1,96 @@
+//first things first scrollbar
+/* width */
+::-webkit-scrollbar {
+    width:10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+@import "components/fonts";
+//varuabkes
+$theme-dark-color: #35394a;
+$theme-primary-color:#ffc107;
+$theme-secondary-color:#ff8f00;
+//rewriting styles
+input:focus{
+    box-shadow: 0px 0px 0px transparent!important;
+}
+
+//classes
+.color-theme-dark{
+    color: $theme-dark-color!important;
+}
+.bg-theme{
+    background: $theme-dark-color !important;
+    color: $theme-primary-color!important;
+}
+.bg-theme-rev{
+    color: $theme-dark-color !important;
+    background-color: $theme-primary-color!important;
+}
+div.center{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%,-50%);
+    -webkit-transform:translate(-50%,-50%);
+    -moz-transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%);
+    -o-transform:translate(-50%,-50%);
+}
+.overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 3;
+}
+.accounts-panel{
+    position:fixed;
+    top: 0;bottom: 0;
+    right: 0;left: 0;
+    z-index: 999;
+    background:$theme-dark-color;
+}
+.border{
+    border: 1px solid #ddd;
+}
+button.btn-block{
+    display: block;
+    width: 100%;
+}
+
+//for notification toast
+#toast-container{
+    top: 80% !important;
+}
+.toast{
+    &.danger{
+        background-color: #b71c1c;
+    }
+    &.success{
+        background-color: #1b5e20!important;
+    }
+}
+//table divs
+div.table-div{
+    height: 30vh;
+    overflow-y: scroll;
+    border-bottom: 1px solid #ddd;
+
+}

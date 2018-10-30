@@ -1,0 +1,144 @@
+@import "default";
+#splashScreen{
+    @extend .accounts-panel;
+    z-index: 1999;
+    img.logo{
+        width: 200px;
+        height: auto;
+    }
+    #splashLoader{
+        min-height: 100px;
+        width:100%;
+    }
+}
+#login{
+    display: none;
+    @extend .accounts-panel;
+    .box{
+        width:60%;
+        padding:40px 20px;
+        height:70vh;
+       .brand{
+           text-align:center;
+           img{
+               height:200px;
+               width:200px;
+           }
+           .brand-name{
+               color: $theme-primary-color;
+               padding-left: 26px;
+           }
+       }
+        .form-div{
+            padding-top: 70px;
+            input{
+                padding: 0 10px;
+                color: $theme-secondary-color;
+            }
+        }
+    }
+}
+//manager
+#manager{
+    display: none;
+    @extend .accounts-panel;
+    padding:2rem;
+    .box{
+        width:60%;
+        padding:40px 45px;
+        height: 60vh;
+        div.input-field{
+            i{
+                color: #999999;
+            }
+            input{
+                color: $theme-primary-color;
+            }
+        }
+    }
+    div.img{
+        img{
+            width:300px;
+            height: auto;
+        }
+    }
+}
+#main-navbar{
+    position: fixed;
+    top: 0;
+    height: auto;
+    z-index: 219;
+    background-color:$theme-dark-color;
+    border-bottom: 0.5px solid #ddd;
+    line-height: 50px;
+    .nav-logo{
+        margin: 0;
+        padding: 10px;
+        @extend .font-raleway;
+        img{
+            width:25px;
+            height: auto;
+        }
+    }
+    div.row{
+        margin: 0 !important;
+    }
+    i{
+        display:inline-block!important;
+        &.user-icon{
+            transform: translateY(20%);
+            line-height: 0px;
+            height: 30px;
+        }
+    }
+    ul{
+        height:50px;
+        li{
+            a{
+                padding: 0 26px;
+                position: relative;
+                transition:all 0.6s ease-out;
+                &.active{
+                    background-color:rgba(0,0,0,0.2);
+                    color:$theme-primary-color;
+                    transform-origin: left;
+                    &::after{
+                        transition:all 0.6s ease-out;
+                        transform-origin: left;
+                        position: absolute;
+                        content: '';
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        border: 1.5px solid $theme-primary-color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//the view
+#view{
+    margin-top:100.97px;
+    position: relative;
+    height: calc(100vh - 100.97px);
+    .routePage{
+        overflow-x: hidden;
+        height: 100%;
+        &#users-view{
+            div.row{
+                margin:0;
+                height: 100%;
+                div.tables{
+                    height:100%;
+                    padding: 20px;
+                    overflow-y: scroll;
+                }
+                div.preview{
+                    position: relative;
+                }
+            }
+        }
+    }
+}

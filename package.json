@@ -1,11 +1,11 @@
 {
   "name": "stockler",
-  "version": "1.1",
+  "version": "1.0.1",
   "description": "Stock Management",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"electron ."
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "dexie": "^2.0.4",
+    "electron-regedit": "^1.0.6",
     "zlib": "^1.0.5"
   }
 }

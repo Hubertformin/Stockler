@@ -1,1 +1,119 @@
-<h1>Stockler bithc!!!!!!!!!!!!!!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/materialicons/icone91f.css">
+    <link rel="stylesheet" href="css/waitMe.min.css">
+    <link rel="stylesheet" href="css/jquery.bootgrid.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/angular.js"></script>
+    <script src="js/angular_route.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/waitMe.min.js"></script>
+</head>
+<body ng-app="StocklerApp" ng-controller="mainCtr">
+    <!--Splash screen -->
+    <section id="splashScreen">
+        <div class="center">
+            <img src="images/logo.png" alt="" class="logo">
+            <h3 class="yellow-text font-kaushan">Stockler</h3>
+            <p id="splashLoader"></p>
+        </div>
+    </section>
+    <!--Login screen -->
+    <section id="login">
+        <div class="box center">
+            <form action="#" id="login-form">
+                <div class="row">
+                    <div class="brand col s7">
+                        <img src="images/logo.png" alt="">
+                        <h4 class="brand-name font-kaushan">
+                            Stockler
+                        </h4>
+                    </div>
+                    <div class="form-div col s5">
+                        <div class="input-field">
+                            <input type="text" ng-model="login_name" id="username">
+                            <label for="username">Nom d'utilisateur</label>
+                        </div>
+                        <div class="input-field">
+                            <input type="password" ng-model="login_password" id="password">
+                            <label for="password">Mot de passe</label>
+                        </div>
+                        <button class="btn" type="submit"><i class="material-icons left">person</i>s'identifier</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!--Manager screen -->
+    <section id="manager" class="center-align">
+        <img src="images/logo.png" style="width:50px;height:50px">
+        <h4 class="center-align amber-text font-fira">Créer un compte de gestion <span class="green-text text-darken-2"><i class="material-icons">verified_user</i></span></h4>
+        <div class="box center">
+            <form action="" id="manager-form">
+                <div class="row">
+                    <div class="img col s6">
+                        <img src="images/manager.png" alt="">
+                    </div>
+                    <div class="form-div col s6">
+                        <div class="input-field">
+                            <i class="material-icons prefix">person</i>
+                            <input ng-model="mgr_name" id="name" type="text" class="validate">
+                            <label for="name">Nom</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input ng-model="mgr_email" id="email" type="email" class="validate">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">lock</i>
+                            <input ng-model="mgr_password" id="mgr_password" type="password" class="validate">
+                            <label for="mgr_password">Mot de passe</label>
+                        </div>
+                        <div class="input-field">
+                            <i class="material-icons prefix">lock_outline</i>
+                            <input ng-model="mgr_cpassword" id="mgr_cpassword" type="password" class="validate">
+                            <label for="mgr_cpassword">Confirmez le mot de passe</label>
+                        </div>
+                        <button class="btn" type="submit">Continuer <i class="material-icons right">arrow_forward</i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <!--navbar  -->
+    <nav id="main-navbar">
+        <div class="row head">
+            <div class="col s5">
+                <h5 class="nav-logo yellow-text">
+                    <img src="images/logo.png" alt="">
+                    Stockler
+                </h5>
+            </div>
+            <div class="col s7 right-align">
+                <span class="yellow-text"><i class="user-icon material-icons">account_circle</i> {{currentUser.name}}</span>
+            </div>
+        </div>
+        <ul>
+            <li><a class="active" href="#/!">Accueil</a></li>
+            <li><a href="#!items">Stock</a></li>
+            <li><a href="#!reports">Rapports</a></li>
+            <li><a href="#!users">Personnel</a></li>
+        </ul>
+    </nav>
+
+   <!--route view -->
+    <section id="view" ng-view></section>
+    
+    <script src="js/materialize.js"></script>
+    <script src="js/jquery.bootgrid.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/controller.js"></script>
+    <script src="js/users-controller.js"></script>
+</body>
+</html>
