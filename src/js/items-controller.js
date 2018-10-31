@@ -78,11 +78,16 @@ app.controller('itemsCtr',($scope)=>{
     $scope.deleteBrand = (i)=>{
         if(confirm('Etes vous sur des suprimmer cette Famille?')){
             //transcation
-            $scope.db.transaction('rw',$scope.db.brand,()=>{
+            $scope.db.transaction('rw',$scope.db.brand,$scope.db.items,()=>{
                 $scope.db.brand.delete(i)
+                $scope.db.items.where('brand').equals(i).delete();
                 $scope.db.brand.toArray()
                     .then(data=>{
                         $scope.brand = data;
+                    })
+                $scope.db.items.toArray()
+                    .then(data=>{
+                        $scope.items = data;
                     })
             }).then(()=>{
                 notifications.success("Suprimmer!");

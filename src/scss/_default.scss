@@ -1,7 +1,7 @@
 //first things first scrollbar
 /* width */
 ::-webkit-scrollbar {
-    width:10px;
+    width:8px;
 }
 
 /* Track */
@@ -20,6 +20,7 @@
 }
 
 
+@import "components/fonts";
 @import "components/fonts";
 //varuabkes
 $theme-dark-color: #004d40;
@@ -41,6 +42,9 @@ input:focus{
 .bg-theme-rev{
     color: $theme-dark-color !important;
     background-color: $theme-primary-color!important;
+}
+.border{
+    border: 1px solid #ddd;
 }
 div.center{
     position: absolute;
@@ -74,6 +78,9 @@ button.btn-block{
     display: block;
     width: 100%;
 }
+button.btn-outline{
+    border:1px solid #ddd;
+}
 
 //for notification toast
 #toast-container{
@@ -99,6 +106,14 @@ div.table-div{
 table{
     th.small,td.small{
         width:6%;
+    }
+    tr{
+        &.selected{
+            background-color:#a5d6a7;
+            &:hover{
+                background-color:#a5d6a7!important;
+            }
+        }
     }
     .action{
         cursor: pointer;

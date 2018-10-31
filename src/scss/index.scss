@@ -129,21 +129,91 @@
     .routePage{
         overflow-x: hidden;
         height: 100%;
-        &#users-view{
-            div.row{
-                margin:0;
+        input[type=search].search-input{
+            border:1px solid #ddd;
+            padding:5px;
+            background-image: url("../images/icons/Search_25px.png");
+            background-repeat: no-repeat;
+            background-position: left;
+            background-size: 20px;
+            padding-left: 25px;
+        }
+        div.row {
+            margin: 0;
+            &:not(.inner){
                 height: 100%;
-                div.tables{
-                    height:100%;
-                    padding: 20px;
-                    overflow-y: scroll;
-                }
-                div.preview{
-                    padding-top: 19px;
+            }
+        }
+        &#dashView{
+            .col{
+                height:100%;
+                padding:5px;
+                fieldset{
+                    margin-top:10px;
+                    height: 98%;
                     position: relative;
-                    height: 100%;
-                    overflow: hidden;
                 }
+            }
+            div.checkout{
+                border-bottom: 1px solid #ddd;
+                height: 80%;
+                overflow-y: scroll;
+                padding: 5px;
+                .item{
+                    border:1px solid #ddd;
+                    padding:5px;
+                    margin-bottom:5px;
+                    .close{
+                        cursor: pointer;
+                    }
+                    p{
+                        margin:5px;
+                    }
+                    input{
+                        width:49%;
+                        border: 1px solid #ddd;
+                        padding:5px 6px;
+                        margin:5px auto;
+                    }
+                }
+            }
+            div.checkout-btns{
+                height: 17%;
+                padding: 5px;
+            }
+            #checkOutModal{
+                .col{
+                    height:auto!important;
+                }
+                div.modal-content{
+                    padding:0;
+                    div.header{
+                        h5{margin:0}
+                        padding:15px;
+                        height: 15%;
+                    }
+                    div.body{
+                        padding:10px;
+                        height:85%;
+                        overflow-y: scroll;
+                    }
+                }
+                div.modal-footer{
+                    padding:0 15px;
+                }
+            }
+        }
+        &#users-view{
+            div.tables{
+                height:100%;
+                padding: 20px;
+                overflow-y: scroll;
+            }
+            div.preview{
+                padding-top: 19px;
+                position: relative;
+                height: 100%;
+                overflow: hidden;
             }
         }
         &#itemsView{
@@ -157,15 +227,6 @@
                 div.models{
                     div.input-field{
                         margin:5px 0 !important;
-                    }
-                    input[type=search]{
-                        border:1px solid #ddd;
-                        padding:5px;
-                        background-image: url("../images/icons/Search_25px.png");
-                        background-repeat: no-repeat;
-                        background-position: left;
-                        background-size: 20px;
-                        padding-left: 25px;
                     }
                     padding-top:9px;
                     position: relative;

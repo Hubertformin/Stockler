@@ -27,7 +27,7 @@ app.controller('mainCtr',($scope)=>{
         users:'++id,&name,password,email,mgr,status,startDate,permissions',
         brand:'++id,&name,date',
         items:'++id,brand,&model,qty,staff,price,date',
-        sales:'++id,&inv,date,*items,totalQty,totalPrice,staff'
+        sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
     });
     //empty varaibles for other
 $scope.users = [];
@@ -117,7 +117,7 @@ $scope.currentUser = '';
         }).then(()=>{
             //finally loggin in
             $scope.currentUser = mgr;
-            sessionStorage.setItem('user',JSON.stringify(user));
+            sessionStorage.setItem('user',JSON.stringify($scope.currentUser));
             jQuery('#manager').hide();
             $scope.$apply();
         }).catch((err)=>{

@@ -9,6 +9,9 @@
       .#{$color_name}-text {
         color: $color_value !important;
       }
+      .#{$color_name}-border {
+        border: 1px solid $color_value !important;
+      }
     }
     @else if $color_name != "shades" {
       .#{$color_name}.#{$color_type} {

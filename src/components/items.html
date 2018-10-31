@@ -81,7 +81,7 @@
                     <div class="row">
                         <div class="col s4">
                             <div class="input-field">
-                                <input class="browser-default" onkeyup="searchTable(event,'#itemsViewTable',7)" placeholder="Recherche..." id="searchItem" type="search">
+                                <input class="browser-default search-input" onkeyup="searchTable(event,'#itemsViewTable',7)" placeholder="Recherche..." id="searchItem" type="search">
                             </div>
                         </div>
                         <div class="col s4"></div>
@@ -116,8 +116,8 @@
                                         <td class="small">{{$index+1}}</td>
                                         <td>{{toBrandName(s.brand)}}</td>
                                         <td>{{s.model}}</td>
-                                        <td>{{s.qty}}</td>
-                                        <td>{{s.price}}</td>
+                                        <td>{{s.qty | currency:"":0}}</td>
+                                        <td>{{s.price | currency:"":0}}</td>
                                         <td>{{toMyDate(s.date)}}</td>
                                         <td>{{s.staff}}</td>
                                         <td class="small"><i ng-click="deleteItem(s.id)" class="action material-icons">delete</i></td>
