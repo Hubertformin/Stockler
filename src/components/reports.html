@@ -1,3 +1,88 @@
 <div class="routePage" ng-controller="reportsCtr">
-
+    <div class="row">
+        <div class="col s6">
+            <fieldset style="padding:0;">
+                <legend>Graph1</legend>
+                <div class="line-chart">
+                    <canvas id="salesChart" height="200" width="400"></canvas>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col s6">
+            <fieldset>
+                <legend>Graph2</legend>
+                <div class="bar-chart">
+                    <canvas id="barChart" height="200" width="400"></canvas>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col s8 no-right-pad">
+            <fieldset>
+                <legend>Graph 3</legend>
+                <div class="table-div">
+                    <table>
+                        <thead>
+                            <th>FAC</th>
+                            <th>Client</th>
+                            <th>Articles</th>
+                            <th>Prix</th>
+                            <th>Date</th>
+                            <th>Utilisateur</th>
+                            <th class="small"><i class="material-icons">delete_forever</i></th>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="s in sales track by $index">
+                            <td>{{s.inv}}</td>
+                            <td>{{s.name}}</td>
+                            <td>
+                                <ul style="list-style-type:circle;" class="browser-default">
+                                    <li ng-repeat="i in s.items">{{toBrandName(i.brand)}} {{i.model}} <span class="badge teal-text">{{i.order_qty}}</span></li>
+                                </ul>
+                            </td>
+                            <td>{{s.totalPrice | currency:"":0}}</td>
+                            <td>{{toMyDate(s.date)}}</td>
+                            <td>{{s.staff}}</td>
+                            <td class="small"><i class="material-icons action">delete</i></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col s4">
+            <fieldset>
+                <legend>Graph 4</legend>
+                <div class="pie-chart">
+                    <canvas id="pieChart" height="200" width="400"></canvas>
+                </div>
+            </fieldset>
+        </div>
+        <div class="col s12">
+            <fieldset>
+                <legend>Quantity</legend>
+                <div class="table-div">
+                    <table>
+                        <thead>
+                            <th>Famille</th>
+                            <th>Serie</th>
+                            <th>Prix</th>
+                            <th>Qty vendu</th>
+                            <th>Qty reste</th>
+                            <th>Qty init</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="x in salesItems track by $index">
+                                <td>{{toBrandName(x.brand)}}</td>
+                                <td>{{x.model}}</td>
+                                <td>{{x.totalOrderPrice}}</td>
+                                <td>{{x.orderedQty}}</td>
+                                <td>{{x.qty - x.orderedQty}}</td>
+                                <td>{{x.qty}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </div>
+    </div>
 </div>

@@ -144,7 +144,7 @@ app.controller('itemsCtr',($scope)=>{
         //
         if(typeof $scope.item_id !== 'number'){
             var item = {brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                qty:$scope.item_qty,price:$scope.item_price,date:d.getTime()}
+                qty:$scope.item_qty,price:$scope.item_price,date:d.getTime(),orderedQty:0}
         }else{
             var item = {id:$scope.item_id,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
                 qty:$scope.item_qty,price:$scope.item_price,date:d.getTime()}

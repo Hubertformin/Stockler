@@ -21,7 +21,7 @@
                         <thead>
                             <th class="small">#</th>
                             <th>Nom</th>
-                            <th class="small"><i class="material-icons">lock</i></th>
+                            <th ng-show="currentUser.mgr" class="small"><i class="material-icons">delete_forever</i></th>
                         </thead>
                     </table>
                         <div class="table-div">
@@ -35,7 +35,7 @@
                                     <tr ng-repeat="b in brand" ng-dblclick="previewBrand($index,true)">
                                         <td>{{$index+1}}</td>
                                         <td>{{b.name}}</td>
-                                        <td class="small"><i ng-click="deleteBrand(b.id)" class="action material-icons">delete</i></td>
+                                        <td ng-show="currentUser.mgr" class="small"><i ng-click="deleteBrand(b.id)" class="action material-icons">delete</i></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -101,7 +101,7 @@
                                 <th>Prix</th>
                                 <th>Date</th>
                                 <th><i class="material-icons">person</i></th>
-                                <th class="small"><i class="material-icons">delete_forever</i></th>
+                                <th ng-show="currentUser.mgr" class="small"><i class="material-icons">delete_forever</i></th>
                                 </thead>
                             </table>
                             <div class="table-div">
@@ -120,7 +120,7 @@
                                         <td>{{s.price | currency:"":0}}</td>
                                         <td>{{toMyDate(s.date)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td class="small"><i ng-click="deleteItem(s.id)" class="action material-icons">delete</i></td>
+                                        <td ng-show="currentUser.mgr" class="small"><i ng-click="deleteItem(s.id)" class="action material-icons">delete</i></td>
                                     </tr>
                                     </tbody>
                                 </table>

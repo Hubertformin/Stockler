@@ -145,7 +145,7 @@ app.controller('dashCtr',($scope)=>{
             for(var i=0;i<$scope.checkout.items.length;i++){
                 for(var j = 0;j<$scope.items.length;j++){
                     if($scope.items[j].id == $scope.checkout.items[i].id){
-                        $scope.items[j].qty -= Number($scope.checkout.items[i].order_qty);
+                        $scope.items[j].orderedQty += Number($scope.checkout.items[i].order_qty);
                     }
                 }
             }
@@ -153,10 +153,21 @@ app.controller('dashCtr',($scope)=>{
 
             $scope.db.items.toArray().then(data=>{
                 $scope.items = data;
-                $scope.$apply();
+                console.log($scope.items)
             })
 
         }).then(()=>{
+            $scope.checkout = {
+                inv:Math.floor(Math.random() * (9999999 - 1000000) ) + 1000000,
+                date:'',
+                name:'',
+                phone:'',
+                items:[],
+                totalQty:0,
+                totalPrice:0,
+                staff:$scope.currentUser.name
+            }
+            jQuery("tr").removeClass('selected');
             $scope.$apply();
             notifications.success("L'achat complete, Imprimmer le recu");
             checkoutModal.close();

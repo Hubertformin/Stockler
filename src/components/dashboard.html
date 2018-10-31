@@ -63,7 +63,7 @@
                                     <tr ng-repeat="s in items" ng-dblclick="addToCart($event,$index)" ng-if="s.brand == sortByBrand || sortByBrand == 'All'" data-id="{{s.model}}">
                                         <td>{{toBrandName(s.brand)}}</td>
                                         <td>{{s.model}}</td>
-                                        <td>{{s.qty}}</td>
+                                        <td>{{s.qty - s.orderedQty}}</td>
                                         <td>{{s.price | currency:"":0}}</td>
                                     </tr>
                                     </tbody>

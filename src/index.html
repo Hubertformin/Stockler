@@ -99,8 +99,8 @@
             </div>
         </div>
         <ul>
-            <li><a class="active" id="dashBtn" href="#/!">Accueil</a></li>
-            <li><a href="#!items">Stock</a></li>
+            <li ng-hide="!currentUser.mgr && !currentUser.permissions.sales"><a class="active" id="dashBtn" href="#/!">Accueil</a></li>
+            <li><a href="#!items" id="itemsCtrBtn">Stock</a></li>
             <li ng-show="currentUser.mgr"><a href="#!reports">Rapports</a></li>
             <li ng-show="currentUser.mgr"><a href="#!users">Personnel</a></li>
         </ul>
@@ -110,12 +110,12 @@
     <section id="view" ng-view></section>
     
     <script src="js/materialize.js"></script>
+    <script src="js/chart.js"></script>
     <script src="js/main.js"></script>
     <script src="js/controller.js"></script>
-    <script src="js/reports-controller.js"></script>
     <script src="js/dash-controller.js"></script>
     <script src="js/items-controller.js"></script>
     <script src="js/users-controller.js"></script>
-
+    <script src="js/reports-controller.js"></script>
 </body>
 </html>

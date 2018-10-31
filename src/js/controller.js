@@ -26,7 +26,7 @@ app.controller('mainCtr',($scope)=>{
     $scope.db.version(1).stores({
         users:'++id,&name,password,email,mgr,status,startDate,permissions',
         brand:'++id,&name,date',
-        items:'++id,brand,&model,qty,staff,price,date',
+        items:'++id,brand,&model,qty,orderedQty,staff,price,date',
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
     });
     //empty varaibles for other
@@ -151,7 +151,12 @@ $scope.currentUser = '';
             //finally loggin in
             $scope.currentUser = user;
             sessionStorage.setItem('user',JSON.stringify(user));
+            if(!user.mgr && !user.permissions.sales){
+                document.querySelector('#itemsCtrBtn').click();
+            }
             jQuery('#login').hide('fast');
+            $scope.login_name = "";
+            $scope.login_password = "";
             $scope.$apply();
         }).catch(err=>{
             console.log(err);

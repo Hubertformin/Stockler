@@ -46,6 +46,15 @@ input:focus{
 .border{
     border: 1px solid #ddd;
 }
+.no-left-pad{
+    padding-left:0!important;
+}.no-right-pad{
+    padding-right:0!important;
+}.no-top-pad{
+    padding-top:0!important;
+}.no-bottom-pad{
+    padding-bottom:0!important;
+}
 div.center{
     position: absolute;
     top: 50%;
