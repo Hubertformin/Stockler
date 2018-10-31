@@ -22,7 +22,7 @@
 
 @import "components/fonts";
 //varuabkes
-$theme-dark-color: #35394a;
+$theme-dark-color: #004d40;
 $theme-primary-color:#ffc107;
 $theme-secondary-color:#ff8f00;
 //rewriting styles
@@ -89,8 +89,32 @@ button.btn-block{
 }
 //table divs
 div.table-div{
-    height: 30vh;
+    height: 40vh;
+    margin-bottom:10px;
     overflow-y: scroll;
-    border-bottom: 1px solid #ddd;
+    position: relative;
+    border: 1px solid #ddd;
 
+}
+table{
+    th.small,td.small{
+        width:6%;
+    }
+    .action{
+        cursor: pointer;
+    }
+    select{
+        width:80%!important;
+    }
+    input{
+        background-color: transparent;
+        border:none!important;
+        height:30px!important;
+        margin: 0!important;
+        &:focus{
+            background:#eeeeee;
+            box-shadow:0px 0px transparent!important;
+            border: none!important;
+        }
+    }
 }

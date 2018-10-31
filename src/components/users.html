@@ -5,23 +5,25 @@
                 <div class="col s12">
                     <fieldset>
                         <legend>Utilisateurs</legend>
-                        <button class="right btn bg-theme waves-effect waves-light">Creer un utilisateur</button>
+                        <button ng-click="showCreateUser()" class="right btn bg-theme waves-effect waves-light">Creer un utilisateur</button>
                         <table class="responsive-table">
                             <thead>
                                 <th>#</th>
                                 <th>Nom</th>
                                 <th>Date de debut</th>
                                 <th>statut</th>
+                                <th class="small"><i class="material-icons">delete_forever</i></th>
                             </thead>
                         </table>
                             <div class="table-div">
                                 <table class="responsive-table highlight">
                                     <tbody>
-                                    <tr ng-repeat="x in localUser">
+                                    <tr ng-repeat="x in localUser track by $index" ng-dblclick="prevUser($index,'localUsers')">
                                         <td>{{$index+1}}</td>
                                         <td>{{x.name}}</td>
                                         <td>{{toMyDate(x.startDate)}}</td>
                                         <td>{{x.status}}</td>
+                                        <td class="small"><i ng-click="deleteUser(x.id)" class="action material-icons">delete</i></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -43,9 +45,9 @@
                             <div class="table-div">
                                 <table class="responsive-table highlight">
                                     <tbody>
-                                    <tr ng-repeat="x in managers">
+                                    <tr ng-repeat="x in managers track by $index" ng-dblclick="prevUser($index,'mgr')">
                                         <td>{{$index+1}}</td>
-                                        <td>{{x.name}} <span ng-show="x.mgr == 1" class="green-text text-darken-2"><i style="transform: translateY(20%);" class="material-icons">verified_user</i></span></td>
+                                        <td>{{x.name}} <span ng-show="x.mgr" class="green-text text-darken-2"><i style="transform: translateY(20%);" class="material-icons">verified_user</i></span></td>
                                         <td>{{toMyDate(x.startDate)}}</td>
                                         <td>{{x.status}}</td>
                                     </tr>
@@ -57,18 +59,19 @@
             </div>
         </div>
         <div class="preview col s3">
-            <div class="overlay white">
-                <div class="center">
-                    <h4>Rien à montrer ici</h4>
-                    <p>Cliquez sur le bouton Créer un utilisateur ou double-cliquez sur les utilisateurs à mettre à jour.</p>
+            <div ng-hide="hideUserControl" class="overlay white">
+                <div class="center" style="width:80%;">
+                    <img src="images/icons/empty.png" alt="">
+                    <h5 class="blue-grey-text">Rien à montrer ici</h5>
+                    <span>Cliquez sur le bouton Créer un utilisateur ou double-cliquez sur les utilisateurs pour modifier.</span>
                 </div>
             </div>
             <form action="#" name="form" id="createUserForm">
-                <fieldset>
+                <fieldset ng-show="createUserForm">
                     <!--Heading -->
                     <h6 class="color-theme-dark">Détails</h6>
                     <hr>
-                    <legend>Current User</legend>
+                    <legend>Creer un utilisateur</legend>
                     <div class="input-field">
                         <i class="material-icons prefix">person</i>
                         <input id="new_name" ng-model="new_name" type="text" class="validate">
@@ -104,9 +107,49 @@
                             <span>Effectuer des ventes</span>
                         </label>
                     </p>
-                    <button type="submit" class="btn btn-block bg-theme waves-effect waves-default">Creer</button>
+                    <button type="submit" class="btn btn-block bg-theme waves-effect waves-default">Cree</button>
                 </fieldset>
             </form>
+                <fieldset ng-show="updateUserForm">
+                    <!--Heading -->
+                    <h6 class="color-theme-dark">
+                        <span ng-show="choosenUser.mgr" class="green-text text-darken-2"><i style="transform: translateY(20%);" class="material-icons">verified_user</i></span>
+                        Détails
+                    </h6>
+                    <hr>
+                    <legend>Modifier Utilisateur</legend>
+                    <div class="input-field">
+                        <i class="material-icons prefix">person</i>
+                        <input id="chose_name" ng-model="choosenUser.name" type="text" class="validate">
+                        <label class="active" for="chose_name">Nom d'utilisateur</label>
+                    </div>
+                    <div class="input-field">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="chose_password" ng-model="choosenUser.password" type="password" class="validate">
+                        <label class="active" for="chose_password">Mot de passe</label>
+                    </div>
+                    <div class="input-field">
+                        <i class="material-icons prefix">date_range</i>
+                        <input id="chosen_startDate" disabled type="text" value="{{toMyDate(choosenUser.startDate)}}" class="validate">
+                        <label for="chosen_startDate" class="active">Date de debut</label>
+                    </div>
+                    <!--Heading -->
+                    <h6 class="color-theme-dark">Autorisations</h6>
+                    <hr>
+                    <p>
+                        <label>
+                            <input type="checkbox" ng-disabled="choosenUser.mgr" ng-model="choosenUser.permissions.create" class="filled-in" checked="checked"  />
+                            <span>Introduire des donnes</span>
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="checkbox" ng-disabled="choosenUser.mgr" ng-model="choosenUser.permissions.sales" class="filled-in"  />
+                            <span>Effectuer des ventes</span>
+                        </label>
+                    </p>
+                    <button ng-click="updateUser()" type="submit" class="btn btn-block bg-theme-rev waves-effect waves-default">Modifier</button>
+                </fieldset>
         </div>
     </div>
 </section>

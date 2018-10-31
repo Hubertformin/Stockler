@@ -85,7 +85,10 @@
     }
     i{
         display:inline-block!important;
-        &.user-icon{
+    }
+    .user-icon{
+        cursor: pointer;
+        i{
             transform: translateY(20%);
             line-height: 0px;
             height: 30px;
@@ -136,7 +139,38 @@
                     overflow-y: scroll;
                 }
                 div.preview{
+                    padding-top: 19px;
                     position: relative;
+                    height: 100%;
+                    overflow: hidden;
+                }
+            }
+        }
+        &#itemsView{
+            div.row{
+                margin:0;
+                height: 100%;
+                div.brand{
+                    height:100%;
+                    padding: 20px;
+                }
+                div.models{
+                    div.input-field{
+                        margin:5px 0 !important;
+                    }
+                    input[type=search]{
+                        border:1px solid #ddd;
+                        padding:5px;
+                        background-image: url("../images/icons/Search_25px.png");
+                        background-repeat: no-repeat;
+                        background-position: left;
+                        background-size: 20px;
+                        padding-left: 25px;
+                    }
+                    padding-top:9px;
+                    position: relative;
+                    height: 100%;
+                    overflow-x: hidden;
                 }
             }
         }

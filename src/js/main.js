@@ -1,4 +1,6 @@
 //main js file
+var $  = jQuery = require('jquery');
+M.AutoInit();
 
 jQuery('#splashLoader').waitMe({
     effect : 'stretch',
@@ -33,3 +35,32 @@ jQuery('#main-navbar a').click((e)=>{
     jQuery('#main-navbar a').removeClass('active');
     jQuery(e.target).addClass('active');
 })
+
+//function search table
+function searchTable(e,tb,num){
+    var val = $(e.target).val().toLowerCase(),
+        table = $(tb),
+        tr = table.children('tbody').children('tr'),
+        td = [];
+
+    //now seraching throught tables
+    for(let j=0;j<tr.length;j++) {
+        var i = 0;
+        td = [];
+        while (i < num){
+            td.push(tr[j].getElementsByTagName('td')[i])
+            i++
+        }
+        for(var k = 0;k<td.length;k++){
+            if(td[k].innerText.toLowerCase().indexOf(val) > -1){
+                tr[j].style.display = 'table-row';
+                break;
+            }else{
+                tr[j].style.display = 'none';
+            }
+
+        }
+    }
+
+
+}

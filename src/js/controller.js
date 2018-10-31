@@ -31,15 +31,20 @@ app.controller('mainCtr',($scope)=>{
     });
     //empty varaibles for other
 $scope.users = [];
+$scope.brand = [];
 $scope.items = [];
 $scope.sales = [];
 $scope.currentUser = '';
-    $scope.db.transaction('rw',$scope.db.users,$scope.db.items,$scope.db.sales,()=>{
+    $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
         $scope.db.users.toArray()
         .then((data)=>{
             $scope.users = data;
          });
         //
+        $scope.db.brand.toArray()
+            .then((data)=>{
+                $scope.brand = data;
+            })
         $scope.db.items.toArray()
         .then((data)=>{
             $scope.items = data;
@@ -60,7 +65,9 @@ $scope.currentUser = '';
         }else{
             if(sessionStorage.getItem('user') === null){
                 jQuery('#login').show();
+                return;
             }
+            $scope.currentUser = JSON.parse(sessionStorage.getItem('user'));
         }
 
     })
@@ -150,6 +157,15 @@ $scope.currentUser = '';
             console.log(err);
         })
     })
+    //4. logout
+    $scope.logOut = ()=>{
+        if(confirm('Deconnection ?')){
+            sessionStorage.clear('user');
+            jQuery('#login').show("fats",()=>{
+                document.querySelector('#dashBtn').click();
+            });
+        }
+    }
 
     //4. functions
     $scope.toMyDate = (dt = 'today')=>{

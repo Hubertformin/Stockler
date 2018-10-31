@@ -1,1 +1,140 @@
-<h1>Items Bitch!!!!!!!!!!!</h1>
+<div id="itemsView" class="routePage" ng-controller="itemsCtr">
+    <div class="row">
+        <div class="brand col s4">
+            <fieldset>
+                <legend>Famille</legend>
+                <!-- create -->
+                <form ng-show="currentUser.mgr || currentUser.permissions.create" id="createBrand">
+                    <div class="input-field">
+                        <input type="text" ng-model="brandName" placeholder="Ajoute un nom de famille">
+                    </div>
+                    <div class="right-align">
+                        <input type="number" style="display:none;" ng-model="brand_id">
+                        <button ng-hide="updateBrandBtn" class="btn"><i class="material-icons">add</i></button>
+                        <button ng-show="updateBrandBtn" class="btn blue darken-2"><i class="material-icons">update</i></button>
+                        <button type="button" ng-show="updateBrandBtn" ng-click="previewBrand(0,false)" class="btn grey darken-2"><i class="material-icons">cancel</i></button>
+                        <br>
+                    </div>
+                </form>
+                <div class="view-items">
+                    <table>
+                        <thead>
+                            <th class="small">#</th>
+                            <th>Nom</th>
+                            <th class="small"><i class="material-icons">lock</i></th>
+                        </thead>
+                    </table>
+                        <div class="table-div">
+                            <div ng-show="brand.length == 0" class="grey lighten-3 overlay">
+                                <div class="center">
+                                    Rien a montre
+                                </div>
+                            </div>
+                            <table class="responsive highlight">
+                                <tbody>
+                                    <tr ng-repeat="b in brand" ng-dblclick="previewBrand($index,true)">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{b.name}}</td>
+                                        <td class="small"><i ng-click="deleteBrand(b.id)" class="action material-icons">delete</i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </fieldset>
+
+        </div>
+        <div class="models col s8">
+            <fieldset>
+                <legend>Stock</legend>
+                <form ng-show="currentUser.mgr || currentUser.permissions.create" action="#" id="createItemForm">
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <select ng-model="item_brand" name="#" id="" class="browser-default">
+                                <option value="">Choisir une famille</option>
+                                <option ng-repeat="b in brand track by $index" value="{{b.id}}">{{b.name}}</option>
+                            </select>
+                        </div>
+                        <div class="input-field col s3">
+                            <input id="model_name" type="text" ng-model="model_name" placeholder="Nom de serie">
+                            <label for="model_name" class="active">Nom de serie</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input type="number" min="1" id="item_qty" ng-model="item_qty" placeholder="Quantite">
+                            <label for="item_qty" class="active">Quantite</label>
+                        </div>
+                        <div class="input-field col s3">
+                            <input type="number" min="1" id="item_price" ng-model="item_price" placeholder="Prix">
+                            <label for="item_price" class="active">Prix</label>
+                        </div>
+                        <div class="col s12 right-align">
+                            <input style="display:none;" type="number" ng-model="item_id">
+                            <button ng-hide="prevUpdateBtn" class="btn waves-effect"><i class="material-icons">add</i></button>
+                            <button ng-show="prevUpdateBtn" class="btn green waves-effect"><i class="material-icons">update</i></button>
+                            <button type="button" ng-click="prevItems(0,false)" ng-show="prevUpdateBtn" class="btn grey waves-effect"><i class="material-icons">cancel</i></button>
+                            <hr>
+                        </div>
+                    </div>
+                </form>
+                <!--table data -->
+                <div class="table-data">
+                    <div class="row">
+                        <div class="col s4">
+                            <div class="input-field">
+                                <input class="browser-default" onkeyup="searchTable(event,'#itemsViewTable',7)" placeholder="Recherche..." id="searchItem" type="search">
+                            </div>
+                        </div>
+                        <div class="col s4"></div>
+                        <div class="col s4">
+                            <select ng-model="sortByBrand" class="browser-default">
+                                <option value="All">Tout</option>
+                                <option ng-repeat="b in brand track by $index" value="{{b.id}}">{{b.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                            <table class="responsive-table">
+                                <thead>
+                                <th>#</th>
+                                <th>Famille</th>
+                                <th>Serie</th>
+                                <th>Qty</th>
+                                <th>Prix</th>
+                                <th>Date</th>
+                                <th><i class="material-icons">person</i></th>
+                                <th class="small"><i class="material-icons">delete_forever</i></th>
+                                </thead>
+                            </table>
+                            <div class="table-div">
+                                <div ng-show="items.length == 0" class="grey lighten-3 overlay">
+                                    <div class="center">
+                                        Rien a montre, stock est vide
+                                    </div>
+                                </div>
+                                <table id="itemsViewTable" class="responsive-table highlight">
+                                    <tbody>
+                                    <tr ng-repeat="s in items" ng-dblclick="prevItems($index)" ng-if="s.brand == sortByBrand || sortByBrand == 'All'">
+                                        <td class="small">{{$index+1}}</td>
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td>{{s.qty}}</td>
+                                        <td>{{s.price}}</td>
+                                        <td>{{toMyDate(s.date)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td class="small"><i ng-click="deleteItem(s.id)" class="action material-icons">delete</i></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col s4">
+                                    <small>Double-cliquez pour modifier</small>
+                                </div>
+                                <div class="col s8">
+                                    <span><strong>Total Qty: </strong>{{items.length}}</span>
+                                </div>
+                            </div>
+                        </div>
+            </fieldset>
+        </div>
+    </div>
+</div>

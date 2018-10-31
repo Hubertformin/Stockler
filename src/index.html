@@ -96,14 +96,14 @@
                 </h5>
             </div>
             <div class="col s7 right-align">
-                <span class="yellow-text"><i class="user-icon material-icons">account_circle</i> {{currentUser.name}}</span>
+                <span ng-click="logOut()" class="user-icon yellow-text"><i class="material-icons">account_circle</i> {{currentUser.name}}</span>
             </div>
         </div>
         <ul>
-            <li><a class="active" href="#/!">Accueil</a></li>
+            <li><a class="active" id="dashBtn" href="#/!">Accueil</a></li>
             <li><a href="#!items">Stock</a></li>
-            <li><a href="#!reports">Rapports</a></li>
-            <li><a href="#!users">Personnel</a></li>
+            <li ng-show="currentUser.mgr"><a href="#!reports">Rapports</a></li>
+            <li ng-show="currentUser.mgr"><a href="#!users">Personnel</a></li>
         </ul>
     </nav>
 
@@ -114,6 +114,7 @@
     <script src="js/jquery.bootgrid.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/controller.js"></script>
+    <script src="js/items-controller.js"></script>
     <script src="js/users-controller.js"></script>
 </body>
 </html>
