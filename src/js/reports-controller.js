@@ -17,11 +17,14 @@ app.controller('reportsCtr',($scope)=>{
                 $scope.sales = data;
             })
     }).then(()=>{
-        $scope.sales.forEach((el)=>{
+        /*$scope.sales.forEach((el,i)=>{
             $scope.salesItems = $scope.salesItems.concat(el.items);
-            console.log(el.items)
 
         })
+        console.log($scope.sales)*/
+        $scope.salesItems.sort(function (a, b) {
+            return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
+        });
         var ctx = document.getElementById('salesChart').getContext('2d');
         var chart = new Chart(ctx, {
             // The type of chart we want to create

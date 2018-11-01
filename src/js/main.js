@@ -64,3 +64,11 @@ function searchTable(e,tb,num){
 
 
 }
+
+const {ipcRenderer} = require('electron')
+var data = ipcRenderer.sendSync('get-file-data');
+if (data ===  null) {
+    console.log("There is no file");
+} else {
+    colsole.log(data);
+}

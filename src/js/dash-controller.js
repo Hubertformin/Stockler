@@ -153,7 +153,6 @@ app.controller('dashCtr',($scope)=>{
 
             $scope.db.items.toArray().then(data=>{
                 $scope.items = data;
-                console.log($scope.items)
             })
 
         }).then(()=>{

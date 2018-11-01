@@ -116,7 +116,7 @@
                                         <td class="small">{{$index+1}}</td>
                                         <td>{{toBrandName(s.brand)}}</td>
                                         <td>{{s.model}}</td>
-                                        <td>{{s.qty | currency:"":0}}</td>
+                                        <td>{{s.qty - s.orderedQty | currency:"":0}}</td>
                                         <td>{{s.price | currency:"":0}}</td>
                                         <td>{{toMyDate(s.date)}}</td>
                                         <td>{{s.staff}}</td>

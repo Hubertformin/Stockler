@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "start": "electron .",
+    "package-win": "electron-packager . Stockler --overwrite --asar=true --platform=win32 --arch=ia32 --icon=logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Silverslopescm \" --version-string.FileDescription=\"Stockler\" --version-string.ProductName=\"Stockler\""
   },
   "repository": {
     "type": "git",
@@ -18,11 +19,13 @@
   },
   "homepage": "https://github.com/Hubertformin/Stockler#readme",
   "devDependencies": {
-    "electron": "^3.0.6"
+    "electron": "^3.0.6",
+    "electron-packager": "^12.2.0"
   },
   "dependencies": {
     "dexie": "^2.0.4",
     "electron-regedit": "^1.0.6",
+    "jquery": "^3.3.1",
     "zlib": "^1.0.5"
   }
 }

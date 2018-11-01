@@ -146,8 +146,14 @@ app.controller('itemsCtr',($scope)=>{
             var item = {brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
                 qty:$scope.item_qty,price:$scope.item_price,date:d.getTime(),orderedQty:0}
         }else{
-            var item = {id:$scope.item_id,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                qty:$scope.item_qty,price:$scope.item_price,date:d.getTime()}
+            //lets get its total ordered qty first
+            for(let j = 0;j<$scope.items.length;j++){
+                if($scope.item_id === $scope.items[j].id){
+                    var item = {id:$scope.item_id,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
+                        qty:$scope.item_qty,price:$scope.item_price,date:d.getTime(),orderedQty:$scope.items[j].orderedQty}
+                        break;
+                }
+            }
         }
             //console.log(item);
         //transcation

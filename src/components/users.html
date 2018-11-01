@@ -16,6 +16,11 @@
                             </thead>
                         </table>
                             <div class="table-div">
+                                <div ng-show="localUser.length == 0" class="grey lighten-5 overlay">
+                                    <div class="center">
+                                        <h6 class="blue-grey-text">Pas d'utilisateur actif,veuillez creer des utilisateurs</h6>
+                                    </div>
+                                </div>
                                 <table class="responsive-table highlight">
                                     <tbody>
                                     <tr ng-repeat="x in localUser track by $index" ng-dblclick="prevUser($index,'localUsers')">
@@ -43,6 +48,11 @@
                             </thead>
                         </table>
                             <div class="table-div">
+                                <div ng-show="managers.length == 0" class="grey lighten-3 overlay">
+                                    <div class="center">
+                                        Rien a montre, stock est vide
+                                    </div>
+                                </div>
                                 <table class="responsive-table highlight">
                                     <tbody>
                                     <tr ng-repeat="x in managers track by $index" ng-dblclick="prevUser($index,'mgr')">

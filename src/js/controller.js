@@ -59,6 +59,7 @@ $scope.currentUser = '';
     .then(()=>{
         //hide splash screen
         jQuery('#splashScreen').remove();
+        console.log($scope.items);
         //show manager or login depending on user length
         if($scope.users.length == 0){
             jQuery('#manager').show();

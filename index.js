@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow,ipcMain} = require('electron')
   
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
@@ -58,3 +58,19 @@ const {app, BrowserWindow} = require('electron')
   
   // In this file you can include the rest of your app's specific main process
   // code. You can also put them in separate files and require them here.
+
+
+// read the file and send data to the render process
+var fs = require('fs');
+ ipcMain.on('get-file-data', function(event) {
+    var data = null;
+    try{
+        if (process.platform == 'win32' && process.argv.length >= 2) {
+            var openFilePath = process.argv[1];
+            data = fs.readFileSync(openFilePath, 'utf-8');
+        }
+    }catch (e) {
+       //
+    }
+    event.returnValue = data;
+});
