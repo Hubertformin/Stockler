@@ -2,7 +2,7 @@
     <div class="row">
         <div class="brand col s4">
             <fieldset>
-                <legend>Famille</legend>
+                <h6 class="legend">Famille</h6>
                 <!-- create -->
                 <form ng-show="currentUser.mgr || currentUser.permissions.create" id="createBrand">
                     <div class="input-field">
@@ -46,7 +46,7 @@
         </div>
         <div class="models col s8">
             <fieldset>
-                <legend>Stock</legend>
+                <h6 class="legend">Stock</h6>
                 <form ng-show="currentUser.mgr || currentUser.permissions.create" action="#" id="createItemForm">
                     <div class="row">
                         <div class="input-field col s3">
@@ -116,7 +116,7 @@
                                         <td class="small">{{$index+1}}</td>
                                         <td>{{toBrandName(s.brand)}}</td>
                                         <td>{{s.model}}</td>
-                                        <td>{{s.qty - s.orderedQty | currency:"":0}}</td>
+                                        <td>{{s.qty | currency:"":0}}</td>
                                         <td>{{s.price | currency:"":0}}</td>
                                         <td>{{toMyDate(s.date)}}</td>
                                         <td>{{s.staff}}</td>

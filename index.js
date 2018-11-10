@@ -1,4 +1,4 @@
-const {app, BrowserWindow,ipcMain} = require('electron')
+const {app, BrowserWindow,ipcMain,dialog} = require('electron')
   
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
@@ -38,6 +38,26 @@ const {app, BrowserWindow,ipcMain} = require('electron')
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on('ready', createWindow)
+  app.on('ready',()=>{
+      // read the file and send data to the render process
+      var fs = require('fs');
+      ipcMain.on('get-file-data', function(event) {
+          var data = null;
+          try{
+              if (process.platform == 'win32' && process.argv.length >= 2) {
+                  var openFilePath = process.argv[1];
+                  data = fs.readFileSync(openFilePath, 'utf-8');
+              }
+          }catch (e) {
+              //
+          }
+          event.returnValue = data;
+      });
+      //
+      win.onclose= (e) => {
+          e.preventDefault();
+      }
+  })
   
   // Quit when all windows are closed.
   app.on('window-all-closed', () => {
@@ -55,22 +75,25 @@ const {app, BrowserWindow,ipcMain} = require('electron')
       createWindow()
     }
   })
+
+    /*app.on('before-quit',(e)=>{
+        e.preventDefault();
+        dialog.showMessageBox({
+            type:'question',
+            message:'Etes vous sur de quiter?',
+            buttons:['Annuler','Oui'],
+            title:'Confirmer',
+            defaultId:0,
+            noLink:true,
+            cancelId:0
+        },(response)=>{
+            console.log(response)
+           if(response === 1){
+               console.log(e);
+               e.quit();
+           }
+        })
+    })*/
   
   // In this file you can include the rest of your app's specific main process
-  // code. You can also put them in separate files and require them here.
 
-
-// read the file and send data to the render process
-var fs = require('fs');
- ipcMain.on('get-file-data', function(event) {
-    var data = null;
-    try{
-        if (process.platform == 'win32' && process.argv.length >= 2) {
-            var openFilePath = process.argv[1];
-            data = fs.readFileSync(openFilePath, 'utf-8');
-        }
-    }catch (e) {
-       //
-    }
-    event.returnValue = data;
-});

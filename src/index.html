@@ -8,12 +8,23 @@
     <link rel="stylesheet" href="css/materialicons/icone91f.css">
     <link rel="stylesheet" href="css/waitMe.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <title>Stockler</title>
     <script src="js/angular.js"></script>
     <script src="js/angular_route.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/waitMe.min.js"></script>
 </head>
+<!--title bar -->
+<!--<title-bar>
+    <span>Stockler</span>
+    <ul id="app_ctrs">
+        <li id="app_minimize" onclick="titleBarBtns('minimize')"><i class="material-icons">remove</i></li>
+        <li id="app_maximize" onclick="titleBarBtns('maximize')"><i class="material-icons">web_asset</i></li>
+        <li id="app_quit" onclick="titleBarBtns('exit')"><i class="material-icons">clear</i></li>
+    </ul>
+</title-bar>-->
 <body ng-app="StocklerApp" ng-controller="mainCtr">
+
     <!--Splash screen -->
     <section id="splashScreen">
         <div class="center">
@@ -24,7 +35,8 @@
     </section>
     <!--Login screen -->
     <section id="login">
-        <div class="box center">
+        <div class="cover">
+            <div class="box center">
             <form action="#" id="login-form">
                 <div class="row">
                     <div class="brand col s7">
@@ -46,6 +58,7 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
     </section>
     <!--Manager screen -->
@@ -88,22 +101,73 @@
     <!--navbar  -->
     <nav id="main-navbar">
         <div class="row head">
-            <div class="col s5">
-                <h5 class="nav-logo yellow-text">
-                    <img src="images/logo.png" alt="">
-                    Stockler
-                </h5>
+            <div class="col s7">
+                <input type="search" placeholder="Recherche.." class="browser-default">
             </div>
-            <div class="col s7 right-align">
-                <span ng-click="logOut()" class="user-icon yellow-text"><i class="material-icons">account_circle</i> {{currentUser.name}}</span>
+            <div class="col s5 right-align">
+                <a href=""><i class="material-icons">notifications</i></a>
+                <a href=""><i class="material-icons">settings</i></a>
+                <a href=""><i class="material-icons">more_vert</i></a>
             </div>
         </div>
-        <ul>
-            <li ng-hide="!currentUser.mgr && !currentUser.permissions.sales"><a class="active" id="dashBtn" href="#/!">Accueil</a></li>
-            <li><a href="#!items" id="itemsCtrBtn">Stock</a></li>
-            <li ng-show="currentUser.mgr"><a href="#!reports">Rapports</a></li>
-            <li ng-show="currentUser.mgr"><a href="#!users">Personnel</a></li>
-        </ul>
+    </nav>
+    <!--side nav -->
+    <nav id="sideNav">
+        <div class="title">
+            <h6 class="teal-text font-kaushan">
+                <img src="images/logo.png">
+                <span>Stockler</span>
+            </h6>
+        </div>
+        <div class="body">
+            <div class="user">
+                <img class="circle" src="images/mentor.jpg" alt="">
+                <div class="username">
+                    <strong>{{currentUser.name}} <i class="material-icons green-text online">fiber_manual_record</i><br><small>Administrateur</small></strong>
+
+                </div>
+            </div>
+            <div class="separator">
+                <small>Nav</small>
+            </div>
+            <ul class="links">
+                <li class="dropdown">
+                    <a href="#"><i class="material-icons left">desktop_mac</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <ul class="sub-menu">
+                        <li><a href="#"><i class="material-icons left">add</i>Vendre</a></li>
+                        <li><a href="#!/"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="material-icons left">chrome_reader_mode</i>Stock <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <ul class="sub-menu">
+                        <li><a href="#"><i class="material-icons left">add</i>Cree</a></li>
+                        <li><a href="#!items"><i class="material-icons left">pie_chart</i>Montre</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="separator">
+                <small>Administrateur</small>
+            </div>
+            <ul class="links">
+                <li class="dropdown">
+                    <a href="#"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <ul class="sub-menu">
+                        <li><a href="#!reports"><i class="material-icons left">add</i>Ventes</a></li>
+                        <li><a href=""><i class="material-icons left">pie_chart</i>Stocks</a></li>
+                        <li><a href=""><i class="material-icons left">person</i>Utilisateur</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#"><i class="material-icons left">people</i>Utilisateur <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <ul class="sub-menu">
+                        <li><a href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
+                        <li><a href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
+                        <li><a href=""><i class="material-icons left">person</i>Utilisateur</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </nav>
 
    <!--route view -->

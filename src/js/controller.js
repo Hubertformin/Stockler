@@ -30,11 +30,11 @@ app.controller('mainCtr',($scope)=>{
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
     });
     //empty varaibles for other
-$scope.users = [];
-$scope.brand = [];
-$scope.items = [];
-$scope.sales = [];
-$scope.currentUser = '';
+    $scope.users = [];
+    $scope.brand = [];
+    $scope.items = [];
+    $scope.sales = [];
+    $scope.currentUser = '';
     $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
         $scope.db.users.toArray()
         .then((data)=>{

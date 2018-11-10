@@ -6,6 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "package-win": "electron-packager . Stockler --overwrite --asar=true --platform=win32 --arch=ia32 --icon=logo.ico --prune=true --out=release-builds --version-string.CompanyName=\"Silverslopescm \" --version-string.FileDescription=\"Stockler\" --version-string.ProductName=\"Stockler\""
   },
   "repository": {
@@ -17,15 +19,34 @@
   "bugs": {
     "url": "https://github.com/Hubertformin/Stockler/issues"
   },
+  "build": {
+    "appId": "your.id",
+    "productName": "Stockler",
+    "copyright": "Copyright © 2018 Silverslopes",
+    "win": {
+      "icon": "logo.ico"
+    },
+    "fileAssociations": {
+      "ext": [
+        "stk"
+      ],
+      "name": "STK",
+      "description": "Stockler Logs Extension",
+      "icon": "stk-icon.ico"
+    }
+  },
   "homepage": "https://github.com/Hubertformin/Stockler#readme",
   "devDependencies": {
     "electron": "^3.0.6",
+    "electron-builder": "^20.29.0",
     "electron-packager": "^12.2.0"
   },
   "dependencies": {
+    "cryptr": "^4.0.0",
     "dexie": "^2.0.4",
     "electron-regedit": "^1.0.6",
     "jquery": "^3.3.1",
+    "phantom-html-to-pdf": "^0.5.6",
     "zlib": "^1.0.5"
   }
 }

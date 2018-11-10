@@ -149,8 +149,11 @@ app.controller('itemsCtr',($scope)=>{
             //lets get its total ordered qty first
             for(let j = 0;j<$scope.items.length;j++){
                 if($scope.item_id === $scope.items[j].id){
+                    console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
+                    console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
+
                     var item = {id:$scope.item_id,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                        qty:$scope.item_qty,price:$scope.item_price,date:d.getTime(),orderedQty:$scope.items[j].orderedQty}
+                        qty:$scope.item_qty + $scope.items[j].qty,price:$scope.item_price,date:d.getTime(),orderedQty:$scope.items[j].orderedQty}
                         break;
                 }
             }
@@ -217,7 +220,8 @@ app.controller('itemsCtr',($scope)=>{
             $scope.item_id = $scope.items[i].id;
             $scope.item_brand = `${$scope.items[i].brand}`;
             $scope.model_name = $scope.items[i].model;
-            $scope.item_qty = $scope.items[i].qty;
+            //$scope.item_qty = $scope.items[i].qty - $scope.items[i].orderedQty;
+            $scope.item_qty = '';
             $scope.item_price = $scope.items[i].price;
             $scope.prevUpdateBtn = true;
         }else{

@@ -1,4 +1,5 @@
 @import "default";
+
 #splashScreen{
     @extend .accounts-panel;
     z-index: 1999;
@@ -66,11 +67,20 @@
 #main-navbar{
     position: fixed;
     top: 0;
-    height: auto;
+    left: 250px;
+    right: 0;
     z-index: 219;
-    background-color:$theme-dark-color;
+    background:#fff;
+    height: 55px;
+  @extend .z-depth-2;
     border-bottom: 0.5px solid #ddd;
     line-height: 50px;
+  input[type=search]{
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 26px;
+    width:256px;
+  }
     .nav-logo{
         margin: 0;
         padding: 10px;
@@ -82,6 +92,7 @@
     }
     div.row{
         margin: 0 !important;
+      height: 55px;
     }
     i{
         display:inline-block!important;
@@ -101,6 +112,7 @@
                 padding: 0 26px;
                 position: relative;
                 transition:all 0.6s ease-out;
+              color: #757575!important;
                 &.active{
                     background-color:rgba(0,0,0,0.2);
                     color:$theme-primary-color;
@@ -120,24 +132,132 @@
         }
     }
 }
+//the sidenav
+nav#sideNav{
+  $side-nav-color:#323c47;
+  height: 100vh;
+  position: fixed;
+  line-height: 54px;
+  top:0;
+  left: 0;
+  bottom: 0;
+  @extend .z-depth-2;
+  overflow-y:hidden;
+  z-index:219;
+  width: 250px;
+  background:$side-nav-color!important;
+  ul::after{
+    clear: both;
+    display: table;
+    content: '';
+  }
+  i{
+    display: inline!important;
+  }
+  div.separator{
+    border-top: 1px solid lighten($side-nav-color,20%);
+    position: relative;
+    line-height:10px;
+    small{
+      padding:10px 15px;
+      color: #eee;
+    }
+  }
+  .title{
+    background: #fff;
+    height: 55px;
+    padding: 5px 15px;
+    img{
+      width: 20px;
+      height:20px;
+      display: inline;
+    }
+    span{
+      font-size: 17px;
+    }
+  }
 
+  .body{
+    position: relative;
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width:5px;
+    }
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background:transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background:darken($side-nav-color,20%);
+    }
+    .user{
+      padding: 25px 10px 20px;
+      line-height: 25px;
+      position: relative;
+      i.online{
+        font-size:10px;
+      }
+      img{
+        height:40px;
+        width: 40px;
+        position: absolute;
+      }
+      div.username{
+        position:relative;
+        padding: 0 0 0 55px;
+        line-height: 0px;
+        strong{
+          display: block;
+          transform: translateY(-20px);
+          position: relative;
+          small{
+            position: absolute;
+            bottom: 7px;
+          }
+        }
+      }
+    }
+    ul.links{
+      li.dropdown{
+        ul.sub-menu{
+          display: none;
+          float: left;
+          background: rgba(0,0,0,0.12);
+          border-bottom:lighten($side-nav-color,20%);
+          li{
+            a{
+              padding-left: 45px;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+  ul{
+    li{
+      display: block;
+      width: 100%;
+    }
+  }
+}
 //the view
 #view{
-    margin-top:100.97px;
+    margin-top:55px;
     position: relative;
-    height: calc(100vh - 100.97px);
+    height: calc(100vh - 55px);
+    width:calc(100vw - 251px) ;
+  margin-left: 251px;
+    fieldset{
+        position: relative;
+        border: none;
+        border-radius:6px ;
+        @extend.z-depth-2;
+}
     .routePage{
         overflow-x: hidden;
         height: 100%;
-        input[type=search].search-input{
-            border:1px solid #ddd;
-            padding:5px;
-            background-image: url("../images/icons/Search_25px.png");
-            background-repeat: no-repeat;
-            background-position: left;
-            background-size: 20px;
-            padding-left: 25px;
-        }
         div.row {
             margin: 0;
             &:not(.inner){
@@ -151,7 +271,6 @@
                 fieldset{
                     margin-top:10px;
                     height: 98%;
-                    position: relative;
                 }
             }
             div.checkout{

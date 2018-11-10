@@ -50,14 +50,18 @@ app.controller('dashCtr',($scope)=>{
         }
         return name;
     }
-
+    //$scope.items;
     $scope.addToCart = (e,i)=>{
         for(let j = 0;j<$scope.checkout.items.length;j++){
             if($scope.checkout.items[j].id == $scope.items[i].id){
-                notifications.warning('Cette element est deja inclu');
+                notifications.warning('L\'article est deja inclu');
                 return false;
             }
         };
+        if(($scope.items[i].qty - $scope.items[i].orderedQty) < 1){
+            notifications.warning('L\'article n\'est plus en stock!');
+            return false;
+        }
         //console.log(e.target);
         if(jQuery(e.target).is('tr')){
             jQuery(e.target).addClass('selected');
@@ -83,6 +87,15 @@ app.controller('dashCtr',($scope)=>{
 
 
 
+        }
+    }
+    //for min quantity, that is if the user inputs a quantity larger thans stock
+    $scope.minQty = (e,i)=>{
+        var val = jQuery(e.target).val();
+        if(typeof val !== 'number') return;
+        if(($scope.items[i].qty - $scope.items[i].orderedQty) - val < 0){
+            notifications.warning('L\'article n\'est plus en stock!');
+            return false;
         }
     }
     //min price
@@ -145,6 +158,7 @@ app.controller('dashCtr',($scope)=>{
             for(var i=0;i<$scope.checkout.items.length;i++){
                 for(var j = 0;j<$scope.items.length;j++){
                     if($scope.items[j].id == $scope.checkout.items[i].id){
+                        $scope.items[j].qty -= Number($scope.checkout.items[i].order_qty);
                         $scope.items[j].orderedQty += Number($scope.checkout.items[i].order_qty);
                     }
                 }

@@ -1,6 +1,16 @@
+const { ipcRenderer } = require('electron');
+//funtion to controll custom tittle bar
+/*function titleBarBtns(type) {
+    ipcRenderer.sendSync('synchronous-message', type);
+}*/
+
 //main js file
+const fs = require('fs');
+
+
 var $  = jQuery = require('jquery');
 M.AutoInit();
+
 
 jQuery('#splashLoader').waitMe({
     effect : 'stretch',
@@ -65,10 +75,17 @@ function searchTable(e,tb,num){
 
 }
 
-const {ipcRenderer} = require('electron')
 var data = ipcRenderer.sendSync('get-file-data');
 if (data ===  null) {
     console.log("There is no file");
 } else {
-    colsole.log(data);
+    console.log(data);
 }
+//
+const Cryptr = require('cryptr');
+const cryptr = new Cryptr('myTotalySecretKey');
+
+//navbar
+jQuery('#sideNav li.dropdown').on('click',(e)=>{
+    jQuery(e.currentTarget).children('ul.sub-menu').slideToggle();
+})
