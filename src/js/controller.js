@@ -14,6 +14,9 @@ app.config(($routeProvider)=>{
         .when('/reports',{
             templateUrl:'components/reports.html'
         })
+        .when('/rep-dash',{
+            templateUrl:'components/reports-dashboard.html'
+        })
 });
 
 

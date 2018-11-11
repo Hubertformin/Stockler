@@ -68,7 +68,7 @@
     position: fixed;
     top: 0;
     left: 250px;
-    right: 0;
+    width: calc(100% - 250px);
     z-index: 219;
     background:#fff;
     height: 55px;
@@ -76,9 +76,10 @@
     border-bottom: 0.5px solid #ddd;
     line-height: 50px;
   input[type=search]{
-    padding: 15px;
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 26px;
+    margin: 0 15px;
     width:256px;
   }
     .nav-logo{
@@ -88,6 +89,14 @@
         img{
             width:25px;
             height: auto;
+        }
+    }
+    div.actions{
+        display: inline-block;
+        position: absolute;
+        right:8px;
+        a{
+            padding: 0 6px;
         }
     }
     div.row{
@@ -351,6 +360,40 @@ nav#sideNav{
                     position: relative;
                     height: 100%;
                     overflow-x: hidden;
+                }
+            }
+        }
+        &#reportsDashboardView{
+            #bestSales{
+                .list{
+                    div.item{
+                        div.label{
+                            border:1px solid #ddd;
+                            border-radius:26px;
+                            position: relative;
+                            width: 80%;
+                            .icon{
+                                position: relative;;
+                                left: 0;
+                                display: inline-block;
+                                height: 40px;
+                                width: 40px;
+                                line-height: 40px;
+                                text-align: center;
+                            }
+                        }
+                        width: 200px;
+                        padding:10px;
+                        border:1px solid #ddd;
+                        border-radius:15px;
+                        .body{
+                            text-align: center;
+                            padding: 1px;
+                            .unit{
+                                margin: 2.5px;
+                            }
+                        }
+}
                 }
             }
         }

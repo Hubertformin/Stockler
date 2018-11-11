@@ -153,6 +153,12 @@ input:focus{
 }.no-bottom-pad{
     padding-bottom:0!important;
 }
+.b-left{
+    border-left: 1px solid #ddd;
+}
+.b-right{
+    border-right: 1px solid #ddd;
+}
 .center{
     position: absolute;
     top: 50%;
@@ -264,4 +270,34 @@ input[type=search].search-input{
 //heading
 .legend{
     color:#ffeb3b;
+}
+//@at-roo
+.hcard{
+    //@extend .z-depth-1;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    .header{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        position: relative;
+        padding:15px 10px;
+        background-color: $theme-primary-color;
+        h6{
+            i{
+                position: absolute;
+                right: 10px;
+            }
+        }
+    }
+    .body{
+        padding: 10px;
+        div.article_det{
+            h6{
+                padding-left:2px;
+                i{
+                    font-size:20px!important;
+                }
+            }
+        }
+    }
 }

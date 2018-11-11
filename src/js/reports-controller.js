@@ -2,6 +2,7 @@ app.controller('reportsCtr',($scope)=>{
     //init
     var elems = document.querySelectorAll('.datepicker');
 
+    
     //
     const {dialog} = require('electron').remote;
     //initializing dynamic variables

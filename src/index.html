@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="css/materialize.css">
     <link rel="stylesheet" href="css/materialicons/icone91f.css">
+    <link rel="stylesheet" href="css/loading-bar.css">
     <link rel="stylesheet" href="css/waitMe.min.css">
     <link rel="stylesheet" href="css/index.css">
     <title>Stockler</title>
@@ -100,11 +101,9 @@
     </section>
     <!--navbar  -->
     <nav id="main-navbar">
-        <div class="row head">
-            <div class="col s7">
+        <div class="head">
                 <input type="search" placeholder="Recherche.." class="browser-default">
-            </div>
-            <div class="col s5 right-align">
+            <div class="actions">
                 <a href=""><i class="material-icons">notifications</i></a>
                 <a href=""><i class="material-icons">settings</i></a>
                 <a href=""><i class="material-icons">more_vert</i></a>
@@ -151,9 +150,9 @@
             </div>
             <ul class="links">
                 <li class="dropdown">
-                    <a href="#"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a href="#!reports"><i class="material-icons left">add</i>Ventes</a></li>
+                        <li><a href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
                         <li><a href=""><i class="material-icons left">pie_chart</i>Stocks</a></li>
                         <li><a href=""><i class="material-icons left">person</i>Utilisateur</a></li>
                     </ul>
@@ -175,11 +174,14 @@
     
     <script src="js/materialize.js"></script>
     <script src="js/chart.js"></script>
+    <script src="js/loading-bar.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/controller.js"></script>
+    <!--Sub conrollers-->
     <script src="js/dash-controller.js"></script>
     <script src="js/items-controller.js"></script>
     <script src="js/users-controller.js"></script>
     <script src="js/reports-controller.js"></script>
+    <script src="js/reportsDash-controller.js"></script>
 </body>
 </html>
