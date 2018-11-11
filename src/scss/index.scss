@@ -275,12 +275,23 @@ nav#sideNav{
         }
         &#dashView{
             .col{
-                height:100%;
+                &.long{
+                    height:100%;
+                }
                 padding:5px;
                 fieldset{
                     margin-top:10px;
                     height: 98%;
                 }
+            }
+            #placeOrder{
+                overflow-y: auto;
+                 &::-webkit-scrollbar-track {
+                    background:transparent;
+                  }
+                  &::-webkit-scrollbar-thumb {
+                    background:darken(#f1f1f1,20%);
+                  }
             }
             div.checkout{
                 border-bottom: 1px solid #ddd;

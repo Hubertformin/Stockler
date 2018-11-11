@@ -1,80 +1,91 @@
 <div class="routePage" id="dashView" ng-controller="dashCtr">
     <div class="row">
-        <div class="col s3">
-            <fieldset>
-                <h6 class="legend">Client</h6>
-                <div class="input-field">
-                    <i class="material-icons prefix">confirmation_number</i>
-                    <input type="number" id="sales_inv" disabled ng-model="checkout.inv">
-                    <label for="sales_inv" class="active">Inv</label>
+      <div id="placeOrder" class="col s8 long">
+        <div class="col s12">
+            <div class="hcard">
+                <div class="header teal white-text">
+                    <h6>Client</h6>
                 </div>
-                <div class="input-field">
-                    <i class="material-icons prefix">date_range</i>
-                    <input type="text" disabled id="sales_date" value="{{toMyDate()}}">
-                    <label for="sales_date" class="active">Date</label>
+                <div class="body">
+                   <div class="row inner">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">confirmation_number</i>
+                            <input type="number" id="sales_inv" disabled ng-model="checkout.inv">
+                            <label for="sales_inv" class="active">Inv</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">date_range</i>
+                            <input type="text" disabled id="sales_date" value="{{toMyDate()}}">
+                            <label for="sales_date" class="active">Date</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">person</i>
+                            <input type="text" id="sales_name" ng-model="checkout.name">
+                            <label for="sales_name" class="active">Nom du client</label>
+                        </div>
+                        <div class="input-field col s6">                                <i class="material-icons prefix">phone</i>
+                            <input type="number" id="sales_phone" ng-model="checkout.phone">
+                            <label for="sales_phone">Telephone(optionnel)</label>
+                        </div>
+                   </div>
                 </div>
-                <div class="input-field">
-                    <i class="material-icons prefix">person</i>
-                    <input type="text" id="sales_name" ng-model="checkout.name">
-                    <label for="sales_name" class="active">Nom du client</label>
-                </div>
-                <div class="input-field">
-                    <i class="material-icons prefix">phone</i>
-                    <input type="number" id="sales_phone" ng-model="checkout.phone">
-                    <label for="sales_phone">Telephone(optionnel)</label>
-                </div>
-            </fieldset>
+            </div>
         </div>
-        <div class="col s6">
-            <fieldset>
-                <h6 class="legend">Produits</h6>
-                <div class="items">
-                    <div class="row">
-                        <div class="col s6">
-                            <div class="input-field">
-                                <input onkeyup="searchTable(event,'#itemsViewTable',4)" class="search-input browser-default" type="search" placeholder="Recherche...">
-                            </div>
-                        </div>
-                        <div class="col s6">
-                            <div class="input-field">
-                                <select ng-model="sortByBrand" id="sortByBrand" class="browser-default">
-                                    <option value="All">Tout</option>
-                                    <option ng-repeat="s in brand track by $index" value="{{s.id}}">{{s.name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col s12">
-                            <table class="responsive-table">
-                                <thead>
-                                <th>Famille</th>
-                                <th>Serie</th>
-                                <th>Qty</th>
-                                <th>Prix</th>
-                                </thead>
-                            </table>
-                            <div class="table-div" style="height:55vh;">
-                                <div ng-show="items.length == 0" class="grey lighten-3 overlay">
-                                    <div class="center">
-                                        Rien a montre, stock est vide
-                                    </div>
+        <div class="col s12">
+            <div class="hcard">
+                <div class="header blue white-text">
+                    <h6>Articles</h6>
+                </div>
+                <div class="body">
+                    <div class="items">
+                        <div class="row">
+                            <div class="col s6">
+                                <div class="input-field">
+                                    <input onkeyup="searchTable(event,'#itemsViewTable',4)" class="search-input browser-default" type="search" placeholder="Recherche...">
                                 </div>
-                                <table id="itemsViewTable" class="responsive-table highlight">
-                                    <tbody>
-                                    <tr ng-repeat="s in items" ng-dblclick="addToCart($event,$index)" ng-if="s.brand == sortByBrand || sortByBrand == 'All'" data-id="{{s.model}}">
-                                        <td>{{toBrandName(s.brand)}}</td>
-                                        <td>{{s.model}}</td>
-                                        <td>{{s.qty}}</td>
-                                        <td>{{s.price | currency:"":0}}</td>
-                                    </tr>
-                                    </tbody>
+                            </div>
+                            <div class="col s6">
+                                <div class="input-field">
+                                    <select ng-model="sortByBrand" id="sortByBrand" class="browser-default">
+                                        <option value="All">Tout</option>
+                                        <option ng-repeat="s in brand track by $index" value="{{s.id}}">{{s.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <table class="responsive-table">
+                                    <thead>
+                                        <th>Famille</th>
+                                        <th>Serie</th>
+                                        <th>Qty</th>
+                                        <th>Prix</th>
+                                    </thead>
                                 </table>
+                                <div class="table-div" style="height:55vh;">
+                                    <div ng-show="items.length == 0" class="grey lighten-3 overlay">
+                                        <div class="center">
+                                            Rien a montre, stock est vide
+                                        </div>
+                                    </div>
+                                    <table id="itemsViewTable" class="responsive-table highlight">
+                                        <tbody>
+                                            <tr ng-repeat="s in items" ng-dblclick="addToCart($event,$index)" ng-if="s.brand == sortByBrand || sortByBrand == 'All'" data-id="{{s.model}}">
+                                                <td>{{toBrandName(s.brand)}}</td>
+                                                <td>{{s.model}}</td>
+                                                <td>{{s.qty}}</td>
+                                                <td>{{s.price | currency:"":0}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
-        <div class="col s3">
+        </div>
+        <div class="col s4 long">
             <fieldset style="padding:0px;">
                 <h6 class="legend" style="margin:0;text-align:center;">Panier</h6>
                 <div ng-show="checkout.items.length == 0" class="overlay white"style="top:3%;">
