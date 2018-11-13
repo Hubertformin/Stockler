@@ -99,6 +99,37 @@
             padding: 0 6px;
         }
     }
+    a{
+        i.num-badge{
+            position: absolute;
+            top:-70%;
+            font-style:normal;
+            right: 20%;
+            text-align: center;
+            font-size: 11px;
+            color: #fff;
+            height:15px;
+            width:15px;
+            line-height:15px;
+            border-radius: 50%;
+            background:#f44336;
+}
+    }
+    a.dropdownBtn{
+        position: relative;
+        div.drop-content{
+            position: absolute;
+            display:none;
+            right:-35%;
+            top:130%;
+            background: #fff;
+            height: 350px;
+            overflow-y: auto;
+            width: 276px;
+            border-radius:15px;
+            border:1px solid #ddd;
+}
+    }
     div.row{
         margin: 0 !important;
       height: 55px;
@@ -159,6 +190,14 @@ nav#sideNav{
     clear: both;
     display: table;
     content: '';
+    li{
+        a{
+            font-size: 0.9rem;
+            i{
+                font-size: 0.9rem;
+            }
+        }
+    }
   }
   i{
     display: inline!important;
@@ -166,7 +205,7 @@ nav#sideNav{
   div.separator{
     border-top: 1px solid lighten($side-nav-color,20%);
     position: relative;
-    line-height:10px;
+    line-height:1.9rem;
     small{
       padding:10px 15px;
       color: #eee;
@@ -361,7 +400,7 @@ nav#sideNav{
                 height: 100%;
                 div.brand{
                     height:100%;
-                    padding: 20px;
+                    padding:9px 0 0 10px;
                 }
                 div.models{
                     div.input-field{
@@ -375,36 +414,46 @@ nav#sideNav{
             }
         }
         &#reportsDashboardView{
+            .hcard{
+                height: 46vh;
+            }
+            div.item{
+                margin:10px;
+                background-color: #fff;
+                display: inline-block;
+                div.label{
+                    border:1px solid #ddd;
+                    border-radius:26px;
+                    position: relative;
+                    width: 80%;
+                    .icon{
+                        position: relative;;
+                        left: 0;
+                        display: inline-block;
+                        height: 40px;
+                        width: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                    }
+                }
+                width: 150px;
+                padding:10px;
+                border:1px solid #ddd;
+                border-radius:15px;
+                .body{
+                    text-align: center;
+                    padding: 1px;
+                    .item-name{
+                        margin: 0.656rem 0 0.656rem 0;
+                    }
+                    .unit{
+                        margin: 2.5px;
+                    }
+                }
+            }
             #bestSales{
                 .list{
-                    div.item{
-                        div.label{
-                            border:1px solid #ddd;
-                            border-radius:26px;
-                            position: relative;
-                            width: 80%;
-                            .icon{
-                                position: relative;;
-                                left: 0;
-                                display: inline-block;
-                                height: 40px;
-                                width: 40px;
-                                line-height: 40px;
-                                text-align: center;
-                            }
-                        }
-                        width: 200px;
-                        padding:10px;
-                        border:1px solid #ddd;
-                        border-radius:15px;
-                        .body{
-                            text-align: center;
-                            padding: 1px;
-                            .unit{
-                                margin: 2.5px;
-                            }
-                        }
-}
+            
                 }
             }
         }

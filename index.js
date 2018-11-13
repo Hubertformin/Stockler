@@ -1,4 +1,4 @@
-const {app, BrowserWindow,ipcMain,dialog} = require('electron')
+const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
   
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
@@ -13,6 +13,7 @@ const {app, BrowserWindow,ipcMain,dialog} = require('electron')
         width:width,
         height: height,
         title:'Stockler',
+        backgroundColor:'#263238',
         icon: './logo.png',
         webPreferences: {
             nodeIntegrationInWorker: true
@@ -54,9 +55,17 @@ const {app, BrowserWindow,ipcMain,dialog} = require('electron')
           event.returnValue = data;
       });
       //
-      win.onclose= (e) => {
-          e.preventDefault();
-      }
+      const notify = new Notification({
+        title:'My message',
+        body:'This is a test notification'
+    })
+    notify.addListener('show',(e)=>{
+        console.log(e)
+    })
+      setTimeout(()=>{
+          console.log('sending notification')
+            notify.show();
+      },10000)
   })
   
   // Quit when all windows are closed.

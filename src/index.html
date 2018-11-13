@@ -24,7 +24,7 @@
         <li id="app_quit" onclick="titleBarBtns('exit')"><i class="material-icons">clear</i></li>
     </ul>
 </title-bar>-->
-<body ng-app="StocklerApp" ng-controller="mainCtr">
+<body ng-app="StocklerApp" ng-controller="mainCtr" ng-cloak ng-csp ng-jq>
 
     <!--Splash screen -->
     <section id="splashScreen">
@@ -104,9 +104,17 @@
         <div class="head">
                 <input type="search" placeholder="Recherche.." class="browser-default">
             <div class="actions">
-                <a href=""><i class="material-icons">notifications</i></a>
-                <a href=""><i class="material-icons">settings</i></a>
-                <a href=""><i class="material-icons">more_vert</i></a>
+                <a class="dropdownBtn" data-target="#navNotify" href="javascript:void(0)">
+                    <i class="material-icons">notifications</i>
+                    <i class="num-badge">0</i>
+                    <div id="navNotify" class="drop-content">
+                        <div ng-show="notificatonMsg.length == 0" class="center">
+                            <span>Aucun notification</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="javascript:void(0)"><i class="material-icons">settings</i></a>
+                <a href="javascript:void(0)"><i class="material-icons">more_vert</i></a>
             </div>
         </div>
     </nav>
@@ -120,7 +128,7 @@
         </div>
         <div class="body">
             <div class="user">
-                <img class="circle" src="images/mentor.jpg" alt="">
+                <img class="circle" src="images/mentor.jpg">
                 <div class="username">
                     <strong>{{currentUser.name}} <i class="material-icons green-text online">fiber_manual_record</i><br><small>Administrateur</small></strong>
 
@@ -131,17 +139,17 @@
             </div>
             <ul class="links">
                 <li class="dropdown">
-                    <a href="#"><i class="material-icons left">desktop_mac</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">shopping_cart</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a href="#"><i class="material-icons left">add</i>Vendre</a></li>
-                        <li><a href="#!/"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
+                        <li><a class="subMenuLink" href="#"><i class="material-icons left">add</i>Vendre</a></li>
+                        <li><a class="subMenuLink" href="#!/"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#"><i class="material-icons left">chrome_reader_mode</i>Stock <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">chrome_reader_mode</i>Stock <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a href="#"><i class="material-icons left">add</i>Cree</a></li>
-                        <li><a href="#!items"><i class="material-icons left">pie_chart</i>Montre</a></li>
+                        <li><a class="subMenuLink" href="#!items"><i class="material-icons left">add</i>Cree</a></li>
+                        <li><a class="subMenuLink" href="#!items"><i class="material-icons left">pie_chart</i>Montre</a></li>
                     </ul>
                 </li>
             </ul>
@@ -152,17 +160,17 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
-                        <li><a href=""><i class="material-icons left">pie_chart</i>Stocks</a></li>
-                        <li><a href=""><i class="material-icons left">person</i>Utilisateur</a></li>
+                        <li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
+                        <li><a class="subMenuLink" href=""><i class="material-icons left">pie_chart</i>Stocks</a></li>
+                        <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Utilisateur</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#"><i class="material-icons left">people</i>Utilisateur <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
-                        <li><a href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
-                        <li><a href=""><i class="material-icons left">person</i>Utilisateur</a></li>
+                        <li><a class="subMenuLink" href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
+                        <li><a class="subMenuLink" href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
+                        <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Utilisateur</a></li>
                     </ul>
                 </li>
             </ul>

@@ -91,11 +91,17 @@ app.controller('dashCtr',($scope)=>{
     }
     //for min quantity, that is if the user inputs a quantity larger thans stock
     $scope.minQty = (e,i)=>{
-        var val = jQuery(e.target).val();
+        var val = Number(jQuery(e.target).val());
         if(typeof val !== 'number') return;
-        if(($scope.items[i].qty - $scope.items[i].orderedQty) - val < 0){
-            notifications.warning('L\'article n\'est plus en stock!');
+        //console.log(val);
+        if($scope.items[i].qty - val < 0){
+            notifications.warning(`La quantite de ${$scope.items[i].model} en stock est insufissant!`);
+            e.target.style.borderColor = "red";
+            e.target.style.backgroundColor = "#ffebee";
             return false;
+        }else{
+            e.target.style.borderColor = "green";
+            e.target.style.backgroundColor = "#e8f5e9";
         }
     }
     //min price
@@ -120,7 +126,7 @@ app.controller('dashCtr',($scope)=>{
                 notifications.warning(`Le prix de ${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model} est plus petite que le minimum`,6000);
                 return;
             }
-            if(typeof $scope.checkout.items[i].order_qty !== 'number'){
+            if(typeof $scope.checkout.items[i].order_qty !== 'number' || $scope.checkout.items[i].order_qty == 0){
                 notifications.warning(`La quantite de ${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model} est invalide`,6000);
                 return;
             }
@@ -158,8 +164,14 @@ app.controller('dashCtr',($scope)=>{
             for(var i=0;i<$scope.checkout.items.length;i++){
                 for(var j = 0;j<$scope.items.length;j++){
                     if($scope.items[j].id == $scope.checkout.items[i].id){
-                        $scope.items[j].qty -= Number($scope.checkout.items[i].order_qty);
-                        $scope.items[j].orderedQty += Number($scope.checkout.items[i].order_qty);
+                        if($scope.checkout.items[i].order_qty > $scope.items[j].qty){
+                            throw 'low-stock';
+                        }else{
+                            $scope.items[j].qty -= Number($scope.checkout.items[i].order_qty);
+                            $scope.items[j].orderedQty += Number($scope.checkout.items[i].order_qty);
+                            $scope.items[j].status = ($scope.items[j].qty === 0)?'inactive':'active';
+                            if($scope.items[j].qty === 0) $scope.items[j].date = d.getTime();
+                        } 
                     }
                 }
             }
@@ -168,7 +180,7 @@ app.controller('dashCtr',($scope)=>{
             $scope.db.items.toArray().then(data=>{
                 $scope.items = data;
             })
-
+            d = null;
         }).then(()=>{
             $scope.checkout = {
                 inv:Math.floor(Math.random() * (9999999 - 1000000) ) + 1000000,
@@ -186,7 +198,12 @@ app.controller('dashCtr',($scope)=>{
             checkoutModal.close();
         }).catch(err=>{
             console.error(err);
-            notifications.error('Erreur de base des donnes!');
+            checkoutModal.close();
+            if(err == 'low-stock'){
+                notifications.error('Le solde de stock est insufissant ');
+            }else{
+                notifications.error('Erreur de base des donnes!');
+            }
         })
         jQuery(e.target).waitMe("hide");
 

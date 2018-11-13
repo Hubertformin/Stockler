@@ -53,6 +53,9 @@ title-bar{
     }
   }
 }
+body{
+    background-color: #fff;
+}
 //first things first scrollbar
 /* width */
 ::-webkit-scrollbar {
@@ -158,6 +161,15 @@ input:focus{
 }
 .b-right{
     border-right: 1px solid #ddd;
+}
+.b-top{
+    border-top: 1px solid #ddd;
+}
+.b-bottom{
+    border-bottom: 1px solid #ddd;
+}
+.p-2{
+    padding: 2px!important;
 }
 .center{
     position: absolute;
@@ -269,7 +281,7 @@ input[type=search].search-input{
 }
 //heading
 .legend{
-    color:#ffeb3b;
+    color:#2196f3;
 }
 //@at-roo
 .hcard{
@@ -291,6 +303,7 @@ input[type=search].search-input{
     }
     .body{
         padding: 10px;
+        position: relative;
         div.article_det{
             h6{
                 padding-left:2px;

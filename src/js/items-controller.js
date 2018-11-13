@@ -45,9 +45,9 @@ app.controller('itemsCtr',($scope)=>{
         var d = new Date();
         $scope.brandName = $scope.brandName[0].toUpperCase()+$scope.brandName.slice(1).toLowerCase();
         //
-        if(typeof $scope.brand_id == 'number'){
+        if(typeof $scope.brand_id == 'number' && typeof $scope.brand_date == 'number'){
             //lets get thr form name
-            var brand = {id:$scope.brand_id,name:$scope.brandName,date:d.getTime()}
+            var brand = {id:$scope.brand_id,name:$scope.brandName,date:$scope.brand_date}
 
         }else{
             var brand = {name:$scope.brandName,date:d.getTime()}
@@ -61,8 +61,10 @@ app.controller('itemsCtr',($scope)=>{
                 })
         }).then(()=>{
             notifications.success('Okay');
+            console.log($scope.brand);
             $scope.brandName = '';
             $scope.brand_id = '';
+            $scope.brand_date = '';
             $scope.updateBrandBtn = false;
             $scope.$apply();
         }).catch(err=>{
@@ -107,6 +109,7 @@ app.controller('itemsCtr',($scope)=>{
         if(meth){
             $scope.brandName = $scope.brand[i].name;
             $scope.brand_id = $scope.brand[i].id;
+            $scope.brand_date = $scope.brand[i].date;
             $scope.updateBrandBtn = true;
         }else{
             $scope.brandName = '';
@@ -128,11 +131,11 @@ app.controller('itemsCtr',($scope)=>{
             notifications.warning('Nom de serie est invalide!');
             return;
         }
-        if($scope.item_qty == '' || typeof $scope.item_qty !== 'number'){
+        if(typeof $scope.item_qty !== 'number' && typeof $scope.item_id !== 'number'){
             notifications.warning('La quantite est requise');
             return;
         }
-        if($scope.item_price == '' || typeof $scope.item_price !== 'number'){
+        if(typeof $scope.item_price !== 'number'){
             notifications.warning('Le prix est requise');
             return;
         }
@@ -143,18 +146,50 @@ app.controller('itemsCtr',($scope)=>{
         $scope.model_name = $scope.model_name[0].toUpperCase()+$scope.model_name.slice(1).toLowerCase();
         //
         if(typeof $scope.item_id !== 'number'){
-            var item = {brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                qty:$scope.item_qty,price:$scope.item_price,date:d.getTime(),orderedQty:0}
+            var item = {brokenStatus:false,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
+                qty:$scope.item_qty,price:$scope.item_price,status:'active',date:d.getTime(),orderedQty:0,lowStockQty:$scope.getLowStockVal($scope.item_price)}
         }else{
             //lets get its total ordered qty first
             for(let j = 0;j<$scope.items.length;j++){
                 if($scope.item_id === $scope.items[j].id){
-                    console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
-                    console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
+                    //console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
+                    //console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
 
-                    var item = {id:$scope.item_id,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                        qty:$scope.item_qty + $scope.items[j].qty,price:$scope.item_price,date:d.getTime(),orderedQty:$scope.items[j].orderedQty}
-                        break;
+                    if(typeof $scope.item_qty === 'number'){
+                        if(($scope.items[j].qty + $scope.item_qty) < 0){
+                            notifications.error('Vous ne pouvez pas supprimer une quantité supérieure au stock')
+                            return;
+                        }
+                        var item = {
+                            brokenStatus:false,
+                            id:$scope.item_id,
+                            brand:$scope.item_brand,
+                            model:$scope.model_name,
+                            staff:$scope.currentUser.name,
+                            qty:$scope.item_qty + $scope.items[j].qty,
+                            status:(this.qty == 0)?'inactive':'active',
+                            price:$scope.item_price,
+                            date:d.getTime(),
+                            orderedQty:$scope.items[j].orderedQty,
+                            lowStockQty:$scope.getLowStockVal($scope.item_price)
+                        }
+                            break;
+                    }else{
+                        var item = {
+                            brokenStatus:false,
+                            id:$scope.item_id,
+                            brand:$scope.item_brand,
+                            model:$scope.model_name,
+                            staff:$scope.currentUser.name,
+                            qty:$scope.items[j].qty,
+                            price:$scope.item_price,
+                            date:$scope.item_date,
+                            status:(this.qty == 0)?'inactive':'active',
+                            orderedQty:$scope.items[j].orderedQty,
+                            lowStockQty:$scope.getLowStockVal($scope.item_price)
+                        }
+                            break;
+                    }
                 }
             }
         }
@@ -172,8 +207,10 @@ app.controller('itemsCtr',($scope)=>{
             }else{
                 notifications.success('Modifier');
             }
+            console.log($scope.items);
             //emptying the form
             $scope.item_id = '';
+            $scope.item_date = '';
             $scope.item_brand = '';
             $scope.model_name = '';
             $scope.item_qty = '';
@@ -218,6 +255,7 @@ app.controller('itemsCtr',($scope)=>{
         }
         if(mode){
             $scope.item_id = $scope.items[i].id;
+            $scope.item_date = $scope.items[i].date;
             $scope.item_brand = `${$scope.items[i].brand}`;
             $scope.model_name = $scope.items[i].model;
             //$scope.item_qty = $scope.items[i].qty - $scope.items[i].orderedQty;

@@ -84,8 +84,27 @@ if (data ===  null) {
 //
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
-
+//drpdowns
+jQuery('.dropdownBtn').on('click',(e)=>{
+    var data = jQuery(e.currentTarget).data('target');
+    jQuery(data).slideDown('fast');
+    data = null;
+})
+jQuery(window).on('click',(e)=>{
+    //if(jQuery(e.target).is('.drop-content'))
+    if(jQuery('.drop-content').css('display') == 'block'){
+        if(jQuery(e.target).parents('.drop-content').length === 1 || 
+        jQuery(e.target).is('.drop-content') ||
+        jQuery(e.target).is('.dropdownBtn') ||
+        jQuery(e.target).is('.dropdownBtn i')){
+            return;
+        }
+        jQuery('.drop-content').slideUp();
+    }
+})
 //navbar
 jQuery('#sideNav li.dropdown').on('click',(e)=>{
+    if(jQuery(e.target).is('.subMenuLink') || jQuery(e.target).is('.subMenuLink i')) return;
     jQuery(e.currentTarget).children('ul.sub-menu').slideToggle();
 })
+

@@ -1,29 +1,28 @@
 <div class="routePage" id="dashView" ng-controller="dashCtr">
     <div class="row">
-      <div id="placeOrder" class="col s8 long">
         <div class="col s12">
             <div class="hcard">
-                <div class="header teal white-text">
+                <div class="header blue-grey darken-3 white-text">
                     <h6>Client</h6>
                 </div>
                 <div class="body">
-                   <div class="row inner">
-                        <div class="input-field col s6">
+                    <div class="row inner">
+                        <div class="input-field col s3">
                             <i class="material-icons prefix">confirmation_number</i>
                             <input type="number" id="sales_inv" disabled ng-model="checkout.inv">
-                            <label for="sales_inv" class="active">Inv</label>
+                            <label for="sales_inv" class="active">FAC</label>
                         </div>
-                        <div class="input-field col s6">
+                        <div class="input-field col s3">
                             <i class="material-icons prefix">date_range</i>
                             <input type="text" disabled id="sales_date" value="{{toMyDate()}}">
                             <label for="sales_date" class="active">Date</label>
                         </div>
-                        <div class="input-field col s6">
+                        <div class="input-field col s3">
                             <i class="material-icons prefix">person</i>
                             <input type="text" id="sales_name" ng-model="checkout.name">
                             <label for="sales_name" class="active">Nom du client</label>
                         </div>
-                        <div class="input-field col s6">                                <i class="material-icons prefix">phone</i>
+                        <div class="input-field col s3">                                <i class="material-icons prefix">phone</i>
                             <input type="number" id="sales_phone" ng-model="checkout.phone">
                             <label for="sales_phone">Telephone(optionnel)</label>
                         </div>
@@ -31,12 +30,11 @@
                 </div>
             </div>
         </div>
-        <div class="col s12">
-            <div class="hcard">
-                <div class="header blue white-text">
-                    <h6>Articles</h6>
-                </div>
-                <div class="body">
+      <div id="placeOrder" class="col s12 long">
+        <div class="col s8">
+            <div class="hcard" style="height:75vh;">
+                <h6 class="blue-text center-align">Articles</h6>
+                <div class="body" style="padding-top:0;">
                     <div class="items">
                         <div class="row">
                             <div class="col s6">
@@ -61,7 +59,7 @@
                                         <th>Prix</th>
                                     </thead>
                                 </table>
-                                <div class="table-div" style="height:55vh;">
+                                <div class="table-div" style="height:45vh;">
                                     <div ng-show="items.length == 0" class="grey lighten-3 overlay">
                                         <div class="center">
                                             Rien a montre, stock est vide
@@ -84,41 +82,44 @@
                 </div>
             </div>
         </div>
-        </div>
-        <div class="col s4 long">
-            <fieldset style="padding:0px;">
-                <h6 class="legend" style="margin:0;text-align:center;">Panier</h6>
-                <div ng-show="checkout.items.length == 0" class="overlay white"style="top:3%;">
-                    <div class="center" style="width:80%;">
-                        <img src="images/icons/shoppng_cart.png" alt="cart">
-                        <h5 class="blue-grey-text">Paneir vide</h5>
-                        <span>Double-cliquez sur les articles pour ajoute au paneir.</span>
+        <div class="col s4">
+            <div class="hcard" style="height:75vh;">
+                <div class="body" style="height:100%;">
+                    <h6 class="legend" style="margin:0;text-align:center;">Panier</h6>
+                    <div ng-show="checkout.items.length == 0" class="overlay white"style="top:3%;">
+                        <div class="center" style="width:80%;">
+                            <img src="images/icons/shoppng_cart.png" alt="cart">
+                            <h5 class="blue-grey-text">Paneir vide</h5>
+                            <span>Double-cliquez sur les articles pour ajoute au paneir.</span>
+                        </div>
+                    </div>
+                    <div class="checkout">
+                        <div class="item z-depth-2" ng-repeat="s in checkout.items track by $index">
+                            <h6 class="teal-text">{{s.model}} <small class="right"><i ng-click="removeFromCart($index)" class="grey-text material-icons close">close</i></small></h6>
+                            <p>{{toBrandName(s.brand)}}</p>
+                            <input type="number" min="1" ng-model="s.order_qty" ng-keyup="minQty($event,$index)" class="browser-default">
+                            <input type="number" min="{{s.price}}" placeholder="prix" ng-model="s.order_price" class="browser-default" aria-busy="true" ng-keyup="minPrice($event,$index)">
+                        </div>
+                    </div>
+                    <div class="checkout-btns">
+                        <div style="position:relative;">
+                            <span style="margin-right:16%;"><strong>Total: </strong><strong>Articles: {{checkout.items.length}}</strong></span>
+                            <button ng-click="removeFromCart('all')" class="btn-flat red-text red-border"><i class="material-icons">remove_shopping_cart</i></button>
+                        </div>
+                        <div style="padding:5px;">
+                            <button ng-click="proceedCheckout()" ng-disabled="checkout.items.length == 0" class="btn-block btn blue waves-effect waves-light"><i class="material-icons left">shopping_cart</i>Proceder</button>
+                        </div>
                     </div>
                 </div>
-                <div class="checkout">
-                    <div class="item z-depth-2" ng-repeat="s in checkout.items track by $index">
-                        <h6 class="teal-text">{{s.model}} <small class="right"><i ng-click="removeFromCart($index)" class="grey-text material-icons close">close</i></small></h6>
-                        <p>{{toBrandName(s.brand)}}</p>
-                        <input type="number" min="1" ng-model="s.order_qty" ng-keyup="minQty($event,$index)" class="browser-default">
-                        <input type="number" min="{{s.price}}" placeholder="prix" ng-model="s.order_price" class="browser-default" aria-busy="true" ng-keyup="minPrice($event,$index)">
-                    </div>
-                </div>
-                <div class="checkout-btns">
-                    <div style="position:relative;">
-                        <span style="margin-right:16%;"><strong>Total: </strong><strong>Articles: {{checkout.items.length}}</strong></span>
-                        <button ng-click="removeFromCart('all')" class="btn-flat red-text red-border">Vider le panier</button>
-                    </div>
-                    <div style="padding:5px;">
-                        <button ng-click="proceedCheckout()" ng-disabled="checkout.items.length == 0" class="btn-block btn green waves-effect waves-light"><i class="material-icons left">shopping_cart</i>Proceder</button>
-                    </div>
-                </div>
-            </fieldset>
-        </div>
+            </div>
+         </div>
+    </div>
+        
     </div>
     <!-- MODALS -->
     <div id="checkOutModal" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <div class="header teal">
+            <div class="header blue darken-2">
                 <h5 class="white-text">Confimer l'achat</h5>
             </div>
             <div class="body">
@@ -167,7 +168,7 @@
         <div class="modal-footer">
             <span class="left"><strong>TOTAL Qty:</strong><span class="blue-grey-text">{{checkout.totalQty | currency:"":0}}</span>    <strong>Prix: </strong><span class="green-text">{{checkout.totalPrice | currency:"FCFA ":0}}</span></span>
             <a href="javascript:void(0)" class="modal-close waves-effect waves-default btn-flat grey white-text">Fermer</a>
-            <a ng-click="completeOrder($event)" href="javascript:void(0)" class="waves-effect waves-default btn-flat teal white-text">Confirmer</a>
+            <a ng-click="completeOrder($event)" href="javascript:void(0)" class="waves-effect waves-default btn-flat blue white-text">Confirmer</a>
         </div>
     </div>
 </div><!--End of controller -->

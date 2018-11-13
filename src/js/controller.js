@@ -29,7 +29,7 @@ app.controller('mainCtr',($scope)=>{
     $scope.db.version(1).stores({
         users:'++id,&name,password,email,mgr,status,startDate,permissions',
         brand:'++id,&name,date',
-        items:'++id,brand,&model,qty,orderedQty,staff,price,date',
+        items:'++id,brand,&model,qty,orderedQty,staff,price,date,status,lowStockQty,brokenStatus',
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
     });
     //empty varaibles for other
@@ -37,6 +37,7 @@ app.controller('mainCtr',($scope)=>{
     $scope.brand = [];
     $scope.items = [];
     $scope.sales = [];
+    $scope.notificatonMsg = [];
     $scope.currentUser = '';
     $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
         $scope.db.users.toArray()
@@ -62,7 +63,7 @@ app.controller('mainCtr',($scope)=>{
     .then(()=>{
         //hide splash screen
         jQuery('#splashScreen').remove();
-        console.log($scope.items);
+        //console.log($scope.items);
         //show manager or login depending on user length
         if($scope.users.length == 0){
             jQuery('#manager').show();
@@ -77,6 +78,63 @@ app.controller('mainCtr',($scope)=>{
     })
     .catch(()=>{
         notifications.error('Erreur de la base de donnees');
+    })
+    //1.2 Database hooks
+    //1.2.1 Item hook to filter items as low stock,broken,inactive,active
+    $scope.filterItems = {
+        lowStock:[],
+        broken:[],
+        inactive:[],
+        active:[]
+    }
+    $scope.db.items.hook('reading',(obj)=>{
+        //firt we modify accordingly
+        if(obj.qty == 0) {
+            obj.status = 'inactive';
+            var o = new Date(obj.date).getTime(),d = new Date().getTime();
+            var diff = Math.floor((d - o)/(1000*60*60*24));
+            obj.brokenStatus = (diff >= 30)?true:false;
+            diff = o = d = null;
+        }
+        //conditions to pass in to filer array
+        if(obj.qty <= obj.lowStockQty){
+            var exist = $scope.filterItems.lowStock.some((el)=>{
+                return el.id === obj.id;
+            })
+            if(!exist){
+                $scope.filterItems.lowStock.push(obj);
+            }
+            delete exist;
+        }
+        if(obj.brokenStatus === true){
+            var exist = $scope.filterItems.broken.some((el)=>{
+                return el.id === obj.id;
+            })
+            if(!exist){
+                $scope.filterItems.broken.push(obj);
+            }
+            delete exist;
+        }
+        if(obj.status === 'inactive'){
+            var exist = $scope.filterItems.inactive.some((el)=>{
+                return el.id === obj.id;
+            })
+            if(!exist){
+                $scope.filterItems.inactive.push(obj);
+            }
+            delete exist;
+        }
+        if(obj.status === 'active'){
+            var exist = $scope.filterItems.active.some((el)=>{
+                return el.id === obj.id;
+            })
+            if(!exist){
+                $scope.filterItems.active.push(obj);
+            }
+            delete exist;
+        }
+        console.log($scope.filterItems);
+        return obj;
     })
 
     //2. Manager account creation
@@ -176,7 +234,7 @@ app.controller('mainCtr',($scope)=>{
         }
     }
 
-    //4. functions
+    //4. functions for globall
     $scope.toMyDate = (dt = 'today')=>{
         var d;
         if(dt == 'today'){
@@ -185,6 +243,17 @@ app.controller('mainCtr',($scope)=>{
             d = new Date(dt);
         }
         return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+    }
+    //to calculate low stock value
+    $scope.getLowStockVal  = (val)=>{
+        var price = Number(val);
+        if(price <= 6000){
+            return 15;
+        }else if(6000 < price && price < 25){
+            return 5;
+        }else if(price >= 25){
+            return 3;
+        }
     }
 
 
