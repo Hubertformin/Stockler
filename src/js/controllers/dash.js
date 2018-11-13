@@ -94,8 +94,8 @@ app.controller('dashCtr',($scope)=>{
         var val = Number(jQuery(e.target).val());
         if(typeof val !== 'number') return;
         //console.log(val);
-        if($scope.items[i].qty - val < 0){
-            notifications.warning(`La quantite de ${$scope.items[i].model} en stock est insufissant!`);
+        if($scope.checkout.items[i].qty - val < 0){
+            notifications.warning(`La quantite de&nbsp;<strong class="amber-text">${$scope.checkout.items[i].model}</strong>&nbsp;en stock est insufissant!`);
             e.target.style.borderColor = "red";
             e.target.style.backgroundColor = "#ffebee";
             return false;

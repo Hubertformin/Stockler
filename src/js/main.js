@@ -85,9 +85,9 @@ if (data ===  null) {
 const Cryptr = require('cryptr');
 const cryptr = new Cryptr('myTotalySecretKey');
 //drpdowns
-jQuery('.dropdownBtn').on('click',(e)=>{
-    var data = jQuery(e.currentTarget).data('target');
-    jQuery(data).slideDown('fast');
+jQuery('#notificationsIcon').on('click',(e)=>{
+    var data = jQuery(e.currentTarget).siblings('.drop-content');
+    jQuery(data).slideToggle('fast');
     data = null;
 })
 jQuery(window).on('click',(e)=>{
@@ -95,8 +95,7 @@ jQuery(window).on('click',(e)=>{
     if(jQuery('.drop-content').css('display') == 'block'){
         if(jQuery(e.target).parents('.drop-content').length === 1 || 
         jQuery(e.target).is('.drop-content') ||
-        jQuery(e.target).is('.dropdownBtn') ||
-        jQuery(e.target).is('.dropdownBtn i')){
+        jQuery(e.target).is('.dropdownTrigger')){
             return;
         }
         jQuery('.drop-content').slideUp();

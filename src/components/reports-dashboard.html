@@ -13,36 +13,36 @@
                     </div>
                 </div>
                 <div class="col s12">
-                        <div class="item-container">
-                                <div class="item red-border center-align">
-                                    <h6 class="brand-name red-text"><i class="material-icons medium">warning</i></h6>
-                                    <div class="body">
-                                        <h6 class="item-name grey-text">Stocks faible</h6>
-                                        <h4 class="unit red-text">{{filterItems.lowStock.length}}</h4>
-                                    </div>
-                                </div>
-                                <div class="item green-border center-align">
-                                    <h6 class="brand-name green-text"><i class="material-icons medium">work</i></h6>
-                                    <div class="body">
-                                        <h6 class="item-name grey-text">Stocks actif</h6>
-                                        <h4 class="unit green-text">{{filterItems.active.length}}</h4>
-                                    </div>
-                                </div>
-                                <div class="item amber-border center-align">
-                                    <h6 class="brand-name amber-text"><i class="material-icons medium">error</i></h6>
-                                    <div class="body">
-                                        <h6 class="item-name grey-text">Stocks inactif</h6>
-                                        <h4 class="unit amber-text">{{filterItems.inactive.length}}</h4>
-                                    </div>
-                                </div>
-                                <div class="item grey-border center-align">
-                                    <h6 class="brand-name grey-text text-darken-3"><i class="material-icons medium">backspace</i></h6>
-                                    <div class="body">
-                                        <h6 class="item-name grey-text">stocks brisés</h6>
-                                        <h4 class="unit grey-text text-darken-3">{{filterItems.broken.length}}</h4>
-                                    </div>
-                                </div>
+                    <div class="item-container">
+                        <a href="#!stock-reports/low_stock" class="item red-border center-align">
+                            <h6 class="brand-name red-text"><i class="material-icons medium">warning</i></h6>
+                            <div class="body">
+                                <h6 class="item-name grey-text">Stocks faible</h6>
+                                <h4 class="unit red-text">{{filterItems.lowStock.length}}</h4>
                             </div>
+                        </a>
+                        <a href="#!stock-reports/in_stock" class="item green-border center-align">
+                            <h6 class="brand-name green-text"><i class="material-icons medium">work</i></h6>
+                            <div class="body">
+                                <h6 class="item-name grey-text">En Stock</h6>
+                                <h4 class="unit green-text">{{filterItems.active.length}}</h4>
+                            </div>
+                        </a>
+                        <a href="#!stock-reports/out_of_stock" class="item amber-border center-align">
+                            <h6 class="brand-name amber-text"><i class="material-icons medium">error</i></h6>
+                            <div class="body">
+                                <h6 class="item-name grey-text">Stocks finis</h6>
+                                <h4 class="unit amber-text">{{filterItems.inactive.length}}</h4>
+                            </div>
+                        </a>
+                        <a href="#!stock-reports/broken_stocks" class="item grey-border center-align">
+                            <h6 class="brand-name grey-text text-darken-3"><i class="material-icons medium">backspace</i></h6>
+                            <div class="body">
+                                <h6 class="item-name grey-text">stocks brisés</h6>
+                                <h4 class="unit grey-text text-darken-3">{{filterItems.broken.length}}</h4>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,8 +57,8 @@
                     <div class="row">
                         <div class="article_det col s12 m6 b-right">
                             <h6 class="red-text"><i class="material-icons left">error_outline</i>Stock faible<span class="badge red-text">{{filterItems.lowStock.length}}</span></h6>
-                            <h6 class="green-text"><i class="material-icons left">featured_play_list</i>Stock<span class="green-text badge">{{filterItems.active.length}}</span></h6>
-                            <h6 class="amber-text"><i class="material-icons left">subtitles</i>Stock inactif <span class="amber-text badge">{{filterItems.inactive.length}}</span></h6>
+                            <h6 class="green-text"><i class="material-icons left">featured_play_list</i>En stock<span class="green-text badge">{{filterItems.active.length}}</span></h6>
+                            <h6 class="amber-text"><i class="material-icons left">subtitles</i>Stocks finis <span class="amber-text badge">{{filterItems.inactive.length}}</span></h6>
                             <h6 class="grey-text"><i class="material-icons left">stop_screen_share</i>Stocks brisés<span class="grey-text badge">{{filterItems.broken.length}}</span>  </h6>
                         </div>
                         <div class="col s12 m6">
@@ -67,7 +67,7 @@
                                 class="ldBar label-center"
                                 data-stroke="data:ldbar/res,gradient(0,1,#9df,#9fd,#df9,#fd9)",
                                 style="width:50%;height:50%;margin:auto"
-                                data-value="85"
+                                data-value="50"
                                 data-preset="circle"
                             ></div>
                         </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="body">
                     <div class="list center-align">
-                        <div class="item purple-border">
+                        <div class="item purple-border" ng-repeat="x in d">
                                 <span class="brand-name purple-text">Samsung</span>
                             <div class="body">
                                 <h5 class="item-name grey-text">Galaxy S9</h5>

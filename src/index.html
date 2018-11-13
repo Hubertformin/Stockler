@@ -104,8 +104,8 @@
         <div class="head">
                 <input type="search" placeholder="Recherche.." class="browser-default">
             <div class="actions">
-                <a class="dropdownBtn" data-target="#navNotify" href="javascript:void(0)">
-                    <i class="material-icons">notifications</i>
+                <a class="dropdownBtn" href="javascript:void(0)">
+                    <i id="notificationsIcon" class="material-icons dropdownTrigger">notifications</i>
                     <i class="num-badge">0</i>
                     <div id="navNotify" class="drop-content">
                         <div ng-show="notificatonMsg.length == 0" class="center">
@@ -141,8 +141,8 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="material-icons left">shopping_cart</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a class="subMenuLink" href="#"><i class="material-icons left">add</i>Vendre</a></li>
-                        <li><a class="subMenuLink" href="#!/"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
+                        <li><a class="subMenuLink" href="#!"><i class="material-icons left">add</i>Vendre</a></li>
+                        <li><a class="subMenuLink" href="#!"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -161,12 +161,12 @@
                     <a href="javascript:void(0)"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
                         <li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
-                        <li><a class="subMenuLink" href=""><i class="material-icons left">pie_chart</i>Stocks</a></li>
-                        <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Utilisateur</a></li>
+                        <li><a class="subMenuLink" href="#!stock-reports/all"><i class="material-icons left">pie_chart</i>Rapports de stock</a></li>
+                        <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Rapports d'utilisateurs</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#"><i class="material-icons left">people</i>Utilisateur <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">people</i>Utilisateur <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
                         <li><a class="subMenuLink" href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
                         <li><a class="subMenuLink" href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
@@ -186,10 +186,12 @@
     <script src="js/main.js"></script>
     <script src="js/controller.js"></script>
     <!--Sub conrollers-->
-    <script src="js/dash-controller.js"></script>
-    <script src="js/items-controller.js"></script>
-    <script src="js/users-controller.js"></script>
-    <script src="js/reports-controller.js"></script>
-    <script src="js/reportsDash-controller.js"></script>
+    <script src="js/controllers/dash.js"></script>
+    <script src="js/controllers/items.js"></script>
+    <script src="js/controllers/users.js"></script>
+    <script src="js/controllers/reports.js"></script>
+    <script src="js/controllers/reports-dashboard.js"></script>
+    <script src="js/controllers/item-reports.js"></script>
+    <script src="js/controllers/today-records.js"></script>
 </body>
 </html>

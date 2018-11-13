@@ -17,6 +17,9 @@ app.config(($routeProvider)=>{
         .when('/rep-dash',{
             templateUrl:'components/reports-dashboard.html'
         })
+        .when('/stock-reports/:type',{
+            templateUrl:'components/stocks-reports.html'
+        })
 });
 
 
@@ -97,11 +100,12 @@ app.controller('mainCtr',($scope)=>{
             diff = o = d = null;
         }
         //conditions to pass in to filer array
-        if(obj.qty <= obj.lowStockQty){
+        if(obj.qty > 0 && obj.qty <= obj.lowStockQty){
             var exist = $scope.filterItems.lowStock.some((el)=>{
                 return el.id === obj.id;
             })
             if(!exist){
+                obj.status = 'low-stock'
                 $scope.filterItems.lowStock.push(obj);
             }
             delete exist;
@@ -124,7 +128,7 @@ app.controller('mainCtr',($scope)=>{
             }
             delete exist;
         }
-        if(obj.status === 'active'){
+        if(obj.status === 'active' && obj.qty > 0  || obj.status > 0){
             var exist = $scope.filterItems.active.some((el)=>{
                 return el.id === obj.id;
             })
@@ -133,8 +137,24 @@ app.controller('mainCtr',($scope)=>{
             }
             delete exist;
         }
-        console.log($scope.filterItems);
         return obj;
+    })
+    $scope.db.items.hook('updating',(mod,pk,obj)=>{
+        $scope.filterItems = {
+            lowStock:[],
+            broken:[],
+            inactive:[],
+            active:[]
+        }
+        var keys = Object.getOwnPropertyNames(mod);
+        var qty_exist = keys.some(el=>{
+            return el == 'qty';
+        })
+        if(qty_exist){
+            if((mod.qty+obj.qty)<0){
+                throw 'negative_qty';
+            }
+        }
     })
 
     //2. Manager account creation
@@ -235,12 +255,25 @@ app.controller('mainCtr',($scope)=>{
     }
 
     //4. functions for globall
-    $scope.toMyDate = (dt = 'today')=>{
+    $scope.toBrandName = (id)=>{
+        var name = 'Indisponible';
+        for(let i = 0;i<$scope.brand.length;i++){
+            if(Number($scope.brand[i].id) === Number(id)){
+                name = $scope.brand[i].name;
+                break;
+            }
+        }
+        return name;
+    }
+    $scope.toMyDate = (dt = 'today',t = null)=>{
         var d;
         if(dt == 'today'){
             d = new Date();
         }else {
             d = new Date(dt);
+        }
+        if(t !== null){
+            return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}`;
         }
         return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
     }

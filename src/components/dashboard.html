@@ -67,7 +67,10 @@
                                     </div>
                                     <table id="itemsViewTable" class="responsive-table highlight">
                                         <tbody>
-                                            <tr ng-repeat="s in items" ng-dblclick="addToCart($event,$index)" ng-if="s.brand == sortByBrand || sortByBrand == 'All'" data-id="{{s.model}}">
+                                            <tr ng-repeat="s in items track by $index" 
+                                                ng-dblclick="addToCart($event,$index)" 
+                                                ng-class="s.status"
+                                                ng-if="s.brand == sortByBrand || sortByBrand == 'All' && s.qty > 0" data-id="{{s.model}}">
                                                 <td>{{toBrandName(s.brand)}}</td>
                                                 <td>{{s.model}}</td>
                                                 <td>{{s.qty}}</td>

@@ -1,0 +1,407 @@
+<div class="routePage light-blue lighten-5" id="stocksReportsView" ng-controller="stocks-reportsCtr">
+    <div class="row" ng-hide="itemView">
+        <div class="col s8">
+            Selectionez l'etat du stock dans la case a droite
+        </div>
+        <div class="col s4">
+            <select ng-model="displayMode" class="browser-default">
+                <option value="all">Tout</option>
+                <option value="in_stock">En stock</option>
+                <option value="low_stock">Stock faible</option>
+                <option value="out_of_stock">Stocks epuise</option>
+                <option value="broken_stocks">Stocks brisés</option>
+            </select>
+        </div>
+        <div class="col s12">
+            <div class="switch" ng-switch="displayMode">
+                <div class="when" ng-switch-when="all">
+                    <div class="head">
+                        <div class="row">
+                            <div class="col s4">
+                                <h5 class="blue-text heading">
+                                    <img src="images/icons/package.png">
+                                    Tout [{{items.length | currency:"":0}} articles(s)]
+                                </h5>
+                            </div>
+                            <div class="col s4">
+                                <button class="btn green waves-effect export-btns">
+                                    <img src="images/icons/excel.png">
+                                    Excel
+                                </button>
+                                <button class="btn orange waves-effect export-btns">
+                                    <img src="images/icons/pdf.png">
+                                    PDF
+                                </button> 
+                            </div>
+                            <div class="col s4">
+                                <input type="search" onkeyup="searchTable(event,'#all_table',6)"  placeholder="Recherche...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body white">
+                        <div class="table-div" style="height:62vh;">
+                            <div class="overlay" ng-show="items.length == 0">
+                                <div class="center">
+                                    <p>Aucun article</p>
+                                </div>
+                            </div>
+                            <table id="all_table">
+                                <thead>
+                                   <th>Famlille</th>
+                                   <th>Serie</th>
+                                   <th>Qte</th>
+                                   <th>Prix</th>
+                                   <th>Date</th>
+                                   <th><i class="material-icons">person</i></th>
+                                   <th><i class="material-icons">delete_forever</i></th>
+                               </thead>
+                               <tbody>
+                                    <tr ng-repeat="s in items track by $index" ng-dblclick="previewItem('items',$index)" ng-class="s.status">
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td>{{s.qty}}</td>
+                                        <td>{{s.price | currency:"FCFA ":0}}</td>
+                                        <td>{{toMyDate(s.date,true)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td><i class="material-icons action">delete</i></td>
+                                    </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <h6><strong>Montrant {{items.length | currency:"":0}} article(s)</strong></h6>
+                    </div>
+                </div>
+                <div class="when" ng-switch-when="low_stock">
+                    <div class="head">
+                        <div class="row">
+                                <div class="col s4">
+                                    <h5 class="amber-text heading">
+                                        <i class="material-icons medium" style="font-size: 2.6rem;transform: translateY(5px);display: inline-block;">warning</i>
+                                                Stock faible ({{filterItems.lowStock.length | currency:"":0}} articles(s))
+                                    </h5>
+                                </div>
+                                <div class="col s4">
+                                    <button class="btn green waves-effect export-btns">
+                                        <img src="images/icons/excel.png">
+                                        Excel
+                                    </button>
+                                    <button class="btn orange waves-effect export-btns">
+                                        <img src="images/icons/pdf.png">
+                                        PDF
+                                    </button> 
+                                </div>
+                                <div class="col s4">
+                                    <input type="search" onkeyup="searchTable(event,'#low_stock_table',6)"  placeholder="Recherche...">
+                                </div>
+                            </div>
+                    </div>
+                    <div class="body white">
+                        <div class="table-div" style="height:62vh;">
+                            <div class="overlay" ng-show="filterItems.lowStock.length == 0">
+                                <div class="center">
+                                    <p>Aucun article</p>
+                                </div>
+                            </div>
+                            <table id="low_stock_table">
+                                <thead>
+                                   <th>Famlille</th>
+                                   <th>Serie</th>
+                                   <th>Qte</th>
+                                   <th>Prix</th>
+                                   <th>Date</th>
+                                   <th><i class="material-icons">person</i></th>
+                                   <th><i class="material-icons">delete_forever</i></th>
+                               </thead>
+                               <tbody class="amber lighten-5">
+                                    <tr ng-repeat="s in filterItems.lowStock track by $index" ng-dblclick="previewItem('low-stock',$index)">
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td class="red-text">{{s.qty}}</td>
+                                        <td>{{s.price | currency:"FCFA ":0}}</td>
+                                        <td>{{toMyDate(s.date,true)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td><i class="material-icons action">delete</i></td>
+                                    </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <h6><strong>Montrant {{filterItems.lowStock.length | currency:"":0}} article(s)</strong></h6>
+                    </div>
+                </div>
+                <div class="when" ng-switch-when="in_stock">
+                    <div class="head">
+                        <div class="row">
+                            <div class="col s4">
+                                <h5 class="green-text heading">
+                                    <i class="material-icons medium" style="font-size: 2.6rem;transform: translateY(5px);display: inline-block;">
+                                        beenhere
+                                    </i>
+                                    En stock ({{filterItems.active.length | currency:"":0}} articles(s))
+                                </h5>
+                            </div>
+                            <div class="col s4">
+                                <button class="btn green waves-effect export-btns">
+                                    <img src="images/icons/excel.png">
+                                    Excel
+                                </button>
+                                <button class="btn orange waves-effect export-btns">
+                                    <img src="images/icons/pdf.png">
+                                    PDF
+                                </button> 
+                            </div>
+                            <div class="col s4">
+                                <input type="search" onkeyup="searchTable(event,'#in_stock_table',6)"  placeholder="Recherche...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body white">
+                        <div class="table-div" style="height:62vh;">
+                            <div class="overlay" ng-show="filterItems.active.length == 0">
+                                <div class="center">
+                                    <p>Aucun article</p>
+                                </div>
+                            </div>
+                            <table id="in_stock_table">
+                                <thead>
+                                   <th>Famlille</th>
+                                   <th>Serie</th>
+                                   <th>Qte</th>
+                                   <th>Prix</th>
+                                   <th>Date</th>
+                                   <th><i class="material-icons">person</i></th>
+                                   <th><i class="material-icons">delete_forever</i></th>
+                               </thead>
+                               <tbody class="light-green lighten-5">
+                                    <tr ng-repeat="s in filterItems.active track by $index" ng-dblclick="previewItem('active',$index)">
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td>{{s.qty}}</td>
+                                        <td>{{s.price | currency:"FCFA ":0}}</td>
+                                        <td>{{toMyDate(s.date,true)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td><i class="material-icons action">delete</i></td>
+                                    </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <h6><strong>Montrant {{filterItems.active.length | currency:"":0}} article(s)</strong></h6>
+                    </div>
+                </div>
+                <div class="when" ng-switch-when="out_of_stock">
+                    <div class="head">
+                        <div class="row">
+                            <div class="col s12">
+                                <h5 class="red-text heading">
+                                    <i class="material-icons medium" style="font-size: 2.6rem;transform: translateY(5px);display: inline-block;">
+                                        cancel
+                                    </i>
+                                   Stocks epuise ({{filterItems.inactive.length | currency:"":0}} articles(s))
+                                </h5>
+                            </div>
+                            <div class="col s4"></div>
+                            <div class="col s4">
+                                <button class="btn green waves-effect export-btns">
+                                    <img src="images/icons/excel.png">
+                                    Excel
+                                </button>
+                                <button class="btn orange waves-effect export-btns">
+                                    <img src="images/icons/pdf.png">
+                                    PDF
+                                </button> 
+                            </div>
+                            <div class="col s4">
+                                <input type="search" onkeyup="searchTable(event,'#out_of_stock_table',6)"  placeholder="Recherche...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body white">
+                        <div class="table-div" style="height:62vh;">
+                            <div class="overlay" ng-show="filterItems.inactive.length == 0">
+                                <div class="center">
+                                    <p>Aucun article</p>
+                                </div>
+                            </div>
+                            <table id="out_of_stock_table">
+                                <thead>
+                                   <th>Famlille</th>
+                                   <th>Serie</th>
+                                   <th>Qte</th>
+                                   <th>Prix</th>
+                                   <th>Date</th>
+                                   <th><i class="material-icons">person</i></th>
+                                   <th><i class="material-icons">delete_forever</i></th>
+                               </thead>
+                               <tbody class="red lighten-5">
+                                    <tr ng-repeat="s in filterItems.inactive track by $index" ng-dblclick="previewItem('inactive',$index)">
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td>{{s.qty}}</td>
+                                        <td>{{s.price | currency:"FCFA ":0}}</td>
+                                        <td>{{toMyDate(s.date,true)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td><i class="material-icons action">delete</i></td>
+                                    </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <h6><strong>Montrant {{filterItems.inactive.length | currency:"":0}} article(s)</strong></h6>
+                    </div>
+                </div>
+                <div class="when" ng-switch-when="broken_stocks">
+                    <div class="head">
+                        <div class="row">
+                            <div class="col s12">
+                                <h5 class="blue-grey-text text-darken-5 heading">
+                                        <i class="material-icons medium" style="font-size: 2.6rem;transform: translateY(5px);display: inline-block;">
+                                            delete_forever
+                                        </i>
+                                        Stocks brises ({{filterItems.broken.length | currency:"":0}} articles(s))
+                                </h5>
+                            </div>
+                            <div class="col s4"></div>
+                            <div class="col s4">
+                                <button
+                                ng-disabled="filterItems.broken.length == 0" 
+                                class="btn green waves-effect export-btns">
+                                    <img src="images/icons/excel.png">
+                                    Excel
+                                </button>
+                                <button
+                                ng-disabled="filterItems.broken.length == 0" 
+                                class="btn orange waves-effect export-btns">
+                                    <img src="images/icons/pdf.png">
+                                    PDF
+                                </button> 
+                            </div>
+                            <div class="col s4">
+                                <input type="search" onkeyup="searchTable(event,'#broken_stocks',6)"  placeholder="Recherche...">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body white">
+                        <div class="table-div" style="height:62vh;">
+                            <div class="overlay" ng-show="filterItems.broken.length == 0">
+                                <div class="center">
+                                    <p>Aucun article</p>
+                                </div>
+                            </div>
+                            <table id="broken_stocks">
+                                <thead>
+                                   <th>Famlille</th>
+                                   <th>Serie</th>
+                                   <th>Qte</th>
+                                   <th>Prix</th>
+                                   <th>Date</th>
+                                   <th><i class="material-icons">person</i></th>
+                                   <th><i class="material-icons">delete_forever</i></th>
+                               </thead>
+                               <tbody>
+                                    <tr ng-repeat="s in filterItems.broken track by $index" ng-dblclick="previewItem('broken-stock',$index)">
+                                        <td>{{toBrandName(s.brand)}}</td>
+                                        <td>{{s.model}}</td>
+                                        <td>{{s.qty}}</td>
+                                        <td>{{s.price | currency:"FCFA ":0}}</td>
+                                        <td>{{toMyDate(s.date,true)}}</td>
+                                        <td>{{s.staff}}</td>
+                                        <td><i class="material-icons action">delete</i></td>
+                                    </tr>
+                               </tbody>
+                           </table>
+                        </div>
+                    </div>
+                    <div class="foot">
+                        <h6><strong>Montrant {{filterItems.broken.length | currency:"":0}} article(s)</strong></h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="item-prev" ng-show="itemView">
+        <div class="col s12">
+            <div class="row inner control-bar">
+                <div class="col s12">
+                    <button class="btn" ng-click="itemView = !itemView"><i class="material-icons left">keyboard_arrow_left</i>Retour</button>
+                </div>
+            </div>
+            <div class="row page" ng-init="editable=false">
+                <div class="col s6 img">
+                    <p>
+                        Detaile de {{toBrandName(previewedItem.brand)}} {{previewedItem.model}}, clicquez le crayon pour modifier
+                        <p ng-switch="previewedItem.status">
+                            <span class="green-text" style="font-size:1.8rem;" ng-switch-when="active">
+                                <i class="material-icons" style="font-size: 2.0rem;transform: translateY(5px);display: inline-block;">
+                                    beenhere
+                                </i>
+                                En stock
+                            </span>
+                            <span ng-switch-when="inactive" class="red-text" style="font-size:1.8rem;">
+                                <i class="material-icons" style="font-size: 2.0rem;transform: translateY(5px);display: inline-block;">
+                                    cancel
+                                </i>
+                                Stock epuise
+                            </span>
+                            <span ng-switch-when="low-stock" class="amber-text" style="font-size:1.8rem;">
+                                <i class="material-icons" style="font-size: 2.0rem;transform: translateY(5px);display: inline-block;">
+                                    warning
+                                </i>
+                                Stock faible
+                            </span>
+                            <span ng-switch-when="broken-stock" class="blue-grey-text text-darken-5" style="font-size:1.8rem;">
+                                <i class="material-icons" style="font-size: 2.0rem;transform: translateY(5px);display: inline-block;">
+                                        delete_forever
+                                </i>
+                                stock brises
+                            </span>
+                        </p>
+                    </p>
+                    <img src="images/icons/phone-icon.jpg" class="circle" />
+                </div>
+                <div class="col s6">
+                     <div class="col s12" style="padding:20px;">
+                        <button ng-show="editable" ng-click="updateItem()" class="green btn-floating waves-effect"><i class="material-icons">save</i></button>
+                        <button ng-show="editable" ng-click="deleteItem(previewedItem.id)" class="grey btn-floating waves-effect"><i class="material-icons">delete</i></button>
+                        <button ng-click="editable= !editable" class="right btn-floating waves-effect"><i class="material-icons">create</i></button>
+                    </div>
+                    <div class="input-field">
+                        <input ng-disabled="!editable" ng-model-options="{updateOn: 'blur'}" class="model" type="text" placeholder="Serie" ng-model="previewedItem.model" />
+                    </div>
+                    <div class="input-field">
+                        <select ng-disabled="!editable" ng-model-options="{updateOn: 'blur'}" ng-model="previewedItem.brand" class="browser-default">
+                            <option ng-repeat="b in brand track by $index" value="{{b.id}}">{{b.name}}</option>
+                        </select>
+                    </div>
+                    <div class="input-labels" ng-class="(!editable)?'disabled':'normal'">
+                            <div class="input-field">
+                                    <label for="" class="active">Qte</label>
+                                    <input ng-disabled="!editable" type="number" placeholder="Qte" ng-model="previewedItem.qty" />
+                                </div>
+                                <div class="input-field">
+                                    <label for="" class="active">Prix</label>
+                                    <p class="input" ng-show="!editable">{{previewedItem.price | currency:"FCFA ":0}}</p>
+                                    <input ng-show="editable" type="number" placeholder="prix" ng-model="previewedItem.price" />
+                                </div>
+                                <div class="input-field">
+                                    <label for="" class="active">Date d'entre:</label>
+                                    <input type="text" disabled placeholder="Date" value="{{toMyDate(previewedItem.date,true)}}" />
+                                </div>
+                                <div class="input-field">
+                                    <label for="" class="active">Cree par:</label>
+                                    <input type="text" disabled placeholder="personnel" ng-model="previewedItem.staff" />
+                                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>

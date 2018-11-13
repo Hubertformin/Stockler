@@ -251,6 +251,12 @@ table{
                 background-color:#a5d6a7!important;
             }
         }
+        &.inactive{
+            background:#ffebee ;
+        }
+        &.low-stock{
+            background: #fffde7;
+        }
     }
     .action{
         cursor: pointer;
@@ -288,6 +294,7 @@ input[type=search].search-input{
     //@extend .z-depth-1;
     border: 1px solid #ddd;
     border-radius: 10px;
+    background: #fff;
     .header{
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;

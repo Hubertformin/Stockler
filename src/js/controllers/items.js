@@ -146,18 +146,45 @@ app.controller('itemsCtr',($scope)=>{
         $scope.model_name = $scope.model_name[0].toUpperCase()+$scope.model_name.slice(1).toLowerCase();
         //
         if(typeof $scope.item_id !== 'number'){
-            var item = {brokenStatus:false,brand:$scope.item_brand,model:$scope.model_name,staff:$scope.currentUser.name,
-                qty:$scope.item_qty,price:$scope.item_price,status:'active',date:d.getTime(),orderedQty:0,lowStockQty:$scope.getLowStockVal($scope.item_price)}
+            if($scope.item_qty < 0) {
+                notifications.error('Vous ne pouvez pas metre un valuer negatif!')
+                return;
+            }
+            var status = 'active';
+            if($scope.item_qty == 0){
+                status = 'inactive';
+            }else if($scope.item_qty > 0 && $scope.item_qty <= $scope.getLowStockVal($scope.item_price)){
+                status = 'low-stock';
+            }
+            var item = {
+                brokenStatus:false,
+                brand:$scope.item_brand,
+                model:$scope.model_name,
+                staff:$scope.currentUser.name,
+                qty:$scope.item_qty,
+                price:$scope.item_price,
+                date:d.getTime(),
+                orderedQty:0,
+                lowStockQty:$scope.getLowStockVal($scope.item_price),
+                status:status
+            }
+            delete status;
         }else{
             //lets get its total ordered qty first
             for(let j = 0;j<$scope.items.length;j++){
                 if($scope.item_id === $scope.items[j].id){
                     //console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
                     //console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
-
+                    var status = 'active';
+                    if(($scope.item_qty + $scope.items[j].qty) > 0
+                    || ($scope.item_qty + $scope.items[j].qty) <= $scope.getLowStockVal($scope.item_price)){
+                        status = 'low-stock';
+                    }else if(($scope.item_qty + $scope.items[j].qty) === 0){
+                        status = 'inactive';
+                    }
                     if(typeof $scope.item_qty === 'number'){
                         if(($scope.items[j].qty + $scope.item_qty) < 0){
-                            notifications.error('Vous ne pouvez pas supprimer une quantité supérieure au stock')
+                            notifications.error('Vous ne pouvez pas supprimer une quantité supérieure a la quantité du stock');
                             return;
                         }
                         var item = {
@@ -167,7 +194,7 @@ app.controller('itemsCtr',($scope)=>{
                             model:$scope.model_name,
                             staff:$scope.currentUser.name,
                             qty:$scope.item_qty + $scope.items[j].qty,
-                            status:(this.qty == 0)?'inactive':'active',
+                            status:status,
                             price:$scope.item_price,
                             date:d.getTime(),
                             orderedQty:$scope.items[j].orderedQty,
@@ -184,7 +211,7 @@ app.controller('itemsCtr',($scope)=>{
                             qty:$scope.items[j].qty,
                             price:$scope.item_price,
                             date:$scope.item_date,
-                            status:(this.qty == 0)?'inactive':'active',
+                            status:status,
                             orderedQty:$scope.items[j].orderedQty,
                             lowStockQty:$scope.getLowStockVal($scope.item_price)
                         }
@@ -220,12 +247,14 @@ app.controller('itemsCtr',($scope)=>{
             $scope.$apply();
             //document.querySelector('#createItemForm').reset();
         }).catch(err=>{
-            console.error(err);
-            if(err.inner.code == 0){
-                notifications.warning('Cette element existe deja!');
-                return;
+            try{
+                if(err.inner.code == 0){
+                    notifications.warning('Cette element existe deja!');
+                    return;
+                }
+            }catch(e){
+                notifications.error("Impossible d'ajouter/modifier la base de données, cet article existe probablement déjà.",6500);
             }
-            notifications.error('Erreur de base donnees');
         })
     });
     //2. delete item
