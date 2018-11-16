@@ -38,15 +38,18 @@
   "homepage": "https://github.com/Hubertformin/Stockler#readme",
   "devDependencies": {
     "electron": "^3.0.6",
-    "electron-builder": "^20.29.0",
     "electron-packager": "^12.2.0"
   },
   "dependencies": {
     "cryptr": "^4.0.0",
     "dexie": "^2.0.4",
     "electron-regedit": "^1.0.6",
+    "electron-settings": "^3.2.0",
+    "file-saverjs": "^1.3.6",
+    "ftp": "^0.3.10",
+    "html-pdf": "^2.2.0",
     "jquery": "^3.3.1",
-    "phantom-html-to-pdf": "^0.5.6",
+    "tableexport": "^5.0.3",
     "zlib": "^1.0.5"
   }
 }

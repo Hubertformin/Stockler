@@ -1,3 +1,63 @@
-<div class="routePage" ng-controller="todayRecordsCtr">
-    
+<div class="routePage" id="today-records" ng-controller="todayRecordsCtr">
+    <div class="view">
+        <div class="white header">
+            <div class="row">
+                <div class="col s4 b-right">
+                    <p class="p-display teal-text">
+                        <img src="images/icons/shoppng_cart.png">
+                        {{todaysOrders.sales.length | currency:"":0}}
+                        <small>Commandes</small>
+                    </p>
+                </div>
+                <div class="col s4 b-right">
+                    <p class="p-display blue-text text-darken-4">
+                        <img src="images/icons/all_sales.png">
+                         {{todaysOrders.totalQty | currency:"":0}}
+                        <small>Arcticles vendu</small>
+                    </p>
+                </div>
+                <div class="col s4">  
+                    <p class="p-display green-text text-darken-4">
+                        <img src="images/icons/money.png">
+                        {{todaysOrders.totalPrice | currency:"FCFA ":0}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="body">
+            <div class="row inner">
+                <div class="col s4 offset-s8">
+                    <input class="browser-default" type="search" placeholder="Recherche..." onkeyup="searchTable(event,'#salesTable',6)" class="right">
+                </div>
+            </div>
+            <div class="table-div">
+                    <table id="salesTable">
+                            <thead>
+                                <th>FAC</th>
+                                <th>Client</th>
+                                <th>Articles</th>
+                                <th>Prix</th>
+                                <th>Date</th>
+                                <th>Utilisateur</th>
+                                <th class="small"><i class="material-icons">delete_forever</i></th>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="s in todaysOrders.sales track by $index">
+                                <td>{{s.inv}}</td>
+                                <td>{{s.name}}</td>
+                                <td>
+                                    <ul style="list-style-type:circle;" class="browser-default">
+                                        <li ng-repeat="i in s.items">{{toBrandName(i.brand)}} {{i.model}} <span class="badge teal-text">{{i.order_qty}}</span></li>
+                                    </ul>
+                                </td>
+                                <td>{{s.totalPrice | currency:"":0}}</td>
+                                <td>{{toMyDate(s.date)}}</td>
+                                <td>{{s.staff}}</td>
+                                <td class="small"><i class="material-icons action">delete</i></td>
+                            </tr>
+                            </tbody>
+                        </table>
+            </div>
+        </div>
+    </div>
 </div>

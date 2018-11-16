@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,7 @@
         <li id="app_quit" onclick="titleBarBtns('exit')"><i class="material-icons">clear</i></li>
     </ul>
 </title-bar>-->
-<body ng-app="StocklerApp" ng-controller="mainCtr" ng-cloak ng-csp ng-jq>
+<body data-theme="dark" ng-app="StocklerApp" ng-controller="mainCtr" ng-cloak ng-csp ng-jq>
 
     <!--Splash screen -->
     <section id="splashScreen">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="form-div col s5">
                         <div class="input-field">
-                            <input type="text" ng-model="login_name" id="username">
+                            <input autofocus type="text" ng-model="login_name" id="username">
                             <label for="username">Nom d'utilisateur</label>
                         </div>
                         <div class="input-field">
@@ -75,7 +75,7 @@
                     <div class="form-div col s6">
                         <div class="input-field">
                             <i class="material-icons prefix">person</i>
-                            <input ng-model="mgr_name" id="name" type="text" class="validate">
+                            <input autofocus ng-model="mgr_name" id="name" type="text" class="validate">
                             <label for="name">Nom</label>
                         </div>
                         <div class="input-field">
@@ -113,8 +113,12 @@
                         </div>
                     </div>
                 </a>
-                <a href="javascript:void(0)"><i class="material-icons">settings</i></a>
-                <a href="javascript:void(0)"><i class="material-icons">more_vert</i></a>
+                <a href="javascript:void(0)" onclick="showModal('#settings')"><i class="material-icons">settings</i></a>
+                <!--<a href="javascript:void(0)"><i class="material-icons">more_vert</i></a>-->
+                <a ng-click="logOut()" style="margin-top: -7%;" href="javascript:void(0)" class="btn-flat red-text red-border">
+                    <i style="height:unset;line-height:unset;" class="material-icons left">exit_to_app</i>
+                    Déconnexion
+                </a>
             </div>
         </div>
     </nav>
@@ -130,39 +134,42 @@
             <div class="user">
                 <img class="circle" src="images/mentor.jpg">
                 <div class="username">
-                    <strong>{{currentUser.name}} <i class="material-icons green-text online">fiber_manual_record</i><br><small>Administrateur</small></strong>
+                    <strong>{{currentUser.name}} <i class="material-icons green-text online">fiber_manual_record</i><br>
+                        <small ng-show="currentUser.mgr">Administrateur</small>
+                        <small ng-hide="currentUser.mgr">Utilisateur</small>
+                    </strong>
 
                 </div>
             </div>
             <div class="separator">
-                <small>Nav</small>
+                <small>Liens</small>
             </div>
             <ul class="links">
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="material-icons left">shopping_cart</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a class="subMenuLink" href="#!"><i class="material-icons left">add</i>Vendre</a></li>
-                        <li><a class="subMenuLink" href="#!"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
+                        <li><a id="dashBtn" class="subMenuLink" href="#!"><i class="material-icons left">add</i>Vendre</a></li>
+                        <li><a class="subMenuLink" href="#!today-records"><i class="material-icons left">pie_chart</i>Records Vendu</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="javascript:void(0)"><i class="material-icons left">chrome_reader_mode</i>Stock <i class="material-icons right">keyboard_arrow_right</i></a>
-                    <ul class="sub-menu">
+                    <a id="itemsCtrBtn" href="#!items"><i class="material-icons left">chrome_reader_mode</i>Stock</a>
+                    <!--<ul class="sub-menu">
                         <li><a class="subMenuLink" href="#!items"><i class="material-icons left">add</i>Cree</a></li>
-                        <li><a class="subMenuLink" href="#!items"><i class="material-icons left">pie_chart</i>Montre</a></li>
-                    </ul>
+                        <li><a id="itemsCtrBtn" class="subMenuLink" href="#!items"><i class="material-icons left">pie_chart</i>Montre</a></li>
+                    </ul>-->
                 </li>
             </ul>
-            <div class="separator">
+            <div ng-show="currentUser.mgr" class="separator">
                 <small>Administrateur</small>
             </div>
-            <ul class="links">
+            <ul ng-show="currentUser.mgr" class="links">
                 <li class="dropdown">
-                    <a href="javascript:void(0)"><i class="material-icons left">create</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">insert_chart</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
                         <li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
-                        <li><a class="subMenuLink" href="#!stock-reports/all"><i class="material-icons left">pie_chart</i>Rapports de stock</a></li>
-                        <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Rapports d'utilisateurs</a></li>
+                        <li><a class="subMenuLink" href="#!stock-reports/all"><i class="material-icons left">pie_chart</i>Stock</a></li>
+                        <li><a class="subMenuLink" href="#!reports"><i class="material-icons left">show_chart</i>Ventes</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
@@ -179,6 +186,12 @@
 
    <!--route view -->
     <section id="view" ng-view></section>
+    <!-- setting side nav-->
+    <div data-theme="dark"  id="settings" class="hmodal no-backdrop">
+        <div class="hmodal-content large">
+            <ng-include src="'components/settings.html'" onload="s_show='theme'"></ng-include>
+        </div>
+    </div>
     
     <script src="js/materialize.js"></script>
     <script src="js/chart.js"></script>

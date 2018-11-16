@@ -1,0 +1,2 @@
+Pdf: html-pdf
+electron-settings

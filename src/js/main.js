@@ -106,4 +106,38 @@ jQuery('#sideNav li.dropdown').on('click',(e)=>{
     if(jQuery(e.target).is('.subMenuLink') || jQuery(e.target).is('.subMenuLink i')) return;
     jQuery(e.currentTarget).children('ul.sub-menu').slideToggle();
 })
-
+//modals
+class Hmodals{
+    constructor(el){
+        this.el = jQ(el);
+    }
+    show(){
+        return new Promise((resolve,reject)=>{
+            this.el.fadeIn('fast',()=>{
+                resolve(this.el);
+            })
+        })
+    }
+    hide(){
+        return new Promise((resolve,reject)=>{
+            this.el.fadeOut('slow',()=>{
+                resolve(this.el);
+            })
+        })
+    }
+    toogle(){
+        return new Promise((resolve,reject)=>{
+            this.el.fadeToggle('fast',()=>{
+                resolve(this.el);
+            })
+        })
+    }
+}
+jQuery('.hmodal').on('click','.close',(e)=>{
+    jQuery(e.currentTarget).parents('.hmodal').fadeOut();
+})
+function showModal(el){
+    if(jQuery(el).is('.hmodal')){
+        jQuery(el).fadeIn("fast");
+    }
+}

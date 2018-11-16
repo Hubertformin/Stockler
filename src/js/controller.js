@@ -20,6 +20,9 @@ app.config(($routeProvider)=>{
         .when('/stock-reports/:type',{
             templateUrl:'components/stocks-reports.html'
         })
+        .when('/today-records',{
+            templateUrl:'components/today-records.html'
+        })
 });
 
 
@@ -241,7 +244,7 @@ app.controller('mainCtr',($scope)=>{
             $scope.login_password = "";
             $scope.$apply();
         }).catch(err=>{
-            console.log(err);
+            console.error(err);
         })
     })
     //4. logout
@@ -273,7 +276,9 @@ app.controller('mainCtr',($scope)=>{
             d = new Date(dt);
         }
         if(t !== null){
-            return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} - ${d.getHours()}:${d.getMinutes()}`;
+            var hour = (d.getHours() < 10)? `0${d.getHours()}`:d.getHours(),
+                min = (d.getMinutes() < 10)? `0${d.getMinutes()}`:d.getMinutes();
+            return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} - ${hour}:${min}`;
         }
         return `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
     }

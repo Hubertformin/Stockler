@@ -4,8 +4,6 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
     $scope.displayMode = $routeParams.type;
     $scope.previewedItem = {};
     $scope.itemView=false;
-
-    console.log($scope.type)
     //functions
     $scope.toBrandName = (id)=>{
         var name = 'Indisponible';
@@ -48,12 +46,19 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
         $scope.salesItems.sort(function (a, b) {
             return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
         });*/
+        jQuery('button.excel').on('click',()=>{
+            console.log('okay');
+            var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#all_table').html()) 
+            location.href=url
+            return false;
+        })
         $scope.$apply();
     }).catch(err=>{
         notifications.error('Erreur de base de donnees');
         console.error(err);
     });
-
+    //dash.js $
+    
     //function
     $scope.previewItem = (array,index)=>{
         $scope.itemView = true;

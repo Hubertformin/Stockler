@@ -1,162 +1,349 @@
-<div class="routePage" style="padding-bottom:40px;" ng-controller="reportsCtr">
-    <div class="row inner">
-        <div class="col s12" style="padding:20px;">
-            <div class="row">
-                <div class="col s6">
-                    <button ng-click="saveLog()" class="btn orange darken-4 waves-effect waves-default">
-                        <i class="material-icons left">input</i>
-                        Exporter
-                    </button>
-                    <button ng-click="openLog()" class="btn cyan darken-4 waves-effect waves-default">
-                        <i class="material-icons left">open_in_browser</i>
-                        Importer
-                    </button>
+<div id="reports" class="routePage" style="padding-bottom:0px;" ng-controller="reportsCtr">
+    <!--<div id="reportsDrop" class="drop overlay">
+        <div class="center">
+            <h4 class="text">
+                <i class="material-icons large">pin_drop</i>
+                Déposer ici
+            </h4>
+        </div>
+    </div> -->   
+    <div id="date-range" class="row inner">
+        <h5 class="title">Choisir Interval
+            <i class="material-icons prefix">date_range</i>
+            <small style="font-size: 0.65em;"><i>Cliquez sur les cases ci-dessous pour choisir une plage de dates valide</i></small>
+        </h5>
+        <div class="col s4">
+            <div class="input-field">
+                <label for="from_date" class="active">Du</label>
+                <input type="text" id="from_date" class="from_date browser-default datepicker">
+            </div>
+        </div>
+        <div class="col s4">
+           <div class="input-field">
+            <label for="to_date" class="active">A</label>
+            <input type="text" id="to_date" class="to_date browser-default datepicker">
+           </div>
+        </div>
+        <div class="col s4">
+            <button ng-click="triggerRender()" style="margin-top: 3%;display:block;" class="btn-floating waves-effect teal"><i class="material-icons">refresh</i></button>
+        </div>
+        </div>
+          <ul id="sectionTab" class="tabs">
+            <li class="tab col s3"><a class="active" href="#home">Accueil</a></li>
+            <li class="tab col s3"><a href="#sales">Ventes</a></li>
+            <li class="tab col s3"><a href="#stocks">Variation de stock</a></li>
+          </ul>
+        <div id="home" class="col s12 tab-view">
+            <div class="row inner">
+                <div class="col s12">
+                    <h4 class="indigo-text">Accueil</h4>
+                    <h6>montrant les comportements de stock et de vente</h6>
                 </div>
-                <div class="col s6 right-align">
-                    <button ng-click="createReport()" class="btn waves-effect waves-default teal darken-2"><i class="material-icons left">create</i>Creer raport</button>
+                <div class="body">
+                    <div class="row inner">
+                        <div class="col s12">
+                            <fieldset style="padding:5px;">
+                                <h6 class="legend teal-text" style="max-height:40px;width:100%;">Graph des ventes</h6>
+                                <div class="line-chart">
+                                    <canvas id="salesChart" height="150" width="400"></canvas>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="row inner">
+                        <div class="col s12">
+                            <h5 class="green-text">Articles</h5>
+                            <hr>
+                        </div>
+                        <div class="col s6">
+                            <fieldset>
+                                <h6 class="legend">Bar chart</h6>
+                                <div class="bar-chart">
+                                    <canvas id="barChart" height="200" width="400"></canvas>
+                                </div>
+                            </fieldset>                            
+                        </div>
+                        <div class="col s6">
+                            <fieldset>
+                                <h6 class="legend">Pie chart</h6>
+                                <div class="pie-chart">
+                                    <canvas id="pieChart" height="200" width="400"></canvas>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="col s12">
+                            <div class="col s12">
+                                <h5 class="green-text">Ventes x Montant</h5>
+                                <hr>
+                            </div>
+                            <fieldset style="padding:5px;">
+                                <h6 class="legend teal-text" style="max-height:40px;width:100%;">Graph des ventes x Montant</h6>
+                                <div class="line-chart">
+                                    <canvas id="salesMoneyChart" height="150" width="400"></canvas>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr>
         </div>
-    </div>
-    <div class="row inner" style="padding:10px 25px;margin-bottom:10px;">
-        <h6 class="yellow-text text-darken-2">Choisir Interval</h6>
-        <hr>
-        <div class="col s4">
-            <label for="from_date" class="active">Du</label>
-            <input type="text" id="from_date" class="datepicker">
-        </div>
-        <div class="col s4">
-            <label for="to_date" class="active">A</label>
-            <input type="text" id="to_date" class="datepicker">
-        </div>
-        <div class="col s12">
-            <hr>
-        </div>
-    </div>
-    <div class="row inner">
-        <div class="col s6">
-            <fieldset style="padding:0;">
-                <h6 class="legend">Graph1</h6>
-                <div class="line-chart">
-                    <canvas id="salesChart" height="200" width="400"></canvas>
+        <div id="sales" class="col s12 tab-view">
+            <div class="row">
+                <div class="col s12">
+                    <h4 class="blue-text">Tout les ventes</h4>
+                    <h6>Toutes les ventes effectuées dans la plage de dates choisie</h6>
+                    <div class="col s3" style="margin:10px 0;">
+                        <select class="browser-default" ng-model="selectDateVal">
+                            <option ng-repeat="x in uniqueSalesDate track by $index" value="{{x}}">{{toFrenchDateString(x)}}</option>
+                        </select>
+                    </div>
                 </div>
-            </fieldset>
-        </div>
-        <div class="col s6">
-            <fieldset>
-                <h6 class="legend">Graph2</h6>
-                <div class="bar-chart">
-                    <canvas id="barChart" height="200" width="400"></canvas>
+                <div>
+                    <div class="col s3 no-right-pad">
+                        <div class="table-div" style="height:75vh;width:100%;">
+                            <ul class="collection" style="margin:0;">
+                                <li ng-click="previewSales($event,$index)" ng-repeat="s in salesObject[myDateString(toNumber(selectDateVal),true)] track by $index" class="collection-item avatar">
+                                  <i class="material-icons circle green">shopping_cart</i>
+                                  <span class="title green-text">{{s.name}}</span>
+                                    <p>{{s.inv}} <br>
+                                        {{toFrenchDateString(s.date)}}
+                                    </p>
+                                  <a href="javascript:void(0)" class="secondary-content"><i class="material-icons">keyboard_arrow_right</i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col s9 no-left-pad" style="position:relative;">
+                        <div class="table-div reciet-table-div" style="height:75vh;width:100%;">
+                                <div class="overlay" ng-hide="showPrevActive">
+                                        <div class="center">
+                                            <img src="images/icons/rules.png" alt="">
+                                            <h5>Rien a montrer</h5>
+                                        </div>
+                                    </div>
+                            <h5 class="teal-text center-align">
+                                <img style="height:25px;width:25px;" src="images/logo.png" alt="">
+                                Emile telecom
+                                <button class="btn-flat right green-border green-text">
+                                    <i class="material-icons left">person</i>
+                                    Venduer: {{sale.staff}}
+                                </button>
+                            </h5>
+                            <div class="reciet">
+                                <div class="sale-details row inner">
+                                    <div class="col s4">
+                                        <div class="input-field">
+                                            <input id="cmodal1" type="text" disabled ng-model="sale.name">
+                                            <label for="cmodal1" class="active">Doit</label>
+                                        </div>
+                                    </div>
+                                    <div class="col s4">
+                                        <div class="input-field">
+                                            <input id="cmodal2" type="text" disabled ng-model="sale.inv">
+                                            <label for="cmodal2" class="active">No de Facture</label>
+                                        </div>
+                                    </div>
+                                    <div class="col s4">
+                                        <div class="input-field">
+                                            <input id="cmodal3" type="text" disabled value="{{toFrenchDateString(sale.date,true)}}">
+                                            <label for="cmodal3" class="active">Date</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sale-items row inner">
+                                    <div class="table-div">
+                                        <table>
+                                            <thead>
+                                                <th>Qty</th>
+                                                <th>Designation</th>
+                                                <th>P.U</th>
+                                                <th>P.Total</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="x in sale.items track by $index">
+                                                <td>{{x.order_qty}}</td>
+                                                <td>{{toBrandName(x.brand)}} {{x.model}}</td>
+                                                <td>{{x.order_price | currency:"":0}}</td>
+                                                <td>{{x.totalOrderPrice | currency:"":0}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="totals">
+                                    <button class="btn-flat blue-border blue-text">Qte Total: {{sale.totalQty | currency:"":0}}</button>
+                                    <button class="btn-flat green-border green-text">Prix Total: {{sale.totalPrice | currency:"FCFA ":0}}</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </fieldset>
+            </div>
         </div>
-    </div>
-    <div class="row inner">
-        <div class="col s8 no-right-pad">
-            <fieldset>
-                <h6 class="legend">Graph 3</h6>
-                <div style="margin:20px">
-                    <input type="search" placeholder="Recherche.." onkeyup="searchTable(event,'#salesTable',6)" class="browser-default search-input">
+        <div id="stocks" class="col s12 tab-view">
+            <div class="row">
+                <div class="col s12">
+                    <h4 class="teal-text">Variation de stock</h4>
+                    <h6>Affichage du comportement du stock dans la plage de dates choisie</h6>
+                    <div class="stockBtns col s12">
+                        <a href="#!stock-reports/in_stock" class="btn-flat green-border green-text">
+                            <i class="material-icons left">kitchen</i>
+                            <strong>En stock</strong>
+                            <span class="right">{{filterItems.active.length | currency:"":0}}</span>
+                        </a>
+                        <a href="#!stock-reports/low_stock" class="btn-flat amber-border amber-text">
+                            <i class="material-icons left">warning</i>
+                            <strong>Faible stock</strong>
+                            <span class="right">{{filterItems.lowStock.length | currency:"":0}}</span>
+                        </a>
+                        <a href="#!stock-reports/out_of_stock" class="btn-flat red-border red-text">
+                            <i class="material-icons left">error</i>
+                            <strong>Stock epuise</strong>
+                            <span class="right">{{filterItems.inactive.length | currency:"":0}}</span>
+                        </a>
+                        <a href="#!stock-reports/broken_stocks" class="btn-flat brown-border brown-text">
+                            <i class="material-icons left">grid_off</i>
+                            <strong>Stocks Casse</strong>
+                            <span class="right">{{filterItems.broken.length | currency:"":0}}</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="table-div">
-                    <table id="salesTable">
-                        <thead>
-                            <th>FAC</th>
-                            <th>Client</th>
-                            <th>Articles</th>
-                            <th>Prix</th>
-                            <th>Date</th>
-                            <th>Utilisateur</th>
-                            <th class="small"><i class="material-icons">delete_forever</i></th>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="s in sales track by $index">
-                            <td>{{s.inv}}</td>
-                            <td>{{s.name}}</td>
-                            <td>
-                                <ul style="list-style-type:circle;" class="browser-default">
-                                    <li ng-repeat="i in s.items">{{toBrandName(i.brand)}} {{i.model}} <span class="badge teal-text">{{i.order_qty}}</span></li>
-                                </ul>
-                            </td>
-                            <td>{{s.totalPrice | currency:"":0}}</td>
-                            <td>{{toMyDate(s.date)}}</td>
-                            <td>{{s.staff}}</td>
-                            <td class="small"><i class="material-icons action">delete</i></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="col s12" style="padding:10px;">
+                    <span class="teal-text">Les Totals <i style="transform: translateY(30%);" class="material-icons">keyboard_arrow_right</i></span>
+                    <button class="btn-flat teal-text teal-border">Qte vendu: {{qty_sold | currency:"":0}}</button>
+                    <button class="btn-flat teal-text teal-border">Montant Vendu: {{amount_sold | currency:"FCFA ":0}}</button>
                 </div>
-            </fieldset>
+                <div class="col s12" style="padding:0 15px;">
+                    <div class="table-div" style="height:70vh;">
+                        <table id="itemsLogs">
+                            <thead>
+                                <th>Famille</th>
+                                <th>Serie</th>
+                                <th>Qte vendue</th>
+                                <th>P.U</th>
+                                <th>M.V</th>
+                                <th>Qte finale</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="x in salesItems track by $index">
+                                    <td>{{toBrandName(x.brand)}}</td>
+                                    <td>{{x.model}}</td>
+                                    <td>{{x.count_qty}}</td>
+                                    <td>{{x.price | currency:"":0}}</td>
+                                    <td>{{x.totalAmount | currency:"":0}}</td>
+                                    <td ng-if="finalStock(x.model) > 0">{{finalStock(x.model)}}</td>
+                                    <td class="red-text" ng-if="finalStock(x.model) == 0">{{finalStock(x.model)}}</td>
+                                    <td ng-if="finalStock(x.model) == 'fin'"><small class="red-text">Cet article n'existe plus</small></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col s4">
-            <fieldset>
-                <h6 class="legend">Graph 4</h6>
-                <div class="pie-chart">
-                    <canvas id="pieChart" height="200" width="400"></canvas>
-                </div>
-            </fieldset>
-        </div>
-    </div>
-    <div class="row inner">
-        <div class="col s9">
-            <fieldset>
-                <h6 class="legend">Quantity</h6>
-                <div class="table-div">
-                    <table id="itemsLogs">
-                        <thead>
-                            <th>Famille</th>
-                            <th>Serie</th>
-                            <th>Prix</th>
-                            <th>Qty vendu</th>
-                            <th>Qty reste</th>
-                            <th>Qty init</th>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="x in items track by $index">
-                                <td>{{toBrandName(x.brand)}}</td>
-                                <td>{{x.model}}</td>
-                                <td>{{x.totalOrderPrice}}</td>
-                                <td>{{x.orderedQty}}</td>
-                                <td>{{x.qty}}</td>
-                                <td>{{x.qty+x.orderedQty}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </fieldset>
-        </div>
-        <div class="col s3">
-            <fieldset>
-                <h6 class="legend">Logs</h6>
-                <ul class="collection">
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle">folder</i>
-                        <span class="title">Title</span>
-                        <p>First Line <br>
-                            Second Line
-                        </p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                    </li>
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle green">insert_chart</i>
-                        <span class="title">Title</span>
-                        <p>First Line <br>
-                            Second Line
-                        </p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                    </li>
-                    <li class="collection-item avatar">
-                        <i class="material-icons circle red">play_arrow</i>
-                        <span class="title">Title</span>
-                        <p>First Line <br>
-                            Second Line
-                        </p>
-                        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-                    </li>
+
+        <!-- FAB---->
+        <div class="fixed-action-btn">
+                <a class="btn-floating btn-large teal darken-4">
+                  <i class="large material-icons">menu</i>
+                </a>
+                <ul>
+                  <li><a ng-click="createReport()" title="Creer raport" class="btn-floating red"><i class="material-icons">create</i></a></li>
+                  <li><a ng-click="saveLog()" title="Exporter des données" class="btn-floating green"><i class="material-icons">publish</i></a></li>
+                  <li><a ng-click="openLog()" title="Importer des données" class="btn-floating teal"><i class="material-icons">file_download</i></a></li>
+                  <li><a ng-click="openLog()" title="Synchroniser" class="btn-floating red"><i class="material-icons">sync</i></a></li>
                 </ul>
-            </fieldset>
         </div>
-    </div>
-    </div>
+        <!-- MODALS -->
+        <div id="exportModal" class="modal blue-border">
+            <div class="modal-content">
+              <div class="header">
+                <p style="margin-top:-0.65rem;" class="blue-text">Assistant STK</p>
+                <h4>Exporter des données</h4>
+                <p>Choisissez une plage de dates</p>
+              </div>
+              <div class="body">
+                  <div class="row">
+                      <div class="col s12">
+                          <h4 class="blue-text">
+                                <i class="material-icons green-text">verified_user</i>
+                                {{currentUser.name}}
+                          </h4>
+                          <hr>
+                      </div>
+                    <div class="col s5">
+                        <select class="browser-default" ng-model="export_start_select">
+                            <option ng-repeat="d in export_filter" value="{{d}}">{{toFrenchDateString(d)}}</option>
+                        </select>
+                    </div>
+                    <div class="col s5">
+                        <select class="browser-default" ng-model="export_end_select">
+                            <option ng-repeat="d in export_filter" value="{{d}}">{{toFrenchDateString(d)}}</option>
+                        </select>
+                    </div>
+                    <div class="col s12" style="margin-top: 8%;">
+                        <label>
+                            <input type="checkbox" class="filled-in" ng-model="showPasswordInput" checked="checked" />
+                            <span>Verrouiller avec mot de passe</span>
+                        </label>
+                        <div ng-show="showPasswordInput" class="input-field">
+                            <input ng-model="export_password" type="password" placeholder="Mot de pass" style="width:50%;margin-left: 8%;" name="" id="">
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+            <div class="modal-footer blue blue-border white-text">
+              <a href="javascript:void(0)" class="red-text modal-close waves-effect waves-red white btn-flat">Annuler</a>
+              <a id="export_data_btn" href="javascript:void(0)" class="waves-effect waves-blue btn-flat blue-text white">Exporter</a>
+            </div>
+        </div>
+        <!--ImportModal-->
+        <div id="importModal" style="width:55vw;" class="modal teal-border">
+            <div class="modal-content">
+                <div class="header">
+                    <p style="margin-top:-0.65rem;" class="teal-text">Assistant STK</p>
+                    <h4>Importer des données</h4>
+                </div>
+                <div class="body">
+                    <div class="row">
+                        <div class="col s2">
+                            <img style="width:100%;height:auto;" src="images/stk-filetype-icon.png">
+                        </div>
+                        <div class="col s10 b-left">
+                            <h5 class="grey-text"><strong class="teal-text">Date d'exportation:</strong> {{previewImport.exportDate}}</h5>
+                            <hr>
+                            <h6>
+                                <button class="btn-flat teal-border teal-text">
+                                    <i class="material-icons left">date_range</i>
+                                    {{previewImport.minDate}}
+                                </button>
+                                <button style="padding:0;" class="btn-flat teal-text"><i style="margin:0;" class="material-icons">arrow_forward</i></button>
+                                <button class="btn-flat teal-border teal-text">
+                                    <i class="material-icons left">date_range</i>
+                                    {{previewImport.maxDate}}
+                                </button>
+                            </h6>
+                            <hr>
+                            <div class="content">
+                                <h6><strong class="teal-text">Du</strong> {{previewImport.minDate}}</h6>
+                                <h6><strong class="teal-text">A</strong> {{previewImport.maxDate}}</h6>
+                                <h6><strong class="teal-text">Exporter par</strong> <span class="teal white-text name">{{previewImport.user}}</span></h6>
+                                <h6><strong class="teal-text">Le</strong> {{previewImport.exportDate}}</h6>
+                                <h6 ng-show="previewImport.isPassword">
+                                    <small class="teal-text">Ce fichier est verrouillé avec un mot de passe, veuillez saisir le mot de passe pour continuer.</small>
+                                    <div class="input-field">
+                                        <input autofocus ng-model="importModalPassword" class="browser-default" type="password" placeholder="Mot de passe" />
+                                    </div>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer teal">
+                <a href="javascript:void(0)" class="modal-close waves-effect waves-red btn-flat white red-text">Annuler</a>
+                <a id="import_data_btn" href="javascript:void(0)" class="waves-effect waves-teal btn-flat teal-text white">Importer</a>
+            </div>
+        </div>
 </div>

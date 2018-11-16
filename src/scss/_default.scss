@@ -88,6 +88,16 @@ $theme-secondary-color:#ff8f00;
 input:focus{
     box-shadow: 0px 0px 0px transparent!important;
 }
+input[type=search]{
+    &.browser-default{
+        padding:10px;
+        border-radius: 19px;
+        background: #fff;
+        border:1px solid #ddd;
+        width: 100%;
+        margin:6px;
+    }
+}
 
 //classes
 // Z-levels
@@ -148,11 +158,11 @@ input:focus{
     border: 1px solid #ddd;
 }
 .no-left-pad{
-    padding-left:0!important;
+    padding-left:0 !important;
 }.no-right-pad{
-    padding-right:0!important;
+    padding-right:0 !important;
 }.no-top-pad{
-    padding-top:0!important;
+    padding-top:0 !important;
 }.no-bottom-pad{
     padding-bottom:0!important;
 }
@@ -221,7 +231,7 @@ button.btn-outline{
 }
 //for notification toast
 #toast-container{
-    top: 80% !important;
+    top: 85% !important;
 }
 .toast{
     &.danger{
@@ -321,3 +331,56 @@ input[type=search].search-input{
         }
     }
 }
+:root {
+    --blue-color: blue;
+    --green-color: green;
+  }
+  
+  [data-theme^="light"],
+  [data-theme] [data-theme^="light"] {
+    --main-color: #000 !important;
+    --background-color: #fff !important;
+    --box-color: lightgrey !important;
+  }
+  
+  [data-theme^="dark"],
+  [data-theme] [data-theme^="dark"],
+  [data-theme="light-dark-sidebar"] nav#sideNav {
+    --blue-color: #1da1f2 !important;
+    --main-color: #fff;
+    --background-color: #000 !important;
+    --sidebar-color: #333 !important;
+    --box-color: grey !important;
+  }
+
+  .hmodal{
+     display: none;
+      z-index: 1000;
+      position: fixed;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      background: rgba(255,255,255,0.8);
+      &.no-backdrop{
+          background: transparent;
+      }
+      .hmodal-content{
+          @extend .center;
+          @extend .z-depth-3;
+          background: #fff;
+          border-radius:16px;
+          &.small{
+            min-width: 50vw;
+            height: 50vh;
+          }
+          &.medium{
+            min-width: 60vw;
+            height: 60vh;
+          }
+          &.large{
+            min-width: 80vw;
+            height: 80vh;
+          }
+      }
+  }

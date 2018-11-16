@@ -1,0 +1,131 @@
+<div class="title b-bottom">
+    <h5><i class="material-icons">settings</i> Parametres</h5>
+    <span class="close"><i class="material-icons">clear</i></span>
+</div>
+<div class="pre b-right">
+        <details>
+            <summary><i class="material-icons small">view_list</i>  Général</summary>
+            <div class="body">
+                <p 
+                ng-class="(s_show=='theme')?'active':''" 
+                ng-click="s_show='theme'">Thème</p>
+            </div>
+        </details>
+        <details>
+            <summary><i class="material-icons">sync</i> Sync</summary>
+            <div class="body">
+                <p
+                ng-class="(s_show=='server')?'active':''" 
+                ng-click="s_show='server'">Serveur</p>
+                <p
+                ng-class="(s_show=='sync_history')?'active':''" 
+                ng-click="s_show='sync_history'">histoire</p>
+            </div>
+        </details>
+        <details>
+            <summary><i class="material-icons">info_outline</i> A propos</summary>
+        </details>
+        <!--about --> 
+</div>
+<div class="view">
+        <div class="switch" ng-switch="s_show">
+            <!-- General-->
+            <div id="theme" class="when" ng-switch-when="theme">
+                <h3 class="heading">Theme</h3>
+                <hr>
+                <div class="show-body">
+                    <div class="row">
+                        <div class="col s4">
+                            <p>
+                                <label>
+                                    <input name="group1" type="radio" checked />
+                                    <span>Blanc</span>
+                                </label>
+                            </p>
+                            <div class="theme-preview">
+                                <div class="side"></div>
+                                <div class="tabs top"></div>
+                                <div class="tabs"></div>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <p>
+                                <label>
+                                    <input name="group1" type="radio" />
+                                    <span>Noir-blanc</span>
+                                </label>
+                            </p>
+                            <div class="theme-preview">
+                                <div style="background-color:#323c47;" class="side"></div>
+                                <div class="tabs top"></div>
+                                <div class="tabs"></div>
+                            </div>
+                        </div>
+                        <div class="col s4">
+                            <p>
+                                <label>
+                                    <input name="group1" type="radio" />
+                                    <span>Sombre</span>
+                                </label>
+                            </p>
+                            <div class="theme-preview">
+                                <div style="background-color:#323c47;" class="side"></div>
+                                <div style="background-color:#323c47;" class="tabs top"></div>
+                                <div style="background-color:#323c47;" class="tabs"></div>
+                            </div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sync-->
+            <div class="when" id="server" ng-switch-when="server">
+                <h3 class="heading">Serveur</h3>
+                <hr>
+                <div class="row">
+                    <div class="col s8">
+                        <div class="grey-border" style="height:46vh;"></div>
+                    </div>
+                    <div class="add col s4 b-left">
+                        <form action="">
+                            <div class="input-field">
+                                <label for="">Nom</label>
+                                <input type="text" class="browser-default">
+                            </div>
+                            <div class="input-field">
+                                <label for="">host name <i class="red-text">*</i></label>
+                                <input type="text" class="browser-default">
+                            </div>
+                            <div class="input-field">
+                                <label for="">username <i class="red-text">*</i></label>
+                                <input type="text" class="browser-default">
+                            </div>
+                            <div class="input-field">
+                                <label for="">password <i class="red-text">*</i></label>
+                                <input type="text" class="browser-default">
+                            </div>
+                            <div class="input-field">
+                                <label for="">port</label>
+                                <input type="text" class="browser-default">
+                            </div>
+                            <div class="input-field">
+                                <label for="">Database</label>
+                                <input type="text" class="browser-default">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="when" ng-switch-when="sync_history">
+                <h3 class="heading">Historique de synchronisation</h3>
+                <hr>
+            </div>
+        </div>
+</div>
+<div class="footer b-top right-align">
+    <button class="close btn-flat grey-border grey-text waves-effect waves-grey">
+        Annuler
+    </button>
+    <button class="btn-flat blue-border blue-text waves-effect waves-blue">
+        Okay
+    </button>
+</div>
