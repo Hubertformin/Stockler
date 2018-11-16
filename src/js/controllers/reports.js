@@ -1,4 +1,4 @@
-app.controller('reportsCtr', ($scope) => {
+app.controller('reportsCtr', ($scope,$filter) => {
     jQuery('#reports').on('scroll', function () {
         //console.log(jQuery('#reports').scrollTop())
         if (jQuery('#reports').scrollTop() >= 168) {
@@ -526,48 +526,100 @@ app.controller('reportsCtr', ($scope) => {
     }
     //
     $scope.createReport = () => {
-        var d = new Date();
-        const path = `stockler_raports_${d.getDate()}_${d.getMonth()+1}_${d.getFullYear()}.pdf`
-        dialog.showSaveDialog({
-            title: "Enregistrer",
-            defaultPath: path,
-            buttonLabel: "Enregistrer",
-            filters: [
-                {
-                    name: 'PDF',
-                    extensions: ['pdf']
-                },
-            ]
-        }, (file) => {
-            if (typeof file !== 'string') return;
-            const filedata = `<img src=".../logo.png" style="display:none;"><table style='margin-top:40px;border:1px solid #000;width:100%;'>${jQuery('#itemsLogs').html()}</table>`
-            //write pdf
-            var conversion = require("phantom-html-to-pdf")();
-            conversion({
-                html: filedata,
-                header: `<h1 align="center" style="margin:20px;"><img src=".../logo.png"> Rapport du ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}</h1>`,
-                viewportSize: {
-                    width: 600,
-                    height: 600
-                },
-                format: {
-                    quality: 100
-                },
-                fitToPage: true,
-            }, function (err, pdf) {
-                if (err) {
-                    dialog.showErrorBox('Erreur', "Ce fichier est ouvert d'ans un auttre application");
-                    return;
-                }
-                var output = fs.createWriteStream(file)
-                console.log(pdf.logs);
-                console.log(pdf.numberOfPages);
-                // since pdf.stream is a node.js stream you can use it
-                // to save the pdf to a file (like in this example) or to
-                // respond an http request.
-                pdf.stream.pipe(output);
-            });
+        var modal = M.Modal.getInstance(jQuery('#createReportModal'));
+        modal.open();
+        jQuery('#create_report_btn').on('click',()=>{
+            if(typeof $scope.reportTitle !== 'string' 
+            || $scope.reportTitle == ''
+            || typeof $scope.reportDetails !== 'string' || $scope.reportDetails == '')
+            {
+                notifications.warning('Veuilliez completez tout les valuers');
+                return;
+            }
+            //get the 
+            var d = new Date();
+            const path = `EMILLE_TELECOM_RAPORTS_${d.getDate()}_${d.getMonth()+1}_${d.getFullYear()}.pdf`
+            dialog.showSaveDialog({
+                title: "Enregistrer",
+                defaultPath: path,
+                buttonLabel: "Enregistrer",
+                filters: [
+                    {
+                        name: 'PDF',
+                        extensions: ['pdf']
+                    },
+                ]
+            }, (file) => {
+                if (typeof file !== 'string') return;
+                var fs = require('fs');
+                var pdf = require('html-pdf');
+                //var html = fs.readFileSync('./src/templates/pdf.html', 'utf8');
+//=====================================================================================
+    jQuery('#createReportModal').waitMe({
+        effect : 'bounce',
+        text : 'Création de pdf en cours',
+        bg : 'rgba(255,255,255,0.7)',
+        color : '#d32f2f',
+        maxSize : '',
+        waitTime : -1,
+        textPos : 'vertical',
+        fontSize : '',
+        source : '',
+        onClose : function() {
+            //console.log(res);
+            $scope.reportTitle = '';
+            $scope.reportDetails = '';
+            modal.close();
+            notifications.success('PDF généré');
+        }
+        });
+
+            const data = jQuery('#itemsLogs').html();     
+            const html = `<html lang="en"><head><meta charset="UTF-8"><style>
+                * {margin: 0;padding: 0;box-sizing: border-box;}
+                body{text-align: center;font-family: sans-serif;}
+                header{background-color: #d32f2f;color: #fff;padding: 20px;}
+                header h1 img {width: 40px;height: auto;margin-right: 15px;transform: translateY(25%);}
+                section#body {padding: 10px;}h2.title{padding: 10px;text-align: left;color: #d32f2f;border-bottom: 1px solid #ddd;}
+                p.details {padding: 15px;}
+                table{border-width:1px;margin-top:40px; border-collapse: collapse;border-spacing: 0;width: 100%;border: 1px solid #ddd;}
+                tr{border-bottom: 1px solid #ddd;}th{font-weight:600}
+                th,td {text-align: left;padding:16px;}</style></head>
+                <body><header><h1>Emile Telecom
+                </h1></header>
+                <section id="body">
+                    <h2 class="title">
+                        ${$scope.reportTitle}
+                    </h2>
+                    <p class="details">
+                        ${$scope.reportDetails}
+                    </p>
+                    <table>
+                        ${data}
+                        <tfoot>
+                            <th>Totals</th>
+                            <th></th>
+                            <th>${$filter('currency')($scope.qty_sold, "", 0)}</th>
+                            <th></th>
+                            <th>${$filter('currency')($scope.amount_sold, "FCFA ", 0)}</th>
+                            <th></th>
+                        </tfoot>
+                    </table>
+                </section>
+            </body>
+            </html>`
+
+
+                
+                var options = { format: 'Letter' };
+                pdf.create(html, options).toFile(file, function(err, res) {
+                    if (err) return console.log(err);
+                         // { filename: '/app/businesscard.pdf' }
+                         jQuery('#createReportModal').waitMe("hide");
+                    });           
+            })
         })
+        
     }
     //others
     $scope.previewSales = (e, i) => {
