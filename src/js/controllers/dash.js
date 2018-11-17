@@ -58,7 +58,7 @@ app.controller('dashCtr',($scope)=>{
                 return false;
             }
         };
-        if(($scope.items[i].qty - $scope.items[i].orderedQty) < 1){
+        if($scope.items[i].qty < 1){
             notifications.warning('L\'article n\'est plus en stock!');
             return false;
         }
@@ -92,9 +92,15 @@ app.controller('dashCtr',($scope)=>{
     //for min quantity, that is if the user inputs a quantity larger thans stock
     $scope.minQty = (e,i)=>{
         var val = Number(jQuery(e.target).val());
-        if(typeof val !== 'number') return;
+        //if(val == 0) return;
         //console.log(val);
-        if($scope.checkout.items[i].qty - val < 0){
+        if(val <= 0){
+            //notifications.warning(`La quantite est invalid!`);
+            e.target.style.borderColor = "red";
+            e.target.style.backgroundColor = "#ffebee";
+            return;
+        }
+        if($scope.checkout.items[i].qty < val ){
             notifications.warning(`La quantite de&nbsp;<strong class="amber-text">${$scope.checkout.items[i].model}</strong>&nbsp;en stock est insufissant!`);
             e.target.style.borderColor = "red";
             e.target.style.backgroundColor = "#ffebee";
@@ -106,7 +112,7 @@ app.controller('dashCtr',($scope)=>{
     }
     //min price
     $scope.minPrice = (e,i)=>{
-        if(e.target.value < $scope.checkout.items[i].price){
+        if(e.target.value === 0 || e.target.value < $scope.checkout.items[i].price){
             e.target.style.borderColor = "red";
             e.target.style.backgroundColor = "#ffebee";
         }else{
@@ -117,19 +123,25 @@ app.controller('dashCtr',($scope)=>{
     }
     //proceed check out
     $scope.proceedCheckout = ()=>{
-        if(typeof $scope.checkout.name !== 'string' || $scope.checkout.name == ''){
-            notifications.warning('Entrez le nom du client');
-            return;
-        }
         for(var i = 0;i<$scope.checkout.items.length;i++){
-            if(typeof $scope.checkout.items[i].order_price !== 'number' || $scope.checkout.items[i].order_price < $scope.checkout.items[i].price){
+            if(typeof $scope.checkout.items[i].order_price <= 0 || $scope.checkout.items[i].order_price < $scope.checkout.items[i].price){
                 notifications.warning(`Le prix de ${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model} est plus petite que le minimum`,6000);
                 return;
             }
-            if(typeof $scope.checkout.items[i].order_qty !== 'number' || $scope.checkout.items[i].order_qty == 0){
+            if($scope.checkout.items[i].order_qty > $scope.checkout.items[i].qty){
+                notifications.warning(`La quantite de&nbsp; 
+                <strong class="amber-text">${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model}</strong> 
+                &nbsp;en stock est insufissant`,6000);
+                return;
+            }
+            if($scope.checkout.items[i].order_qty <= 0){
                 notifications.warning(`La quantite de ${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model} est invalide`,6000);
                 return;
             }
+        }
+        if(typeof $scope.checkout.name !== 'string' || $scope.checkout.name == ''){
+            notifications.warning('Entrez le nom du client');
+            return;
         }
         //to the rest
         $scope.checkout.name = $scope.checkout.name[0].toUpperCase()+$scope.checkout.name.slice(1).toLowerCase();

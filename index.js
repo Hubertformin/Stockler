@@ -14,7 +14,7 @@ const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
         height: height,
         title:'Stockler',
         backgroundColor:'#263238',
-        icon: './logo.png',
+        icon: './assets/logo.png',
         webPreferences: {
             nodeIntegrationInWorker: true
         }

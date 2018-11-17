@@ -1,5 +1,8 @@
 <div class="routePage light-blue lighten-5" id="stocksReportsView" ng-controller="stocks-reportsCtr">
-    <div class="row" ng-hide="itemView">
+    <div ng-show="redirectionBtn" style="position:fixed;z-index:2;top:8.5%;left:0;right:0;padding:5px 270px;" class="bar light-blue lighten-5 b-bottom">
+        <a ng-href="{{redir.url}}" class="btn waves-effect"><i class="material-icons left">keyboard_arrow_left</i>Retour</a>
+    </div>
+    <div style="margin-top:2.5%;" class="row" ng-hide="itemView">
         <div class="col s8">
             Selectionez l'etat du stock dans la case a droite
         </div>
@@ -63,7 +66,7 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i class="material-icons action">delete</i></td>
+                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -122,7 +125,7 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i class="material-icons action">delete</i></td>
+                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -183,7 +186,7 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i class="material-icons action">delete</i></td>
+                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -245,7 +248,7 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i class="material-icons action">delete</i></td>
+                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -311,7 +314,7 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i class="material-icons action">delete</i></td>
+                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -374,6 +377,7 @@
                         <input ng-disabled="!editable" ng-model-options="{updateOn: 'blur'}" class="model" type="text" placeholder="Serie" ng-model="previewedItem.model" />
                     </div>
                     <div class="input-field">
+                            <label class="active" ng-show="editable">Famille</label>
                         <select ng-disabled="!editable" ng-model-options="{updateOn: 'blur'}" ng-model="previewedItem.brand" class="browser-default">
                             <option ng-repeat="b in brand track by $index" value="{{b.id}}">{{b.name}}</option>
                         </select>

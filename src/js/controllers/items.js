@@ -175,9 +175,12 @@ app.controller('itemsCtr',($scope)=>{
                 if($scope.item_id === $scope.items[j].id){
                     //console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
                     //console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
-                    var status = 'active';
+                    //var status = 'active';
                     if(($scope.item_qty + $scope.items[j].qty) > 0
-                    || ($scope.item_qty + $scope.items[j].qty) <= $scope.getLowStockVal($scope.item_price)){
+                    || ($scope.item_qty + $scope.items[j].qty) > $scope.getLowStockVal($scope.item_price)){
+                        status = 'active';
+                    }else if(($scope.item_qty + $scope.items[j].qty) > 0
+                            || ($scope.item_qty + $scope.items[j].qty) <= $scope.getLowStockVal($scope.item_price)){
                         status = 'low-stock';
                     }else if(($scope.item_qty + $scope.items[j].qty) === 0){
                         status = 'inactive';

@@ -81,7 +81,7 @@ body{
 @import "components/fonts";
 @import "components/fonts";
 //varuabkes
-$theme-dark-color: #000;
+$theme-dark-color: #0d47a1;
 $theme-primary-color:#ffc107;
 $theme-secondary-color:#ff8f00;
 //rewriting styles
@@ -204,9 +204,9 @@ input[type=search]{
     top: 0;bottom: 0;
     right: 0;left: 0;
     z-index: 999;
-    background-image: url('../images/splash.png');
-    background-repeat: no-repeat;
-    background-size: cover;
+    background:#311b92;
+    //background-repeat: no-repeat;
+    //background-size: cover;
     div.cover{
         position: absolute;
         top: 0;bottom: 0;

@@ -1,4 +1,5 @@
-app.controller('reportsCtr', ($scope,$filter) => {
+app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
+    $scope.defaultTab = $routeParams.tab;
     jQuery('#reports').on('scroll', function () {
         //console.log(jQuery('#reports').scrollTop())
         if (jQuery('#reports').scrollTop() >= 168) {
@@ -172,7 +173,7 @@ app.controller('reportsCtr', ($scope,$filter) => {
             //console.log($scope.salesItems)
 
             for (let i = 0; i < $scope.salesItems.length; i++) {
-                if (i > 0 && $scope.salesItems[i - 1].id === $scope.salesItems[i].id || i > 0 && $scope.salesItems[i - 1].model === $scope.salesItems[i].model) {
+                if (i > 0 && $scope.salesItems[i - 1].id === $scope.salesItems[i].id ) {
                     $scope.salesItems[i - 1].count += 1;
                     $scope.salesItems[i - 1].count_qty += Number($scope.salesItems[i].order_qty);
                     $scope.salesItems[i - 1].totalAmount += Number($scope.salesItems[i].totalOrderPrice);

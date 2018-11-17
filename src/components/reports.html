@@ -29,9 +29,9 @@
         </div>
         </div>
           <ul id="sectionTab" class="tabs">
-            <li class="tab col s3"><a class="active" href="#home">Accueil</a></li>
-            <li class="tab col s3"><a href="#sales">Ventes</a></li>
-            <li class="tab col s3"><a href="#stocks">Variation de stock</a></li>
+            <li class="tab col s3"><a ng-class="(defaultTab == 'tab1')?'active':''" href="#home">Accueil</a></li>
+            <li class="tab col s3"><a ng-class="(defaultTab == 'tab2')?'active':''" href="#sales">Ventes</a></li>
+            <li class="tab col s3"><a ng-class="(defaultTab == 'tab3')?'active':''" href="#stocks">Variation de stock</a></li>
           </ul>
         <div id="home" class="col s12 tab-view">
             <div class="row inner">
@@ -186,22 +186,22 @@
                     <h4 class="teal-text">Variation de stock</h4>
                     <h6>Affichage du comportement du stock dans la plage de dates choisie</h6>
                     <div class="stockBtns col s12">
-                        <a href="#!stock-reports/in_stock" class="btn-flat green-border green-text">
+                        <a href="#!stock-reports/in_stock/reports-tab3" class="btn-flat green-border green-text">
                             <i class="material-icons left">kitchen</i>
                             <strong>En stock</strong>
                             <span class="right">{{filterItems.active.length | currency:"":0}}</span>
                         </a>
-                        <a href="#!stock-reports/low_stock" class="btn-flat amber-border amber-text">
+                        <a href="#!stock-reports/low_stock/reports-tab3" class="btn-flat amber-border amber-text">
                             <i class="material-icons left">warning</i>
                             <strong>Faible stock</strong>
                             <span class="right">{{filterItems.lowStock.length | currency:"":0}}</span>
                         </a>
-                        <a href="#!stock-reports/out_of_stock" class="btn-flat red-border red-text">
+                        <a href="#!stock-reports/out_of_stock/reports-tab3" class="btn-flat red-border red-text">
                             <i class="material-icons left">error</i>
                             <strong>Stock epuise</strong>
                             <span class="right">{{filterItems.inactive.length | currency:"":0}}</span>
                         </a>
-                        <a href="#!stock-reports/broken_stocks" class="btn-flat brown-border brown-text">
+                        <a href="#!stock-reports/broken_stocks/reports-tab3" class="btn-flat brown-border brown-text">
                             <i class="material-icons left">grid_off</i>
                             <strong>Stocks Casse</strong>
                             <span class="right">{{filterItems.broken.length | currency:"":0}}</span>

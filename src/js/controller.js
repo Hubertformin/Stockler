@@ -11,13 +11,13 @@ app.config(($routeProvider)=>{
         .when('/users',{
             templateUrl:'components/users.html'
         })
-        .when('/reports',{
+        .when('/reports/:tab',{
             templateUrl:'components/reports.html'
         })
         .when('/rep-dash',{
             templateUrl:'components/reports-dashboard.html'
         })
-        .when('/stock-reports/:type',{
+        .when('/stock-reports/:type/:redir',{
             templateUrl:'components/stocks-reports.html'
         })
         .when('/today-records',{
@@ -92,7 +92,7 @@ app.controller('mainCtr',($scope)=>{
         broken:[],
         inactive:[],
         active:[]
-    }
+    };
     $scope.db.items.hook('reading',(obj)=>{
         //firt we modify accordingly
         if(obj.qty == 0) {
@@ -141,24 +141,24 @@ app.controller('mainCtr',($scope)=>{
             delete exist;
         }
         return obj;
-    })
+    });
     $scope.db.items.hook('updating',(mod,pk,obj)=>{
         $scope.filterItems = {
             lowStock:[],
             broken:[],
             inactive:[],
             active:[]
-        }
+        };
         var keys = Object.getOwnPropertyNames(mod);
         var qty_exist = keys.some(el=>{
             return el == 'qty';
-        })
+        });
         if(qty_exist){
             if((mod.qty+obj.qty)<0){
                 throw 'negative_qty';
             }
         }
-    })
+    });
 
     //2. Manager account creation
     jQuery('#manager-form').on('submit',(e)=>{

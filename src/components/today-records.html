@@ -31,6 +31,11 @@
                 </div>
             </div>
             <div class="table-div">
+                <div ng-show="todaysOrders.sales.length == 0" class="overlay grey lighten-4">
+                    <div class="center">
+                        <p>Aucun transaction fait aujourd'hui</p>
+                    </div>
+                </div>
                     <table id="salesTable">
                             <thead>
                                 <th>FAC</th>

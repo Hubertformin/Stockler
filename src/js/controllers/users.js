@@ -1,7 +1,14 @@
 app.controller('usersCtr',($scope)=>{
     //1. first thing first splitting users to managers snd local users
+    const fs = require('fs');
+    const path = require('path');
+
     $scope.managers = [];
     $scope.localUser = [];
+    $scope.defaultImg = 'images/user.png';
+    $scope.createUserImg = $scope.defaultImg;
+
+
     $scope.db.transaction('rw',$scope.db.users,()=>{
         $scope.db.users.toArray()
             .then(data=>{
@@ -29,6 +36,9 @@ app.controller('usersCtr',($scope)=>{
         //Angular breaks if this is done earlier than document ready.
         jQuery("#admin-table").bootgrid();
     });*/
+    //user upload on change
+
+
     $scope.hideUserControl = false;
 
     $scope.showCreateUser = ()=>{
@@ -36,6 +46,7 @@ app.controller('usersCtr',($scope)=>{
         $scope.updateUserForm = false;
         $scope.createUserForm = true;
     }
+
     //preview user
     $scope.prevUser = (i,u)=>{
         if(u == 'mgr'){

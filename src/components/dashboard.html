@@ -70,7 +70,7 @@
                                             <tr ng-repeat="s in items track by $index" 
                                                 ng-dblclick="addToCart($event,$index)" 
                                                 ng-class="s.status"
-                                                ng-if="s.brand == sortByBrand || sortByBrand == 'All' && s.qty > 0" data-id="{{s.model}}">
+                                                ng-if="s.brand == sortByBrand || sortByBrand == 'All'" data-id="{{s.model}}">
                                                 <td>{{toBrandName(s.brand)}}</td>
                                                 <td>{{s.model}}</td>
                                                 <td>{{s.qty}}</td>
@@ -100,8 +100,16 @@
                         <div class="item z-depth-2" ng-repeat="s in checkout.items track by $index">
                             <h6 class="teal-text">{{s.model}} <small class="right"><i ng-click="removeFromCart($index)" class="grey-text material-icons close">close</i></small></h6>
                             <p>{{toBrandName(s.brand)}}</p>
-                            <input type="number" min="1" ng-model="s.order_qty" ng-keyup="minQty($event,$index)" class="browser-default">
-                            <input type="number" min="{{s.price}}" placeholder="prix" ng-model="s.order_price" class="browser-default" aria-busy="true" ng-keyup="minPrice($event,$index)">
+                            <div class="row">
+                                <div class="col s6">
+                                    <label class="active">Qte</label>
+                                    <input type="number" min="1" ng-model="s.order_qty" ng-keyup="minQty($event,$index)" class="browser-default">
+                                </div>
+                                <div class="col s6">
+                                    <label class="active">Prix Unitaire</label>
+                                    <input type="number" min="{{s.price}}" placeholder="prix" ng-model="s.order_price" class="browser-default" ng-keyup="minPrice($event,$index)">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="checkout-btns">

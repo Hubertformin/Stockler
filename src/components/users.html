@@ -1,4 +1,4 @@
-<section class="routePage" id="users-view" ng-controller="usersCtr">
+<section class="routePage" id="usersView" ng-controller="usersCtr">
     <div class="row">
         <div class="tables col s9">
             <div class="row">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="preview col s3">
+        <div class="preview col s3 white">
             <div ng-hide="hideUserControl" class="overlay white">
                 <div class="center" style="width:80%;">
                     <img src="images/icons/empty.png" alt="">
@@ -82,6 +82,14 @@
                     <h6 class="color-theme-dark">Détails</h6>
                     <hr>
                     <h6 class="legend">Creer un utilisateur</h6>
+                    <!--<div class="center-align">
+                        <input style="display:none;" type="file" id="createUserPic" accept="image/*">
+                        <span onclick="document.querySelector('#createUserPic').click()" class="img-span">
+                            <span class="hover"><i class="material-icons">add</i></span>
+                            <img ng-src="{{createUserImg}}" class="profile-pic">
+                        </span><br>
+                        <small>Cliquez sur l'image pour ajoute une photo</small>
+                    </div>-->
                     <div class="input-field">
                         <i class="material-icons prefix">person</i>
                         <input id="new_name" ng-model="new_name" type="text" class="validate">
@@ -120,6 +128,7 @@
                     <button type="submit" class="btn btn-block bg-theme waves-effect waves-default">Cree</button>
                 </fieldset>
             </form>
+            <form>
                 <fieldset ng-show="updateUserForm">
                     <!--Heading -->
                     <h6 class="color-theme-dark">
@@ -160,6 +169,7 @@
                     </p>
                     <button ng-click="updateUser()" type="submit" class="btn btn-block bg-theme-rev waves-effect waves-default">Modifier</button>
                 </fieldset>
+            </form>
         </div>
     </div>
 </section>

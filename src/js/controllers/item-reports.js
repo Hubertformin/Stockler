@@ -1,5 +1,14 @@
 app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
     $scope.type = $routeParams.type;
+    $scope.redirection = $routeParams.redir;
+    if($scope.redirection !== 'none'){
+        $scope.redirectionBtn = true;
+        //fefixing
+        $scope.redirection = $scope.redirection.replace('-','/');
+        //redirect link
+        $scope.redir = {url:`#!${$scope.redirection}`}
+        //console.log($scope.redir);
+    }
     //vars
     $scope.displayMode = $routeParams.type;
     $scope.previewedItem = {};
@@ -93,11 +102,13 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
                     return;
                 }
 
-                var status = 'active';
                 if(typeof $scope.previewedItem.qty == 'number'){
                     $scope.previewedItem.date = new Date().getTime();
                     if($scope.previewedItem.qty > 0 && 
-                    $scope.previewedItem.qty <= $scope.getLowStockVal($scope.previewedItem.price)){
+                        $scope.previewedItem.qty > $scope.getLowStockVal($scope.previewedItem.price)){
+                            $scope.previewedItem.status = 'active';
+                    }else if($scope.previewedItem.qty > 0 && 
+                        $scope.previewedItem.qty <= $scope.getLowStockVal($scope.previewedItem.price)){
                         $scope.previewedItem.status = 'low-stock';
                     }else if($scope.previewedItem.qty == 0){
                         $scope.previewedItem.status = 'inactive';
