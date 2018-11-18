@@ -101,7 +101,11 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
                     notifications.warning('Un nom de serie valide requise!');
                     return;
                 }
-
+                $scope.previewedItem.qty = Number($scope.previewedItem.qty) + Number(jQuery('#updateItemQty').val());
+                if($scope.previewedItem.qty < 0){
+                    notifications.warning('Vous ne pouvez pas supprimer une quantité supérieure a la quantité du stock');
+                    return;
+                }
                 if(typeof $scope.previewedItem.qty == 'number'){
                     $scope.previewedItem.date = new Date().getTime();
                     if($scope.previewedItem.qty > 0 && 

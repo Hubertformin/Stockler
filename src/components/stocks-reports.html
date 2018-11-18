@@ -385,7 +385,8 @@
                     <div class="input-labels" ng-class="(!editable)?'disabled':'normal'">
                             <div class="input-field">
                                     <label for="" class="active">Qte</label>
-                                    <input ng-disabled="!editable" type="number" placeholder="Qte" ng-model="previewedItem.qty" />
+                                    <p class="input" ng-show="!editable">{{previewedItem.qty | currency:"":0}}</p>
+                                    <input ng-show="editable" ng-disabled="!editable" type="number" placeholder="Qte" id="updateItemQty" />
                                 </div>
                                 <div class="input-field">
                                     <label for="" class="active">Prix</label>

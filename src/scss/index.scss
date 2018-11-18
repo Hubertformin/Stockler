@@ -72,7 +72,7 @@
     z-index: 219;
     background:#fff;
     height: 55px;
-  @extend .z-depth-2;
+    @extend .z-depth-2;
     border-bottom: 0.5px solid #ddd;
     line-height: 50px;
   input[type=search]{
@@ -95,16 +95,17 @@
         display: inline-block;
         position: absolute;
         right:8px;
-        a{
+        a,.dropdownBtn{
             padding: 0 6px;
+            color: #323c47;
         }
     }
-    a{
+    a,.dropdownBtn{
         i.num-badge{
             position: absolute;
-            top:-70%;
+            top:15%;
             font-style:normal;
-            right: 20%;
+            right:9%;
             text-align: center;
             font-size: 11px;
             color: #fff;
@@ -115,20 +116,40 @@
             background:#f44336;
 }
     }
-    a.dropdownBtn{
+    li.dropdownBtn{
+        color: #323c47;
         position: relative;
+        cursor: pointer;
         div.drop-content{
             position: absolute;
             display:none;
-            right:-35%;
-            top:130%;
+            right:-68%;
+            top:96%;
             background: #fff;
             height: 350px;
             overflow-y: auto;
-            width: 276px;
+            width: 376px;
+            @extend .z-depth-5;
             border-radius:15px;
             border:1px solid #ddd;
 }
+    }
+    #navNotify{
+        display: none;
+        line-height: 1.9em;
+        a.list{
+            padding:5px 10px;
+            border-bottom: 1px solid #ddd;
+            .title{
+                display: block;
+                font-weight: 600;
+                color:#000;
+            }
+            .body{
+                color: #999;
+            }
+        }
+        
     }
     div.row{
         margin: 0 !important;
@@ -152,7 +173,6 @@
                 padding: 0 26px;
                 position: relative;
                 transition:all 0.6s ease-out;
-              color: #757575!important;
                 &.active{
                     background-color:rgba(0,0,0,0.2);
                     color:$theme-primary-color;
@@ -292,6 +312,15 @@ nav#sideNav{
 }
 //the view
 #view{
+    &.ng-enter {
+        transition:0.3s linear all;
+        transform: scale(0.95);
+      }
+      
+      /* The finishing CSS styles for the enter animation */
+    &.ng-enter.ng-enter-active {
+        transform: scale(1);
+      }
     margin-top:55px;
     position: relative;
     height: calc(100vh - 55px);
@@ -751,6 +780,24 @@ nav#sideNav{
                     border-radius: 4px;
                     padding: 10px;
                     background: #fff;
+                }
+            }
+            #createReportModal{
+                input{
+                    padding:10px;
+                    background: #fff;
+                    width: 100%;
+                    border: 1px solid #ddd;
+                }
+                textarea{
+                    min-height:9.5rem;
+                    border:1px solid #ddd;
+                    background: #fff;
+                    padding: 10px;
+                    margin-bottom:10px;
+                }
+                input:focus,textarea:focus{
+                    border-color: #f44336;
                 }
             }
         }

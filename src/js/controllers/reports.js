@@ -189,6 +189,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
             //date pickers
             $scope.startDateModel = ($scope.uniqueSalesDate.length <= 31) ? new Date($scope.uniqueSalesDate[0]) : new Date($scope.uniqueSalesDate.length - 7);
             $scope.endDateModel = new Date($scope.uniqueSalesDate[$scope.uniqueSalesDate.length - 1]);
+            $scope.endDateModel = new Date(`${$scope.endDateModel.toDateString()} 23:59`);
 
             $scope.startDateInstance = M.Datepicker.init(jQuery('.from_date'), {
                 format: 'dddd dd mmmm yyyy',
@@ -260,7 +261,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
 
 
             });
-            //bar data
+            /*//bar data
             $scope.barchartData = {}
             $scope.barchartData.x = $scope.salesItems.map((el) => {
                 return el.model;
@@ -301,7 +302,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                         color: 'rgba(0, 0, 0, 0.6)'
                     }
                 }
-            });
+            });*/
             //
             //money chart and few varibles settings
             var ctx = document.getElementById('salesMoneyChart').getContext('2d');
@@ -330,7 +331,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
 
 
             });
-            console.log($scope.salesItems);
+           // console.log($scope.salesItems);
             $scope.amount_sold = $scope.reduceObjArray($scope.salesItems, 'totalAmount');
             $scope.qty_sold = $scope.reduceObjArray($scope.salesItems, 'count_qty');
             //funalling applying
@@ -395,6 +396,11 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
             //export var
             var minDate = Date.parse(`${$scope.export_start_select} 00:00`);
             var maxDate = Date.parse(`${$scope.export_end_select} 23:59`);
+            //check
+            if(minDate > maxDate){
+                notifications.warning('La date de debut est plus grande que la date de fin!');
+                return;
+            }
             $scope.saveData = {
                 type: "reports",
                 exportDate:Date.now(),
@@ -565,17 +571,22 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
         waitTime : -1,
         textPos : 'vertical',
         fontSize : '',
-        source : '',
-        onClose : function() {
-            //console.log(res);
-            $scope.reportTitle = '';
-            $scope.reportDetails = '';
-            modal.close();
-            notifications.success('PDF généré');
-        }
+        source : ''
         });
 
-            const data = jQuery('#itemsLogs').html();     
+            const data = jQuery(`#${$scope.selectedReportTable}`).html(); 
+             var tfoot = ($scope.selectedReportTable === "itemsLogs")?`<th>Totals</th>
+                            <th></th>
+                            <th>${$filter('currency')($scope.qty_sold, "", 0)}</th>
+                            <th></th>
+                            <th>${$filter('currency')($scope.amount_sold, "FCFA ", 0)}</th>
+                            <th></th>`:`<th>Totals</th>
+                            <th></th>
+                            <th></th>
+                            <th>Qte: ${$filter('currency')($scope.qty_sold, "", 0)}</th>
+                            <th>${$filter('currency')($scope.amount_sold, "FCFA ", 0)}</th>
+                            <th></th><th></th>`;
+            
             const html = `<html lang="en"><head><meta charset="UTF-8"><style>
                 * {margin: 0;padding: 0;box-sizing: border-box;}
                 body{text-align: center;font-family: sans-serif;}
@@ -585,7 +596,8 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                 p.details {padding: 15px;}
                 table{border-width:1px;margin-top:40px; border-collapse: collapse;border-spacing: 0;width: 100%;border: 1px solid #ddd;}
                 tr{border-bottom: 1px solid #ddd;}th{font-weight:600}
-                th,td {text-align: left;padding:16px;}</style></head>
+                th,td {text-align: left;padding:16px;}
+                table ul{list-style-type: circle;}.badge{font-weight:600;color:#f44336;}</style></head>
                 <body><header><h1>Emile Telecom
                 </h1></header>
                 <section id="body">
@@ -598,12 +610,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                     <table>
                         ${data}
                         <tfoot>
-                            <th>Totals</th>
-                            <th></th>
-                            <th>${$filter('currency')($scope.qty_sold, "", 0)}</th>
-                            <th></th>
-                            <th>${$filter('currency')($scope.amount_sold, "FCFA ", 0)}</th>
-                            <th></th>
+                            ${tfoot}
                         </tfoot>
                     </table>
                 </section>
@@ -614,9 +621,16 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                 
                 var options = { format: 'Letter' };
                 pdf.create(html, options).toFile(file, function(err, res) {
-                    if (err) return console.log(err);
+                    jQuery('#createReportModal').waitMe("hide");
+                    if (err) {
+                        notifications.error('Impossible de genere pdf (CHTMTOPDF)');
+                        return;
+                    }
+                    $scope.reportTitle = '';
+                    $scope.reportDetails = '';
+                    modal.close();
+                    notifications.success('PDF généré');
                          // { filename: '/app/businesscard.pdf' }
-                         jQuery('#createReportModal').waitMe("hide");
                     });           
             })
         })
@@ -629,9 +643,9 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
         jQuery('ul.collection li').removeClass('active');
         jQuery(e.currentTarget).addClass('active');
     }
-    $scope.finalStock = (model) => {
+    $scope.finalStock = (id) => {
         for (let i = 0; i < $scope.items.length; i++) {
-            if ($scope.items[i].model === model) {
+            if ($scope.items[i].id === id) {
                 return $scope.items[i].qty;
             }
         }

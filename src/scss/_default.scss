@@ -54,7 +54,7 @@ title-bar{
   }
 }
 body{
-    background-color: #fff;
+    background-color:#333;
 }
 //first things first scrollbar
 /* width */
@@ -104,7 +104,6 @@ input[type=search]{
 .z-depth-0 {
     box-shadow: none !important;
   }
-  
   /* 2dp elevation modified*/
   .z-depth-1 {
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),
@@ -114,28 +113,24 @@ input[type=search]{
   .z-depth-1-half {
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
   }
-  
   /* 6dp elevation modified*/
   .z-depth-2 {
     box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),
                 0 1px 10px 0 rgba(0,0,0,0.12),
                 0 2px 4px -1px rgba(0,0,0,0.3);
   }
-  
   /* 12dp elevation modified*/
   .z-depth-3 {
     box-shadow: 0 8px 17px 2px rgba(0,0,0,0.14),
                 0 3px 14px 2px rgba(0,0,0,0.12),
                 0 5px 5px -3px rgba(0, 0, 0, 0.2);
   }
-  
   /* 16dp elevation */
   .z-depth-4 {
     box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14),
                 0 6px 30px 5px rgba(0,0,0,0.12),
                 0 8px 10px -7px rgba(0,0,0,0.2);
   }
-  
   /* 24dp elevation */
   .z-depth-5 {
     box-shadow: 0 24px 38px 3px rgba(0,0,0,0.14),
@@ -255,6 +250,15 @@ table{
         width:6%;
     }
     tr{
+        &.ng-enter {
+            transition:0.5s linear all;
+            opacity: 0;
+          }
+          
+          /* The finishing CSS styles for the enter animation */
+        &.ng-enter.ng-enter-active {
+            opacity:1;
+          }
         &.selected{
             background-color:#a5d6a7;
             &:hover{
@@ -365,6 +369,9 @@ input[type=search].search-input{
       &.no-backdrop{
           background: transparent;
       }
+      &.dark{
+          background: rgba(0,0,0,0.8);
+      }
       .hmodal-content{
           @extend .center;
           @extend .z-depth-3;
@@ -382,5 +389,74 @@ input[type=search].search-input{
             min-width: 80vw;
             height: 80vh;
           }
+      }
+  }
+  //Alerts
+  div#alertContainer{
+    position: fixed;
+    top:10%;
+    right:20px;
+    z-index:200;
+    border:1px solid #ddd;
+  }
+  div.alert{
+      border: 1px solid #ddd;
+      min-width: 250px;
+      margin-bottom: 6px;
+      @extend .z-depth-5;
+      max-height:105px;
+      background:#fff;
+      opacity: 1;
+      border-radius:9px;
+      max-width: 600px;
+      cursor: pointer;
+      transition: all 0.6s ease;
+      &.click{
+          transform: scale(0.95);
+      }
+      &.active{
+        animation-name: alert;
+        animation-duration: 0.7s;
+        animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        display: block;
+        top:10%;
+      }
+      .row{
+          margin:0;
+      }
+      .img{
+          line-height:102px;
+          img{
+              height: 47px;
+              width: 47px;
+              border-radius:50%;
+          }
+      }
+      .title{
+          margin:3px;
+      }
+      .message{
+          margin: 3.5px;
+      }
+      .btns{
+          display: block;
+          width: 100%;
+          .span-btn{
+              width:50%;
+              a{
+                  padding:2px 10px;
+              }
+          }
+      }
+  }
+
+  @keyframes alert{
+      from{
+          display:block;
+          top:-10%;
+      }
+      to{
+          display: block;
+          top:10%;
       }
   }

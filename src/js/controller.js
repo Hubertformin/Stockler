@@ -1,4 +1,4 @@
-var app = angular.module('StocklerApp',['ngRoute']);
+var app = angular.module('StocklerApp',['ngRoute','ngAnimate']);
 //routing
 app.config(($routeProvider)=>{
     $routeProvider
@@ -38,6 +38,8 @@ app.controller('mainCtr',($scope)=>{
         items:'++id,brand,&model,qty,orderedQty,staff,price,date,status,lowStockQty,brokenStatus',
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
     });
+    ////alert
+    $scope.alertMsg = [];
     //empty varaibles for other
     $scope.users = [];
     $scope.brand = [];
@@ -101,6 +103,7 @@ app.controller('mainCtr',($scope)=>{
             var diff = Math.floor((d - o)/(1000*60*60*24));
             obj.brokenStatus = (diff >= 30)?true:false;
             diff = o = d = null;
+            //
         }
         //conditions to pass in to filer array
         if(obj.qty > 0 && obj.qty <= obj.lowStockQty){
@@ -110,6 +113,15 @@ app.controller('mainCtr',($scope)=>{
             if(!exist){
                 obj.status = 'low-stock'
                 $scope.filterItems.lowStock.push(obj);
+                $scope.alertMsg.push({
+                    type:obj.status,
+                    broken:obj.brokenStatus,
+                    brand:obj.brand,
+                    action:'#!stock-reports/low_stock/none',
+                    msg:': stock est faible',
+                    model:obj.model,
+                    qty:obj.qty,
+                })
             }
             delete exist;
         }
@@ -119,6 +131,15 @@ app.controller('mainCtr',($scope)=>{
             })
             if(!exist){
                 $scope.filterItems.broken.push(obj);
+                $scope.alertMsg.push({
+                    type:obj.status,
+                    broken:obj.brokenStatus,
+                    brand:obj.brand,
+                    action:'#!stock-reports/broken_stocks/none',
+                    msg:'est en rupture de stock depuis plus de 30 jours+',
+                    model:obj.model,
+                    qty:obj.qty,
+                })
             }
             delete exist;
         }
@@ -128,6 +149,15 @@ app.controller('mainCtr',($scope)=>{
             })
             if(!exist){
                 $scope.filterItems.inactive.push(obj);
+                $scope.alertMsg.push({
+                    type:obj.status,
+                    broken:obj.brokenStatus,
+                    brand:obj.brand,
+                    action:'#!stock-reports/out_of_stock/none',
+                    msg:'est epuise',
+                    model:obj.model,
+                    qty:obj.qty,
+                })
             }
             delete exist;
         }
@@ -149,6 +179,7 @@ app.controller('mainCtr',($scope)=>{
             inactive:[],
             active:[]
         };
+        $scope.alertMsg = [];
         var keys = Object.getOwnPropertyNames(mod);
         var qty_exist = keys.some(el=>{
             return el == 'qty';
@@ -158,7 +189,9 @@ app.controller('mainCtr',($scope)=>{
                 throw 'negative_qty';
             }
         }
+        
     });
+    
 
     //2. Manager account creation
     jQuery('#manager-form').on('submit',(e)=>{

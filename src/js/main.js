@@ -1,4 +1,6 @@
 const { ipcRenderer } = require('electron');
+
+const { Notify,Alert }  = require('./js/modules/Notifications.js');
 //funtion to controll custom tittle bar
 /*function titleBarBtns(type) {
     ipcRenderer.sendSync('synchronous-message', type);
@@ -22,22 +24,7 @@ jQuery('#splashLoader').waitMe({
     textPos : 'vertical',
     fontSize : ''
 });
-//notifications class
-class Notify {
-    error(msg,time = 4000){
-        M.toast({html:`<i class="left material-icons red-text text-darken-3">cancel</i>${msg}`,displayLength:time});
-    }
-    success(msg,time = 4000){
-        M.toast({html:`<i class="left material-icons green-text text-darken-3">check_circle</i>${msg}`,displayLength:time});
-    }
-    info(msg,time = 4000){
-        M.toast({html:`<i class="left material-icons light-blue-text text-darken-3">error</i>${msg}`,displayLength:time});
-    }
-    warning(msg,time = 4000){
-        M.toast({html:`<i class="left material-icons amber-text text-darken-3">warning</i>${msg}`,displayLength:time});
-    }
 
-}
 //calling the notifications class
 const notifications = new Notify();
 //i. active nav links
@@ -93,8 +80,7 @@ jQuery('#notificationsIcon').on('click',(e)=>{
 jQuery(window).on('click',(e)=>{
     //if(jQuery(e.target).is('.drop-content'))
     if(jQuery('.drop-content').css('display') == 'block'){
-        if(jQuery(e.target).parents('.drop-content').length === 1 || 
-        jQuery(e.target).is('.drop-content') ||
+        if(jQuery(e.target).is('.drop-content') ||
         jQuery(e.target).is('.dropdownTrigger')){
             return;
         }

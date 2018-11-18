@@ -150,8 +150,10 @@ app.controller('itemsCtr',($scope)=>{
                 notifications.error('Vous ne pouvez pas metre un valuer negatif!')
                 return;
             }
-            var status = 'active';
-            if($scope.item_qty == 0){
+            var status;
+            if($scope.item_qty > 0 && $scope.item_qty > $scope.getLowStockVal($scope.item_price)){
+                status = 'active';
+            }else if($scope.item_qty == 0){
                 status = 'inactive';
             }else if($scope.item_qty > 0 && $scope.item_qty <= $scope.getLowStockVal($scope.item_price)){
                 status = 'low-stock';
@@ -176,11 +178,12 @@ app.controller('itemsCtr',($scope)=>{
                     //console.log($scope.item_qty+($scope.items[j].qty - $scope.items[j].orderedQty))
                     //console.log($scope.item_qty,$scope.items[j].qty, $scope.items[j].orderedQty)
                     //var status = 'active';
+                    var status;
                     if(($scope.item_qty + $scope.items[j].qty) > 0
-                    || ($scope.item_qty + $scope.items[j].qty) > $scope.getLowStockVal($scope.item_price)){
+                    && ($scope.item_qty + $scope.items[j].qty) > $scope.getLowStockVal($scope.item_price)){
                         status = 'active';
                     }else if(($scope.item_qty + $scope.items[j].qty) > 0
-                            || ($scope.item_qty + $scope.items[j].qty) <= $scope.getLowStockVal($scope.item_price)){
+                            && ($scope.item_qty + $scope.items[j].qty) <= $scope.getLowStockVal($scope.item_price)){
                         status = 'low-stock';
                     }else if(($scope.item_qty + $scope.items[j].qty) === 0){
                         status = 'inactive';
@@ -203,6 +206,7 @@ app.controller('itemsCtr',($scope)=>{
                             orderedQty:$scope.items[j].orderedQty,
                             lowStockQty:$scope.getLowStockVal($scope.item_price)
                         }
+                        
                             break;
                     }else{
                         var item = {

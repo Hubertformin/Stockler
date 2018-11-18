@@ -12,6 +12,7 @@
     <title>Stockler</title>
     <script src="js/angular.js"></script>
     <script src="js/angular_route.js"></script>
+    <script src="js/angular-animate.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/waitMe.min.js"></script>
 </head>
@@ -104,21 +105,43 @@
         <div class="head">
                 <input type="search" placeholder="Recherche.." class="browser-default">
             <div class="actions">
-                <a class="dropdownBtn" href="javascript:void(0)">
+                <ul>
+                <li class="dropdownBtn" ng-init="alertMsg = []">
                     <i id="notificationsIcon" class="material-icons dropdownTrigger">notifications</i>
-                    <i class="num-badge">0</i>
+                    <i ng-hide="alertMsg.length === 0" class="num-badge">
+                        {{(alertMsg.length <= 9)?alertMsg.length:'9+'}}
+                    </i>
                     <div id="navNotify" class="drop-content">
-                        <div ng-show="notificatonMsg.length == 0" class="center">
+                        <div ng-if="alertMsg.length == 0" class="center">
                             <span>Aucun notification</span>
                         </div>
+                        <div>
+                            <a class="list" ng-repeat="n in alertMsg" ng-href="{{n.action}}">
+                                <span class="title">
+                                    <span ng-switch="n.type">
+                                        <i ng-switch-when="low-stock" class="left material-icons medium amber-text text-darken-3">warning</i>
+                                        <i ng-switch-when="inactive" class="left material-icons red-text text-darken-3">cancel</i>
+                                    </span>
+                                    <i ng-if="n.broken" class="left material-icons brown-text text-darken-3">cancel</i>
+                                    {{toBrandName(n.brand)}}
+                                </span>
+                                <span class="body">
+                                    {{n.model}} {{n.msg}}
+                                </span>
+                            </a>
+                        </div>
                     </div>
-                </a>
-                <a href="javascript:void(0)" onclick="showModal('#settings')"><i class="material-icons">settings</i></a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" onclick="showModal('#settings')">
+                        <i class="material-icons">settings</i></a>
+                </li>
                 <!--<a href="javascript:void(0)"><i class="material-icons">more_vert</i></a>-->
-                <a ng-click="logOut()" style="margin-top: -7%;" href="javascript:void(0)" class="btn-flat red-text red-border">
+                <li><a ng-click="logOut()" style="margin-top: -7%;" href="javascript:void(0)" class="btn-flat red-text red-border">
                     <i style="height:unset;line-height:unset;" class="material-icons left">exit_to_app</i>
                     Déconnexion
-                </a>
+                </a></li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -167,18 +190,19 @@
                 <li class="dropdown">
                     <a href="javascript:void(0)"><i class="material-icons left">insert_chart</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
-                        <li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>
+                        <!--<li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>-->
                         <li><a class="subMenuLink" href="#!stock-reports/all/none"><i class="material-icons left">pie_chart</i>Stock</a></li>
                         <li><a class="subMenuLink" href="#!reports/tab1"><i class="material-icons left">show_chart</i>Ventes</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="javascript:void(0)"><i class="material-icons left">people</i>Utilisateur <i class="material-icons right">keyboard_arrow_right</i></a>
-                    <ul class="sub-menu">
+                    <a href="#!users"><i class="material-icons left">people</i>Utilisateur 
+                        <!--<i class="material-icons right">keyboard_arrow_right</i>--></a>
+                    <!--<ul class="sub-menu">
                         <li><a class="subMenuLink" href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
                         <li><a class="subMenuLink" href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
                         <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Utilisateur</a></li>
-                    </ul>
+                    </ul>-->
                 </li>
             </ul>
         </div>
@@ -187,11 +211,36 @@
    <!--route view -->
     <section id="view" ng-view></section>
     <!-- setting side nav-->
-    <div data-theme="dark"  id="settings" class="hmodal no-backdrop">
+    <div data-theme="dark"  id="settings" class="hmodal dark">
         <div class="hmodal-content large">
             <ng-include src="'components/settings.html'" onload="s_show='theme'"></ng-include>
         </div>
     </div>
+
+    <!-- Alert-->
+    <!--<div class="" id="alertContainer">
+        <div class="alert">
+            <div class="row">
+                <div class="col s3 img">
+                    <i class="left material-icons medium green-text text-darken-3">check_circle</i>                        
+                </div>
+                <div class="col s9">
+                    <h5 class="title grey-text">Low stock</h5>
+                    <p class="message">
+                        this item s low stock please do something
+                    </p>
+                    <span class="btns">
+                        <span class="span-btn b-right">
+                            <a class="actionBtn" href="">Ouvrir</a>
+                       </span>
+                        <span class="span-btn">
+                            <a class="cancelBtn" href="javascript:void(0)">Ferme</a>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>-->
     
     <script src="js/materialize.js"></script>
     <script src="js/chart.js"></script>

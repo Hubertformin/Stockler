@@ -55,7 +55,7 @@
                             <h5 class="green-text">Articles</h5>
                             <hr>
                         </div>
-                        <div class="col s6">
+                        <!--<div class="col s6">
                             <fieldset>
                                 <h6 class="legend">Bar chart</h6>
                                 <div class="bar-chart">
@@ -70,7 +70,7 @@
                                     <canvas id="pieChart" height="200" width="400"></canvas>
                                 </div>
                             </fieldset>
-                        </div>
+                        </div>-->
                         <div class="col s12">
                             <div class="col s12">
                                 <h5 class="green-text">Ventes x Montant</h5>
@@ -82,6 +82,47 @@
                                     <canvas id="salesMoneyChart" height="150" width="400"></canvas>
                                 </div>
                             </fieldset>
+                        </div>
+                        <!-- Sales Table-->
+                        <div class="col s12">
+                                <div class="col s12">
+                                        <h5 class="blue-text">Ventes</h5>
+                                        <hr>
+                                    </div>
+                            <div class="table-div" style="height:75vh;">
+                                <table id="salesTable">
+                                    <thead>
+                                        <tr class="blue white-text">
+                                            <th>FAC</th>
+                                            <th>Name</th>
+                                            <th>Tel</th>
+                                            <th>Articles</th>
+                                            <th>M.V</th>
+                                            <th>Vendeur</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="s in newSales track by $index">
+                                            <td>{{s.inv}}</td>
+                                            <td>{{s.name}}</td>
+                                            <td>{{s.phone}}</td>
+                                            <td>
+                                                <ul>
+                                                    <li ng-repeat="i in s.items track by $index">
+                                                        {{toBrandName(i.brand)}} {{i.model}}
+                                                        <span class="badge teal-text">{{i.order_qty}}</span>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <td>{{s.totalPrice | currency:"":0}}</td>
+                                            <td>{{s.staff}}</td>
+                                            <td>{{toFrenchDateString(s.date)}}</td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -231,9 +272,9 @@
                                     <td>{{x.count_qty}}</td>
                                     <td>{{x.price | currency:"":0}}</td>
                                     <td>{{x.totalAmount | currency:"":0}}</td>
-                                    <td ng-if="finalStock(x.model) > 0">{{finalStock(x.model)}}</td>
-                                    <td class="red-text" ng-if="finalStock(x.model) == 0">{{finalStock(x.model)}}</td>
-                                    <td ng-if="finalStock(x.model) == 'fin'"><small class="red-text">Cet article n'existe plus</small></td>
+                                    <td ng-if="finalStock(x.id) > 0">{{finalStock(x.id)}}</td>
+                                    <td class="red-text" ng-if="finalStock(x.id) == 0">{{finalStock(x.id)}}</td>
+                                    <td ng-if="finalStock(x.id) == 'fin'"><small class="red-text">Cet article n'existe plus</small></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -347,7 +388,8 @@
             </div>
         </div>
         <!-- Report Modal -->
-        <div id="createReportModal" class="modal red-border">
+        <div id="createReportModal" class="modal red-border" 
+            ng-init="selectedReportTable = 'itemsLogs'">
             <div class="modal-content">
                 <div class="header">
                     <h4 class="red-text center-align">
@@ -356,12 +398,18 @@
                 </div>
                 <div class="body">
                     <div class="input-field">
-                        <input type="text" ng-model="reportTitle" class="red-input">
-                        <label for="">Titre</label>
+                        <input type="text" placeholder="Titre" ng-model="reportTitle" class="browser-default">
+                        <label for="" class="active">Titre</label>
                     </div>
                     <div class="input-field">
-                        <label for="">Detaile</label>
-                        <textarea rows="3" ng-model="reportDetails" class="red-input materialize-textarea"></textarea>
+                        <textarea placeholder="Remarque..." rows="3" ng-model="reportDetails"></textarea>
+                    </div>
+                    <div class="input-field">
+                        <label for="" class="active">Choisir Table</label>
+                        <select ng-model="selectedReportTable" style="margin-top:5px;" class="browser-default">
+                            <option value="itemsLogs">Variation de stock</option>
+                            <option value="salesTable">Ventes effectuer</option>
+                        </select>
                     </div>
                 </div>
             </div>
