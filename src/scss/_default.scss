@@ -57,6 +57,10 @@ body{
     background-color:#333;
 }
 //first things first scrollbar
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
 /* width */
 ::-webkit-scrollbar {
     width:8px;
@@ -376,7 +380,6 @@ input[type=search].search-input{
           @extend .center;
           @extend .z-depth-3;
           background: #fff;
-          border-radius:16px;
           &.small{
             min-width: 50vw;
             height: 50vh;

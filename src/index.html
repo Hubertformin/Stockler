@@ -150,7 +150,7 @@
         <div class="title">
             <h6 class="teal-text font-kaushan">
                 <img src="images/logo.png">
-                <span>Stockler</span>
+                <span>Emelie Telecom</span>
             </h6>
         </div>
         <div class="body">
@@ -211,9 +211,9 @@
    <!--route view -->
     <section id="view" ng-view></section>
     <!-- setting side nav-->
-    <div data-theme="dark"  id="settings" class="hmodal dark">
+    <div data-theme="dark"  id="settings" ng-controller="settingsCtr" class="hmodal dark">
         <div class="hmodal-content large">
-            <ng-include src="'components/settings.html'" onload="s_show='theme'"></ng-include>
+            <ng-include src="'components/settings.html'" onload="s_show='general'"></ng-include>
         </div>
     </div>
 
@@ -255,5 +255,6 @@
     <script src="js/controllers/reports-dashboard.js"></script>
     <script src="js/controllers/item-reports.js"></script>
     <script src="js/controllers/today-records.js"></script>
+    <script src="js/controllers/settings.js"></script>
 </body>
 </html>

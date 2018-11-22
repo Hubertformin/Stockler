@@ -1,3 +1,7 @@
+//Requiring modules
+//1. export
+var TableToExcel = require('table-to-excel');
+
 var app = angular.module('StocklerApp',['ngRoute','ngAnimate']);
 //routing
 app.config(($routeProvider)=>{
@@ -24,8 +28,6 @@ app.config(($routeProvider)=>{
             templateUrl:'components/today-records.html'
         })
 });
-
-
 //the main controller
 app.controller('mainCtr',($scope)=>{
     //creating and fetching databses
@@ -36,8 +38,12 @@ app.controller('mainCtr',($scope)=>{
         users:'++id,&name,password,email,mgr,status,startDate,permissions',
         brand:'++id,&name,date',
         items:'++id,brand,&model,qty,orderedQty,staff,price,date,status,lowStockQty,brokenStatus',
-        sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff'
+        sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff',
+        syncRemote:'&id,date',
+        syncImport:'&id,date,range',
     });
+    //excel
+    $scope.excel = new TableToExcel();
     ////alert
     $scope.alertMsg = [];
     //empty varaibles for other
@@ -47,6 +53,10 @@ app.controller('mainCtr',($scope)=>{
     $scope.sales = [];
     $scope.notificatonMsg = [];
     $scope.currentUser = '';
+    $scope.sync = {
+        online:'',
+        import:''
+    }
     $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
         $scope.db.users.toArray()
         .then((data)=>{
@@ -326,6 +336,11 @@ app.controller('mainCtr',($scope)=>{
             return 3;
         }
     }
+    //printer
+    $scope.printOrder = (order)=>{
+        //
+    }
+    
 
 
 });

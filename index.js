@@ -2,7 +2,7 @@ const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
   
   // Keep a global reference of the window object, if you don't, the window will
   // be closed automatically when the JavaScript object is garbage collected.
-  let win
+  let win;
 
 
   function createWindow () {
@@ -24,7 +24,7 @@ const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
     win.loadFile('src/index.html')
   
     // Open the DevTools.
-    win.webContents.openDevTools()
+    //win.webContents.openDevTools()
   
     // Emitted when the window is closed.
     win.on('closed', () => {
@@ -34,7 +34,7 @@ const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
       win = null
     })
   }
-  
+ 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
@@ -54,18 +54,11 @@ const {app, BrowserWindow,ipcMain,dialog,Notification} = require('electron')
           }
           event.returnValue = data;
       });
-      //
-      const notify = new Notification({
-        title:'My message',
-        body:'This is a test notification'
-    })
-    notify.addListener('show',(e)=>{
-        console.log(e)
-    })
-      setTimeout(()=>{
-          console.log('sending notification')
-            notify.show();
-      },10000)
+      var contents = win.webContents;
+      //console.log(contents.getPrinters())
+      ipcMain.on('synchronous-message',(event,args)=>{
+          event.returnValue =  JSON.stringify(contents.getPrinters());
+      })
   })
   
   // Quit when all windows are closed.

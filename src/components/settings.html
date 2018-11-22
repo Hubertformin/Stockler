@@ -1,40 +1,76 @@
-<div class="title b-bottom">
+<div class="title b-bottom blue-grey darken-4 white-text">
     <h5><i class="material-icons">settings</i> Parametres</h5>
     <span class="close"><i class="material-icons">clear</i></span>
 </div>
-<div class="pre b-right">
-        <details>
-            <summary><i class="material-icons small">view_list</i>  Général</summary>
-            <div class="body">
+<div class="pre b-right font-fira">
+        <dl>
+            <dt><i class="material-icons small">view_list</i>  Paramaetres</dt>
+            <dd>
+                <p ng-class="(s_show=='general')?'active':''" 
+                ng-click="s_show='general'">Général</p>
+            </dd>
+            <dd>
                 <p 
-                ng-class="(s_show=='theme')?'active':''" 
-                ng-click="s_show='theme'">Thème</p>
-            </div>
-        </details>
-        <details>
-            <summary><i class="material-icons">sync</i> Sync</summary>
-            <div class="body">
+                ng-class="(s_show=='sync')?'active':''" 
+                ng-click="s_show='sync'">Sync</p>
+            </dd>
+            <dd>
                 <p
-                ng-class="(s_show=='server')?'active':''" 
-                ng-click="s_show='server'">Serveur</p>
+                ng-class="(s_show=='printer')?'active':''" 
+                ng-click="s_show='printer'">Impression</p>
+            </dd>
+            <dd>
                 <p
-                ng-class="(s_show=='sync_history')?'active':''" 
-                ng-click="s_show='sync_history'">histoire</p>
-            </div>
-        </details>
-        <details>
-            <summary><i class="material-icons">info_outline</i> A propos</summary>
-        </details>
+                ng-class="(s_show=='about')?'active':''" 
+                ng-click="s_show='about'">A propos</p>
+            </dd>
+        </dl>
         <!--about --> 
 </div>
 <div class="view">
         <div class="switch" ng-switch="s_show">
             <!-- General-->
-            <div id="theme" class="when" ng-switch-when="theme">
-                <h3 class="heading">Theme</h3>
+            <div id="general" class="whem" ng-switch-when="general">
+                <h3 class="heading">Général</h3>
                 <hr>
-                <div class="show-body">
-                    <div class="row">
+                <div class="general">
+                    <dl>
+                        <dt>Mode</dt>
+                        <dd>
+                            <select class="browser-default" ng-model="settings.general.mode">
+                                <option value="client">Client</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <!-- Sync-->
+            <div id="sync" class="when" ng-switch-when="sync">
+                <h3 class="heading">Sync</h3>
+                <hr>
+                <div class="show-body" ng-init="edit = false">
+                    <div class="col s2">
+                        <div class="row">
+                            <div class="col s12">
+                                Url de Sync:  
+                                <input ng-disabled="!edit" class="inline browser-default" ng-model="settings.sync.url" type="text" placeholder="URL">
+                                <button ng-click="edit = !edit" class="btn-floating brown">
+                                    <i class="material-icons">create</i>
+                                </button>
+                                <hr>
+                            </div>
+                            <div class="col s12">
+                                Intervalle de rafraîchissement <br>
+                                <input  class="browser-default inline" ng-model="settings.sync.freq" type="number" maxlength="2" style="padding:10px 15px;width:50px;"> heur(s)
+                                <hr>
+                            </div>
+                            <div class="col s12">
+                                <h5>Dernière synchronisation</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<div class="row">
                         <div class="col s4">
                             <p>
                                 <label>
@@ -74,50 +110,80 @@
                                 <div style="background-color:#323c47;" class="tabs"></div>
                             </div>                           
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
-            <!-- Sync-->
-            <div class="when" id="server" ng-switch-when="server">
-                <h3 class="heading">Serveur</h3>
+            <!--Printer-->
+            <div class="when" id="printer" ng-switch-when="printer">
+                <h3 class="heading">Impression</h3>
                 <hr>
                 <div class="row">
-                    <div class="col s8">
-                        <div class="grey-border" style="height:46vh;"></div>
+                    <div class="col s12">
+                        <p>Activer l'impression
+                            <label>
+                                <input type="checkbox" ng-model="settings.printers.active">
+                                <span class="lever"></span>
+                            </label>
+                        </p>
+                        <hr>
                     </div>
-                    <div class="add col s4 b-left">
-                        <form action="">
-                            <div class="input-field">
-                                <label for="">Nom</label>
-                                <input type="text" class="browser-default">
+                    <div class="list-printers" ng-show="settings.printers.active">
+                        <div ng-show="settings.printers.default !== false" class="col s12 line-height">
+                        <p>
+                            <small>Imprimante par défaut</small>
+                            <div class="row">
+                                <div class="no-right-pad col s2" style="width:11%;">
+                                    <img src="images/icons/printer1.png" alt="">
+                                </div>
+                                <div class="col">
+                                    <h6 class="title">{{settings.printers.default[0].name}} 
+                                        <small><i class="material-icons green-text right">check_circle</i></small>
+                                    </h6>
+                                    
+                                </div>
                             </div>
-                            <div class="input-field">
-                                <label for="">host name <i class="red-text">*</i></label>
-                                <input type="text" class="browser-default">
+                        </p>
+                        <hr>
+                        </div>
+                        <div class="col s12 line-height">
+                        <small>Imprimantes installées</small>
+                        <div class="row" style="padding:5px;border: 1px solid #ddd;height: 25vh;overflow-y: auto;margin-top: 15px;">
+                            <div ng-repeat="p in settings.printers.All" 
+                                ng-class="(p.isDefault)?'active':''" 
+                                class="col s4 printers">
+                                <div class="row">
+                                    <div class="no-right-pad col s4">
+                                        <img src="images/icons/printer1.png" alt="">
+                                    </div>
+                                    <div class="col s8">
+                                        <h6 class="title">{{p.name}}</h6>  
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-field">
-                                <label for="">username <i class="red-text">*</i></label>
-                                <input type="text" class="browser-default">
-                            </div>
-                            <div class="input-field">
-                                <label for="">password <i class="red-text">*</i></label>
-                                <input type="text" class="browser-default">
-                            </div>
-                            <div class="input-field">
-                                <label for="">port</label>
-                                <input type="text" class="browser-default">
-                            </div>
-                            <div class="input-field">
-                                <label for="">Database</label>
-                                <input type="text" class="browser-default">
-                            </div>
-                        </form>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="when" ng-switch-when="sync_history">
-                <h3 class="heading">Historique de synchronisation</h3>
+            <div class="when" ng-switch-when="about">
+                <h3 class="heading">A propos</h3>
                 <hr>
+                <div class="row">
+                    <dl>
+                        <dt><strong>L'Application</strong></dt>
+                        <dd><strong>App ID:</strong> Stockler</dd>
+                        <dd><strong>Enregistré à:</strong> Emelie Telecom</dd>
+                        <dd><strong>Version:</strong> 1.0.1</dd>
+                        <dd><strong>Liscence: </strong>Apache Liscence 2.0</dd>
+                        <dd><strong>Statut: </strong>Activé</dd>
+                    </dl>
+                    <dl>
+                        <dt><strong>Developeur</strong></dt>
+                        <dd><strong>Hubert Formin</strong></dd>
+                        <dd><strong>https://silverslopecm.ml</strong></dd>
+                        <dd><strong>&copy;2018</strong></dd>
+                    </dl>
+                </div>
             </div>
         </div>
 </div>

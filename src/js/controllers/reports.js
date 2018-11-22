@@ -97,7 +97,12 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                 })
         }).then(() => {
             //console.log(salesData[0].date);
-            RenderView();
+            RenderView()
+            .catch(err=>{
+                if(err === 'empty-db'){
+                    return;
+                }
+            })
             $scope.$apply();
         })
         .catch(err => {
@@ -151,6 +156,10 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
             $scope.barchartData = {}
             //get uniqie date sal
             $scope.salesObject = {}
+            //if empty database
+            if($scope.newSales.length === 0){
+                reject('empty-db');
+            }
 
             for (let i = 0; i < $scope.newSales.length; i++) {
                 $scope.salesItems = $scope.salesItems.concat($scope.newSales[i].items);
@@ -371,6 +380,9 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
 
     //367.FAB actions
     $scope.saveLog = () => {
+        if($scope.newSales.length === 0){
+            return;
+        }
         var minDate = new Date(salesData[0].date),
             maxDate = new Date(salesData[salesData.length - 1].date);
             $scope.export_filter = [];
@@ -471,7 +483,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
     }
     //save 
 
-    //
+    //open and parse
     $scope.openLog = () => {
         const path = require('path');
         dialog.showOpenDialog({
@@ -501,7 +513,7 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                     const fileCryptr = new Cryptr('myTotalyFileSecretKey');
                     var logsData = fileCryptr.decrypt(data);
                     logsData = JSON.parse(logsData);
-                    console.log(logsData);
+                    //console.log(logsData);
                     //parsingData
                     var modal = M.Modal.getInstance(jQuery('#importModal'));
                     $scope.previewImport = {
@@ -520,7 +532,47 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                             notifications.warning('Mot de passe Invalid');
                             return;
                         }
-                        //now importing
+                        //now importing and display
+                        console.log(logsData.data);
+                        $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
+                            //$scope.db.users.clear()
+                            $scope.db.users.bulkPut(logsData.data.users)
+                            $scope.db.users.toArray()
+                            .then((data)=>{
+                                $scope.users = data;
+                             });
+                            //
+                            $scope.db.brand.clear()
+                            $scope.db.brand.bulkPut(logsData.data.brand)
+                            $scope.db.brand.toArray()
+                                .then((data)=>{
+                                    $scope.brand = data;
+                                })
+                            $scope.db.items.clear()
+                            $scope.db.items.bulkPut(logsData.data.items)
+                            $scope.db.items.toArray()
+                            .then((data)=>{
+                                $scope.items = data;
+                             });
+                            //
+                            $scope.db.sales.clear()
+                            $scope.db.sales.bulkPut(logsData.data.sales)
+                            $scope.db.sales.toArray()
+                            .then((data)=>{
+                                salesData = data;
+                                $scope.sales = data;
+                             });
+                            //
+                            //$scope.db.syncImport.get(1)
+                        })
+                        .then(()=>{
+                            $scope.startDateModel = new Date(logsData.minDate);
+                            $scope.endDateModel = new Date(logsData.maxDate);
+                            $scope.triggerRender();
+                            notifications.info('Donnees importees!');
+                            modal.close();
+                            $scope.$apply();
+                        })
                         
                     })
                     //
@@ -533,6 +585,9 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
     }
     //
     $scope.createReport = () => {
+        if($scope.newSales.length === 0){
+            return;
+        }
         var modal = M.Modal.getInstance(jQuery('#createReportModal'));
         modal.open();
         jQuery('#create_report_btn').on('click',()=>{
@@ -643,6 +698,24 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
         jQuery('ul.collection li').removeClass('active');
         jQuery(e.currentTarget).addClass('active');
     }
+    //export as exel
+    $scope.saveExcel = () => {
+        var modal = M.Modal.getInstance(jQuery('#tableExport'));
+        modal.open();
+        jQuery('#tableExportBtn').on('click',()=>{
+            if($scope.selectedTableExport == '' || $scope.selectedTypeExport == ''){
+                notifications.warning('Choisir une tableaux et une methode!');
+                return;
+            }
+            //export
+            //var table = jQuery(`#${$scope.selectedTableExport}`);
+            switch($scope.selectedTypeExport){
+                case 'excel':
+                    $scope.excel.render($scope.selectedTableExport,{text:"file1",bg:"#333",color:"#fff"});
+            }
+        })
+    }
+
     $scope.finalStock = (id) => {
         for (let i = 0; i < $scope.items.length; i++) {
             if ($scope.items[i].id === id) {
@@ -651,6 +724,12 @@ app.controller('reportsCtr', ($scope,$filter,$routeParams) => {
         }
         return 'fin';
     }
+
+   
+
+    jQuery('#excelBtn').on('click',()=>{
+        excel.render('salesTable');
+    })
 
 
 

@@ -1,4 +1,11 @@
 <div id="reports" class="routePage" style="padding-bottom:0px;" ng-controller="reportsCtr">
+    <div style="position:fixed;left:250px;" ng-show="newSales.length === 0" class="overlay white">
+        <div class="center center-align">
+            <img src="images/icons/no-sales.png" alt="">
+            <h4>Rien à afficher ici</h4>
+            <h6>les métadonnées des ventes et des ventes s'afficheraient ici</h6>
+        </div>
+    </div>
     <!--<div id="reportsDrop" class="drop overlay">
         <div class="center">
             <h4 class="text">
@@ -164,7 +171,7 @@
                                     </div>
                             <h5 class="teal-text center-align">
                                 <img style="height:25px;width:25px;" src="images/logo.png" alt="">
-                                Emile telecom
+                                Emeliee Telecom
                                 <button class="btn-flat right green-border green-text">
                                     <i class="material-icons left">person</i>
                                     Venduer: {{sale.staff}}
@@ -293,6 +300,7 @@
                   <li><a ng-click="saveLog()" title="Exporter des données" class="btn-floating blue"><i class="material-icons">publish</i></a></li>
                   <li><a ng-click="openLog()" title="Importer des données" class="btn-floating teal"><i class="material-icons">file_download</i></a></li>
                   <li><a ng-click="openLog()" title="Synchroniser" class="btn-floating amber"><i class="material-icons">sync</i></a></li>
+                  <li><a ng-click="saveExcel()" style="line-height:55px;text-align:center;" class="btn-floating green darken-4"><img src="images/icons/excel.png"></a></li>
                 </ul>
         </div>
         <!-- MODALS -->
@@ -416,6 +424,30 @@
             <div class="modal-footer red white-text">
                 <a href="javascript:void(0)" class="modal-close waves-effect waves-grey btn-flat white grey-text">Annuler</a>
                 <a id="create_report_btn" href="javascript:void(0)" class="waves-effect waves-red btn-flat red-text white">Completer</a>
+            </div>
+        </div>
+        <!-- Export to excel or pdf-->
+        <div id="tableExport" class="modal modal-fixed-footer" style="height:350px;">
+            <div class="modal-content" ng-init="selectedTableExport = 'itemsLogs';selectedTypeExport='excel'">
+                <h5>Exporter Tableaux</h5>
+                <div class="input-field" style="margin-top:2.6rem;">
+                    <label for="" class="active">Choisir Table</label>
+                    <select ng-model="selectedTableExport" style="margin-top:5px;" class="browser-default">
+                        <option value="itemsLogs">Variation de stock</option>
+                        <option value="salesTable">Ventes effectuer</option>
+                    </select>
+                </div>
+                <div class="input-field" style="margin-top:2.6rem;">
+                    <select ng-model="selectedTypeExport" class="browser-default">
+                        <option value="excel">Excel</option>
+                        <option value="pdf">Pdf</option>
+                    </select>
+                    <label for="" class="active">Choisir type</label>
+                </div>
+            </div>
+            <div class="modal-footer green darken-4">
+                <a href="javascript:void(0)" class="white-text modal-close waves-effect waves-grey btn-flat">Annuler</a>
+                <a id="tableExportBtn" href="javascript:void(0)" class="white-text waves-effect waves-green btn-flat">Exporter</a>
             </div>
         </div>
 </div>
