@@ -1,10 +1,13 @@
 //Requiring modules
 //1. export
-var TableToExcel = require('table-to-excel');
-
-var app = angular.module('StocklerApp',['ngRoute','ngAnimate']);
+var TableToExcel = require('./js/modules/TableToExcel');
+//2 print
+//const remote = require('electron').remote;
+const print = remote.require('electron-thermal-printer');
+//declaring
+var Stockler = angular.module('StocklerApp',['ngRoute','ngAnimate']);
 //routing
-app.config(($routeProvider)=>{
+Stockler.config(($routeProvider)=>{
     $routeProvider
         .when('/',{
             templateUrl:'components/dashboard.html'
@@ -29,7 +32,7 @@ app.config(($routeProvider)=>{
         })
 });
 //the main controller
-app.controller('mainCtr',($scope)=>{
+Stockler.controller('mainCtr',($scope,$filter)=>{
     //creating and fetching databses
     var Dexie = require('dexie');
 
@@ -41,6 +44,7 @@ app.controller('mainCtr',($scope)=>{
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff',
         syncRemote:'&id,date',
         syncImport:'&id,date,range',
+        itemRecords:'++id,brand,model,qty,date'
     });
     //excel
     $scope.excel = new TableToExcel();
@@ -105,6 +109,17 @@ app.controller('mainCtr',($scope)=>{
         inactive:[],
         active:[]
     };
+    //function to add into items records
+    $scope.addItemsRecords = function(obj) {
+        $scope.db.itemRecords.add({
+            brand:obj.brand,
+            model:obj.model,
+            date:obj.date,
+            qty:obj.qty,
+            staff:obj.staff
+        })
+    }
+    //Hooks
     $scope.db.items.hook('reading',(obj)=>{
         //firt we modify accordingly
         if(obj.qty == 0) {
@@ -279,10 +294,14 @@ app.controller('mainCtr',($scope)=>{
             //finally loggin in
             $scope.currentUser = user;
             sessionStorage.setItem('user',JSON.stringify(user));
+            document.querySelector('#dashBtn').style.display = 'block';
+            if(user.mgr || user.permissions.sales){
+                document.querySelector('#dashBtn').click();
+            }
             if(!user.mgr && !user.permissions.sales){
                 document.querySelector('#itemsCtrBtn').click();
             }
-            jQuery('#login').hide('fast');
+            jQuery('#login').fadeOut('fast');
             $scope.login_name = "";
             $scope.login_password = "";
             $scope.$apply();
@@ -294,9 +313,7 @@ app.controller('mainCtr',($scope)=>{
     $scope.logOut = ()=>{
         if(confirm('Deconnection ?')){
             sessionStorage.clear('user');
-            jQuery('#login').show("fats",()=>{
-                document.querySelector('#dashBtn').click();
-            });
+            jQuery('#login').fadeIn("fast");
         }
     }
 
@@ -337,8 +354,47 @@ app.controller('mainCtr',($scope)=>{
         }
     }
     //printer
-    $scope.printOrder = (order)=>{
-        //
+    var p2 = require('electron').remote.require('electron-thermal-printer');
+    $scope.printOrders = (data)=>{
+        data.date = new Date(data.date);
+        //console.log(data.inv);
+        const date = `${data.date.getDate()}/${data.date.getMonth()+1}/${data.date.getFullYear()} - ${data.date.getHours()}:${data.date.getMinutes()}`;
+        var print_data = [
+            {type: 'bodyInit', css: {"margin": "0 0 0 0", "width": '250px'}},
+            {type: 'text', value:'Emelie Telecom' , style: `font-size: 24px;font-weight:600;text-align:center;text-decoration:underline;`},
+            {type: 'text', value: date, style: `font-size: 14px;text-align:center;`},
+            {type: 'text', value: `Client : ${data.name}`, style: `font-size: 18px;margin-top:10px;border-bottom:1px solid #ddd;text-align:left;font-weight:600;`}
+      ]
+      data.items.forEach(el=>{
+        print_data.push({type: 'text', value:`- ${$scope.toBrandName(el.brand)} ${el.model}          ${el.order_qty} X ${$filter('currency')(el.order_price, "", 0)}`, style: `padding:5px;font-size: 15px;`})
+      })
+      print_data  = print_data.concat([
+         {type: 'text', value: `Total: ${$filter('currency')(data.totalPrice, "FCFA ", 0)}`, style: `margin:25px 0 0 0;font-size: 17px;font-weight:bold;text-decoration:underline;`},
+         {
+             type: 'qrcode',
+             value:`${data.inv}`,
+             height: 66,
+             width: 66,
+             style: `text-align:center;width:64px;margin: 25px 0 0 0;float:right`
+         },
+         {type: 'text', value: 'Garantie 7 jours', style: `text-align:left;font-size:8px;font-weight:600;`},
+         {type: 'text', value: 'emelie Telecom', style: `text-align:center;font-size: 12px`},
+      ])
+        //printing....
+        p2.print58m( {
+            data: print_data,
+            preview:true,
+            deviceName: 'EPSON TM-T20II Receipt',
+            timeoutPerLine: 400
+        }).then((data)=>{
+            if(data){
+                notifications.info('Added to printing que');
+            }else{
+                notifications.warning('Failed to print!')
+            }
+        }).catch(err=>{
+            notifications.error("Print error: Make sure printer is connected to PC<br>-Check if printer drivers are up-to-date");
+        })
     }
     
 

@@ -168,7 +168,7 @@
                 <small>Liens</small>
             </div>
             <ul class="links">
-                <li class="dropdown">
+                <li class="dropdown" ng-show="currentUser.mgr || currentUser.permissions.sales">
                     <a href="javascript:void(0)"><i class="material-icons left">shopping_cart</i>Ventes <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
                         <li><a id="dashBtn" class="subMenuLink" href="#!"><i class="material-icons left">add</i>Vendre</a></li>
@@ -188,7 +188,7 @@
             </div>
             <ul ng-show="currentUser.mgr" class="links">
                 <li class="dropdown">
-                    <a href="javascript:void(0)"><i class="material-icons left">insert_chart</i>Raports <i class="material-icons right">keyboard_arrow_right</i></a>
+                    <a href="javascript:void(0)"><i class="material-icons left">insert_chart</i>Rapports <i class="material-icons right">keyboard_arrow_right</i></a>
                     <ul class="sub-menu">
                         <!--<li><a class="subMenuLink" href="#!rep-dash"><i class="material-icons left">dashboard</i>Panneau</a></li>-->
                         <li><a class="subMenuLink" href="#!stock-reports/all/none"><i class="material-icons left">pie_chart</i>Stock</a></li>
@@ -202,7 +202,8 @@
                         <li><a class="subMenuLink" href="#!users"><i class="material-icons left">person_add</i>Cree</a></li>
                         <li><a class="subMenuLink" href=""><i class="material-icons left">people_outline</i>Montrer</a></li>
                         <li><a class="subMenuLink" href=""><i class="material-icons left">person</i>Utilisateur</a></li>
-                    </ul>-->
+                    </ul>
+                    <a ng-click="printOrders()" href="javascript:void(0)"><span>Print</span></a>-->
                 </li>
             </ul>
         </div>

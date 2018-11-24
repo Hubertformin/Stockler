@@ -59,28 +59,28 @@
                 <form ng-show="currentUser.mgr || currentUser.permissions.create" action="#" id="createItemForm">
                     <div class="row">
                         <div class="input-field col s3">
-                            <select ng-model="item_brand" name="#" id="" class="browser-default">
+                            <select ng-disabled="!editable && !currentUser.mgr" ng-model="item_brand" name="#" id="" class="browser-default">
                                 <option value="">Choisir une famille</option>
                                 <option ng-repeat="b in brand track by $index" value="{{b.id}}">{{b.name}}</option>
                             </select>
                         </div>
                         <div class="input-field col s3">
-                            <input id="model_name" type="text" ng-model="model_name" placeholder="Nom de serie">
+                            <input ng-disabled="!editable && !currentUser.mgr" id="model_name" type="text" ng-model="model_name" placeholder="Nom de serie">
                             <label for="model_name" class="active">Nom de serie</label>
                         </div>
                         <div class="input-field col s3">
-                            <input type="number" id="item_qty" ng-model="item_qty" placeholder="Quantite">
+                            <input  type="number" id="item_qty" ng-model="item_qty" placeholder="Quantite">
                             <label for="item_qty" class="active">Quantite</label>
                         </div>
                         <div class="input-field col s3">
-                            <input type="number" min="1" id="item_price" ng-model="item_price" placeholder="Prix">
+                            <input ng-disabled="!editable && !currentUser.mgr" type="number" min="1" id="item_price" ng-model="item_price" placeholder="Prix">
                             <label for="item_price" class="active">Prix</label>
                         </div>
                         <div class="col s12 right-align">
                             <input style="display:none;" type="number" ng-model="item_id">
                             <input style="display:none;" type="number" ng-model="item_date">
-                            <button ng-hide="prevUpdateBtn" class="btn-floating waves-effect"><i class="material-icons">add</i></button>
-                            <button ng-show="prevUpdateBtn" class="btn green waves-effect"><i class="material-icons">update</i></button>
+                            <button ng-if="!prevUpdateBtn" class="btn-floating waves-effect"><i class="material-icons">add</i></button>
+                            <button ng-if="prevUpdateBtn" class="btn green waves-effect"><i class="material-icons">update</i></button>
                             <button type="button" ng-click="prevItems(0,false)" ng-show="prevUpdateBtn" class="btn grey waves-effect"><i class="material-icons">cancel</i></button>
                             <hr>
                         </div>

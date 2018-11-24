@@ -1,10 +1,13 @@
-app.controller('itemsCtr',($scope)=>{
+Stockler.controller('itemsCtr',($scope)=>{
     //first thin first refetch items and brands
     $scope.sortByBrand = 'All';
     $scope.item_id = '';
     $scope.items = [];
     $scope.brand = [];
-
+    //variable to permit edit
+    if(!$scope.currentUser.mgr){
+        $scope.editable = true;
+    }
 
 
     $scope.db.transaction('rw',$scope.db.brand,$scope.db.items,()=>{
@@ -55,6 +58,7 @@ app.controller('itemsCtr',($scope)=>{
         //transcation
         $scope.db.transaction('rw',$scope.db.brand,()=>{
             $scope.db.brand.put(brand)
+            
             $scope.db.brand.toArray()
                 .then(data=>{
                     $scope.brand = data;
@@ -123,7 +127,7 @@ app.controller('itemsCtr',($scope)=>{
     jQuery('#createItemForm').on('submit',(e)=>{
         e.preventDefault();
         if($scope.item_brand == '' || typeof $scope.item_brand !== 'string'){
-            $scope.item_brand = Number($scope.item_brand);
+            //$scope.item_brand = Number($scope.item_brand);
             notifications.warning('Choisir une famille!');
             return;
         }
@@ -140,14 +144,14 @@ app.controller('itemsCtr',($scope)=>{
             return;
         }
         //items:'++id,brand,&model,qty,staff,price,date',
-        $scope.item_brand = Number($scope.item_brand);
+        //$scope.item_brand = Number($scope.item_brand);
 
         var d = new Date();
         $scope.model_name = $scope.model_name[0].toUpperCase()+$scope.model_name.slice(1).toLowerCase();
         //
         if(typeof $scope.item_id !== 'number'){
             if($scope.item_qty < 0) {
-                notifications.error('Vous ne pouvez pas metre un valuer negatif!')
+                notifications.warning('Vous ne pouvez pas metre un valuer negatif!')
                 return;
             }
             var status;
@@ -160,7 +164,7 @@ app.controller('itemsCtr',($scope)=>{
             }
             var item = {
                 brokenStatus:false,
-                brand:$scope.item_brand,
+                brand:Number($scope.item_brand),
                 model:$scope.model_name,
                 staff:$scope.currentUser.name,
                 qty:$scope.item_qty,
@@ -189,14 +193,19 @@ app.controller('itemsCtr',($scope)=>{
                         status = 'inactive';
                     }
                     if(typeof $scope.item_qty === 'number'){
+                        //return if non managerial account is inputing -ve val
+                        if(!$scope.currentUser.mgr && $scope.item_qty < 0){
+                            notifications.warning('Vous ne pouvez pas metre un valuer negatif!')
+                            return;
+                        }
                         if(($scope.items[j].qty + $scope.item_qty) < 0){
-                            notifications.error('Vous ne pouvez pas supprimer une quantité supérieure a la quantité du stock');
+                            notifications.warning('Vous ne pouvez pas supprimer une quantité supérieure a la quantité du stock');
                             return;
                         }
                         var item = {
                             brokenStatus:false,
                             id:$scope.item_id,
-                            brand:$scope.item_brand,
+                            brand:Number($scope.item_brand),
                             model:$scope.model_name,
                             staff:$scope.currentUser.name,
                             qty:$scope.item_qty + $scope.items[j].qty,
@@ -212,7 +221,7 @@ app.controller('itemsCtr',($scope)=>{
                         var item = {
                             brokenStatus:false,
                             id:$scope.item_id,
-                            brand:$scope.item_brand,
+                            brand:Number($scope.item_brand),
                             model:$scope.model_name,
                             staff:$scope.currentUser.name,
                             qty:$scope.items[j].qty,
@@ -229,8 +238,12 @@ app.controller('itemsCtr',($scope)=>{
         }
             //console.log(item);
         //transcation
-        $scope.db.transaction('rw',$scope.db.items,()=>{
+        $scope.db.transaction('rw',$scope.db.items,$scope.db.itemRecords,()=>{
+            //adding
             $scope.db.items.put(item)
+            //recording
+            $scope.addItemsRecords(item);
+            //reading
             $scope.db.items.toArray()
                 .then(data=>{
                     $scope.items = data;
@@ -250,6 +263,9 @@ app.controller('itemsCtr',($scope)=>{
             $scope.item_qty = '';
             $scope.item_price = '';
             $scope.prevUpdateBtn = false;
+            if(!$scope.currentUser.mgr){
+                $scope.editable = true;
+            }
             //applying changes
             $scope.$apply();
             //document.querySelector('#createItemForm').reset();
@@ -285,11 +301,10 @@ app.controller('itemsCtr',($scope)=>{
     };
     //3. prev users
     $scope.prevItems = (i=0,mode=true)=>{
-        if(!$scope.currentUser.mgr){
-            notifications.info("Vous n'etes pas autoriser a performe cette operation");
-            return;
-        }
         if(mode){
+            if(!$scope.currentUser.mgr){
+                $scope.editable = false;
+            }
             $scope.item_id = $scope.items[i].id;
             $scope.item_date = $scope.items[i].date;
             $scope.item_brand = `${$scope.items[i].brand}`;
@@ -299,6 +314,9 @@ app.controller('itemsCtr',($scope)=>{
             $scope.item_price = $scope.items[i].price;
             $scope.prevUpdateBtn = true;
         }else{
+            if(!$scope.currentUser.mgr){
+                $scope.editable = true;
+            }
             $scope.item_id = '';
             $scope.item_brand = '';
             $scope.model_name = '';

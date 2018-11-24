@@ -1,4 +1,4 @@
-app.controller('usersCtr',($scope)=>{
+Stockler.controller('usersCtr',($scope)=>{
     //1. first thing first splitting users to managers snd local users
     const fs = require('fs');
     const path = require('path');

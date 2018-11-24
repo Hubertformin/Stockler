@@ -27,11 +27,11 @@
                                 </h5>
                             </div>
                             <div class="col s4">
-                                <button class="btn excel green waves-effect export-btns">
+                                <button ng-click="exportTable($event,'excel','all_table','Tout_stock')" class="btn excel green waves-effect export-btns">
                                     <img src="images/icons/excel.png">
                                     Excel
                                 </button>
-                                <button class="btn orange waves-effect export-btns">
+                                <button ng-click="exportTable($event,'pdf','all_table','Tout_stock')" class="btn orange waves-effect export-btns">
                                     <img src="images/icons/pdf.png">
                                     PDF
                                 </button> 
@@ -55,8 +55,7 @@
                                    <th>Qte</th>
                                    <th>Prix</th>
                                    <th>Date</th>
-                                   <th><i class="material-icons">person</i></th>
-                                   <th><i class="material-icons">delete_forever</i></th>
+                                   <th>Utilisateur</th>
                                </thead>
                                <tbody>
                                     <tr ng-repeat="s in items track by $index" ng-dblclick="previewItem('items',$index)" ng-class="s.status">
@@ -66,7 +65,6 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -86,11 +84,11 @@
                                     </h5>
                                 </div>
                                 <div class="col s4">
-                                    <button class="btn green waves-effect export-btns">
+                                    <button ng-click="exportTable($event,'excel','low_stock_table','Faible_stock')" class="btn green waves-effect export-btns">
                                         <img src="images/icons/excel.png">
                                         Excel
                                     </button>
-                                    <button class="btn orange waves-effect export-btns">
+                                    <button ng-click="exportTable($event,'pdf','low_stock_table','Faible_stock')"  class="btn orange waves-effect export-btns">
                                         <img src="images/icons/pdf.png">
                                         PDF
                                     </button> 
@@ -114,8 +112,7 @@
                                    <th>Qte</th>
                                    <th>Prix</th>
                                    <th>Date</th>
-                                   <th><i class="material-icons">person</i></th>
-                                   <th><i class="material-icons">delete_forever</i></th>
+                                   <th>Utilisateur</th>
                                </thead>
                                <tbody class="amber lighten-5">
                                     <tr ng-repeat="s in filterItems.lowStock track by $index" ng-dblclick="previewItem('low-stock',$index)">
@@ -125,7 +122,6 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -147,11 +143,11 @@
                                 </h5>
                             </div>
                             <div class="col s4">
-                                <button class="btn green waves-effect export-btns">
+                                <button ng-click="exportTable($event,'excel','in_stock_table','Stocks_actif')"  class="btn green waves-effect export-btns">
                                     <img src="images/icons/excel.png">
                                     Excel
                                 </button>
-                                <button class="btn orange waves-effect export-btns">
+                                <button ng-click="exportTable($event,'pdf','in_stock_table','Stocks_actif')"  class="btn orange waves-effect export-btns">
                                     <img src="images/icons/pdf.png">
                                     PDF
                                 </button> 
@@ -175,8 +171,7 @@
                                    <th>Qte</th>
                                    <th>Prix</th>
                                    <th>Date</th>
-                                   <th><i class="material-icons">person</i></th>
-                                   <th><i class="material-icons">delete_forever</i></th>
+                                   <th>Utilisateur</th>
                                </thead>
                                <tbody class="light-green lighten-5">
                                     <tr ng-repeat="s in filterItems.active track by $index" ng-dblclick="previewItem('active',$index)">
@@ -186,7 +181,6 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -209,11 +203,11 @@
                             </div>
                             <div class="col s4"></div>
                             <div class="col s4">
-                                <button class="btn green waves-effect export-btns">
+                                <button ng-click="exportTable($event,'excel','out_of_stock_table','Stock_epuise')" class="btn green waves-effect export-btns">
                                     <img src="images/icons/excel.png">
                                     Excel
                                 </button>
-                                <button class="btn orange waves-effect export-btns">
+                                <button ng-click="exportTable($event,'pdf','out_of_stock_table','Stock_epuise')" class="btn orange waves-effect export-btns">
                                     <img src="images/icons/pdf.png">
                                     PDF
                                 </button> 
@@ -237,8 +231,7 @@
                                    <th>Qte</th>
                                    <th>Prix</th>
                                    <th>Date</th>
-                                   <th><i class="material-icons">person</i></th>
-                                   <th><i class="material-icons">delete_forever</i></th>
+                                   <th>Utilisateur</th>
                                </thead>
                                <tbody class="red lighten-5">
                                     <tr ng-repeat="s in filterItems.inactive track by $index" ng-dblclick="previewItem('inactive',$index)">
@@ -248,7 +241,6 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>
@@ -272,12 +264,14 @@
                             <div class="col s4"></div>
                             <div class="col s4">
                                 <button
+                                ng-click="exportTable($event,'excel','broken_stocks','Stock_brisee')"
                                 ng-disabled="filterItems.broken.length == 0" 
                                 class="btn green waves-effect export-btns">
                                     <img src="images/icons/excel.png">
                                     Excel
                                 </button>
                                 <button
+                                ng-click="exportTable($event,'pdf','broken_stocks','Stock_brisee')"
                                 ng-disabled="filterItems.broken.length == 0" 
                                 class="btn orange waves-effect export-btns">
                                     <img src="images/icons/pdf.png">
@@ -303,8 +297,7 @@
                                    <th>Qte</th>
                                    <th>Prix</th>
                                    <th>Date</th>
-                                   <th><i class="material-icons">person</i></th>
-                                   <th><i class="material-icons">delete_forever</i></th>
+                                   <th>Utilisateur</th>
                                </thead>
                                <tbody>
                                     <tr ng-repeat="s in filterItems.broken track by $index" ng-dblclick="previewItem('broken-stock',$index)">
@@ -314,7 +307,6 @@
                                         <td>{{s.price | currency:"FCFA ":0}}</td>
                                         <td>{{toMyDate(s.date,true)}}</td>
                                         <td>{{s.staff}}</td>
-                                        <td><i ng-click="deleteItem(s.id)" class="material-icons action">delete</i></td>
                                     </tr>
                                </tbody>
                            </table>

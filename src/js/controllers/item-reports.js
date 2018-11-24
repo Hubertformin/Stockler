@@ -1,4 +1,8 @@
-app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
+Stockler.controller('stocks-reportsCtr',($scope,$routeParams)=>{
+    const {
+        dialog
+    } = require('electron').remote;
+
     $scope.type = $routeParams.type;
     $scope.redirection = $routeParams.redir;
     if($scope.redirection !== 'none'){
@@ -94,9 +98,7 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
     //2modificatons on items
     //2.1 Updating
     $scope.updateItem = ()=>{
-            //transcation
-            $scope.db.transaction('rw',$scope.db.items,()=>{
-                $scope.previewedItem.brand = Number($scope.previewedItem.brand);
+        $scope.previewedItem.brand = Number($scope.previewedItem.brand);
                 if(typeof $scope.previewedItem.model !== 'string' || $scope.previewedItem.model == ''){
                     notifications.warning('Un nom de serie valide requise!');
                     return;
@@ -118,7 +120,13 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
                         $scope.previewedItem.status = 'inactive';
                     }
                 }
+                //transcation
+                $scope.db.transaction('rw',$scope.db.items,$scope.db.itemRecords,()=>{
+                //updating
                 $scope.db.items.put($scope.previewedItem)
+                //recording
+                $scope.addItemsRecords($scope.previewedItem);
+                //reading
                 $scope.db.items.toArray()
                     .then(data=>{
                         $scope.items = data;
@@ -160,6 +168,91 @@ app.controller('stocks-reportsCtr',($scope,$routeParams)=>{
             })
         }
     };
+    //3.export table
+    $scope.exportTable = (e,type,table,label) => {
+            //export
+            var d = new Date();
+            //var table = jQuery(`#${$scope.selectedTableExport}`);
+            //var file = (table == 'itemsLogs')?'Variation_de_stock':'Ventes_effectuer';
+            var file = `${label}_${d.getDate()}_${d.getMonth()+1}_${d.getFullYear()}`;
+            switch(type){
+                case 'excel':
+                    $scope.excel.createExcel({
+                        id:table,
+                        title:"Excel",
+                        name:'Sheet1',
+                        fileName:`${file}`
+                    });
+                    break;
+                case 'pdf':
+                    const path = `${file}.pdf`
+                    dialog.showSaveDialog({
+                        title: "Enregistrer",
+                        defaultPath: path,
+                        buttonLabel: "Enregistrer",
+                        filters: [
+                            {
+                                name: 'PDF',
+                                extensions: ['pdf']
+                            },
+                        ]
+                        }, (file) => {
+                            if (typeof file !== 'string') return;
+                            //loader
+                            jQuery(e.target).waitMe({
+                                effect : 'bounce',
+                                bg : 'rgba(255,255,255,0.9)',
+                                color : '#ff6f00',
+                                maxSize : '',
+                                waitTime : -1,
+                                textPos : 'vertical',
+                                fontSize : '',
+                                source : ''
+                                });
+                        var fs = require('fs');
+                        var pdf = require('html-pdf');
+                        var data = jQuery(`#${table}`).html();
+                    const html = `<html lang="en"><head><meta charset="UTF-8"><style>
+                    * {margin: 0;padding: 0;box-sizing: border-box;}
+                    body{text-align: center;font-family: sans-serif;}
+                    header{background-color:#ff6f00;color: #fff;padding: 20px;}
+                    header h1 img {width: 40px;height: auto;margin-right: 15px;transform: translateY(25%);}
+                    section#body {padding: 10px;}h2.title{padding: 10px;text-align: left;color: #d32f2f;border-bottom: 1px solid #ddd;}
+                    p.details {padding: 15px;}
+                    table{border-width:1px;margin-top:40px; border-collapse: collapse;border-spacing: 0;width: 100%;border: 1px solid #ddd;}
+                    tr{border-bottom: 1px solid #ddd;}th{font-weight:600}
+                    th,td {text-align: left;padding:16px;}
+                    table ul{list-style-type: circle;}.badge{font-weight:600;color:#f44336;}</style></head>
+                    <body><header><h1>Emile Telecom
+                    </h1></header>
+                    <section id="body">
+                        <table>
+                            ${data}
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </section>
+                </body>
+                </html>`;
+                
+                var options = { format: 'Letter' };
+                pdf.create(html, options).toFile(file, function(err, res) {
+                    jQuery(e.target).waitMe("hide");
+                    if (err) {
+                        notifications.error('Impossible de genere pdf (CHTMTOPDF)');
+                        console.log(err)
+                        return;
+                    }
+                    //modal.close();
+                    notifications.success('PDF généré');
+                         // { filename: '/app/businesscard.pdf' }
+                    }); 
+
+
+                })
+                break;
+            }
+    }
 
 
 

@@ -1,4 +1,4 @@
-app.controller('dashCtr',($scope)=>{
+Stockler.controller('dashCtr',($scope)=>{
     //Modal
     jQuery('.modal').modal();
     //invoice num
@@ -123,6 +123,8 @@ app.controller('dashCtr',($scope)=>{
     }
     //proceed check out
     $scope.proceedCheckout = ()=>{
+        $scope.checkout.totalQty = 0;
+        $scope.checkout.totalPrice = 0;
         for(var i = 0;i<$scope.checkout.items.length;i++){
             if(typeof $scope.checkout.items[i].order_price <= 0 || $scope.checkout.items[i].order_price < $scope.checkout.items[i].price){
                 notifications.warning(`Le prix de ${$scope.toBrandName($scope.checkout.items[i].brand)} ${$scope.checkout.items[i].model} est plus petite que le minimum`,6000);
@@ -194,8 +196,10 @@ app.controller('dashCtr',($scope)=>{
             })
             d = null;
         }).then(()=>{
+            //print reciet
+            $scope.printOrders($scope.checkout);
             $scope.checkout = {
-                inv:Math.floor(Math.random() * (9999999 - 1000000) ) + 1000000,
+                inv:Math.floor(Math.random() * (99999999 - 1000000) ) + 1000000,
                 date:'',
                 name:'',
                 phone:'',
@@ -206,7 +210,7 @@ app.controller('dashCtr',($scope)=>{
             }
             jQuery("tr").removeClass('selected');
             $scope.$apply();
-            notifications.success("L'achat complete, Imprimmer le recu");
+            notifications.success("L'achat complete, Ajouté à la file d'impression");
             checkoutModal.close();
         }).catch(err=>{
             console.error(err);

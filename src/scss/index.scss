@@ -174,19 +174,9 @@
                 position: relative;
                 transition:all 0.6s ease-out;
                 &.active{
-                    background-color:rgba(0,0,0,0.2);
-                    color:$theme-primary-color;
+                    //background-color:rgba(0,0,0,0.2);
+                    //color:$theme-primary-color;
                     transform-origin: left;
-                    &::after{
-                        transition:all 0.6s ease-out;
-                        transform-origin: left;
-                        position: absolute;
-                        content: '';
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        border: 1.5px solid $theme-primary-color;
-                    }
                 }
             }
         }

@@ -1,4 +1,4 @@
-app.controller('reportsDashCtr',($scope)=>{
+Stockler.controller('reportsDashCtr',($scope)=>{
     $scope.d = [1,2,3,4,5,6,8,9];
     /*$('.dial')
     .val(27)

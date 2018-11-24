@@ -1,4 +1,4 @@
-app.controller('todayRecordsCtr',($scope)=>{
+Stockler.controller('todayRecordsCtr',($scope)=>{
     //vars
     var i,today = new Date();
     $scope.todaysOrders = {
@@ -35,7 +35,6 @@ app.controller('todayRecordsCtr',($scope)=>{
         $scope.salesItems.sort(function (a, b) {
             return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
         });*/
-        console.log($scope.sales)
         $scope.sales.reverse();
         for(i = 0;i<$scope.sales.length;i++){
             var o =new Date($scope.sales[i].date);

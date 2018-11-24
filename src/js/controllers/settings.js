@@ -1,7 +1,14 @@
-app.controller('settingsCtr',($scope,$http)=>{
-    const { ipcRenderer } = require('electron');
+Stockler.controller('settingsCtr',($scope,$http)=>{
+    const { ipcRenderer,app } = require('electron');
     const printers = JSON.parse(ipcRenderer.sendSync('synchronous-message'));
+    const fs = require('fs');
     //console.log(printers);
+    fs.open('bin/config.json','a',(err,fd)=>{
+        if (err.code === 'ENOENT') {
+            console.error('myfile does not exist');
+            return;
+          }
+    })
 
     $scope.settings = {
         general:{
@@ -19,6 +26,18 @@ app.controller('settingsCtr',($scope,$http)=>{
             All:printers
         }
     }
+    //db transaction
+    $scope.syncImport = {};
+    $scope.db.transaction('rw',$scope.db.syncImport,()=>{
+        $scope.db.syncImport.get(1,(data)=>{
+            $scope.syncImport = data;
+        });
+    })
+    .then(()=>{
+        $scope.$apply();
+        console.log(typeof $scope.syncImport)
+    })
+
 
     /*$scope.timeAgo = (time)=>{
         var now = Date.now(),ago = Number(time),
@@ -50,7 +69,7 @@ app.controller('settingsCtr',($scope,$http)=>{
             return (years == 1)?'A Year ago':`${years} years ago`;
         }
     }*/
-    $scope.timeAgo = (time)=>{
+    $scope.frenchTimeAgo = (time)=>{
         var now = Date.now(),ago = Number(time),
             diff = now - ago;
             if(diff < 0) return null;
@@ -83,7 +102,7 @@ app.controller('settingsCtr',($scope,$http)=>{
 
     var date = new Date('2018-11-18 00:36');
 
-    console.log($scope.timeAgo(date.getTime()));
+    //console.log($scope.frenchTimeAgo(date.getTime()));
 
 })
 

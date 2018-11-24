@@ -39,6 +39,7 @@
             <li class="tab col s3"><a ng-class="(defaultTab == 'tab1')?'active':''" href="#home">Accueil</a></li>
             <li class="tab col s3"><a ng-class="(defaultTab == 'tab2')?'active':''" href="#sales">Ventes</a></li>
             <li class="tab col s3"><a ng-class="(defaultTab == 'tab3')?'active':''" href="#stocks">Variation de stock</a></li>
+            <li class="tab col s3"><a ng-class="(defaultTab == 'tab4')?'active':''" href="#itemRecordsDiv">Histoire de stock</a></li>
           </ul>
         <div id="home" class="col s12 tab-view">
             <div class="row inner">
@@ -49,6 +50,10 @@
                 <div class="body">
                     <div class="row inner">
                         <div class="col s12">
+                            <div class="col s12">
+                                <h5 class="teal-text">Ventes x Qte</h5>
+                                <hr>
+                            </div>
                             <fieldset style="padding:5px;">
                                 <h6 class="legend teal-text" style="max-height:40px;width:100%;">Graph des ventes</h6>
                                 <div class="line-chart">
@@ -58,11 +63,11 @@
                         </div>
                     </div>
                     <div class="row inner">
-                        <div class="col s12">
+                        <!--<div class="col s12">
                             <h5 class="green-text">Articles</h5>
                             <hr>
                         </div>
-                        <!--<div class="col s6">
+                        <div class="col s6">
                             <fieldset>
                                 <h6 class="legend">Bar chart</h6>
                                 <div class="bar-chart">
@@ -92,18 +97,65 @@
                         </div>
                         <!-- Sales Table-->
                         <div class="col s12">
-                                <div class="col s12">
-                                        <h5 class="blue-text">Ventes</h5>
-                                        <hr>
+                            <div class="col s12" style="padding-bottom:0px;">
+                                <h5 class="blue-text">Ventes</h5>
+                                <hr>
+                            </div>
+                            <div class="col s12" style="padding:0;">
+                                <div class="row">
+                                    <div class="col s6"></div>
+                                    <div class="col s6" style="padding:0;height:63px;">
+                                        <div class="input-field" style="padding:0;">
+                                            <input onkeyup="searchTable(event,'#allSalesTable',7)" type="search" placeholder="Recherche..." class="browser-default">
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
                             <div class="table-div" style="height:75vh;">
-                                <table id="salesTable">
+                                <table id="allSalesTable">
                                     <thead>
                                         <tr class="blue white-text">
                                             <th>FAC</th>
                                             <th>Name</th>
                                             <th>Tel</th>
                                             <th>Articles</th>
+                                            <th>Qte T</th>
+                                            <th>M.V</th>
+                                            <th>Vendeur</th>
+                                            <th>Date</th>
+                                            <th><i class="material-icons">delete_forever</i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="s in newSales track by $index">
+                                            <td>{{s.inv}}</td>
+                                            <td>{{s.name}}</td>
+                                            <td>{{s.phone}}</td>
+                                            <td>
+                                                <ul>
+                                                    <li ng-repeat="i in s.items track by $index">
+                                                        {{toBrandName(i.brand)}} {{i.model}}
+                                                        <span class="badge teal-text">{{i.order_qty}}</span>
+                                                    </li>
+                                                </ul>
+                                            </td>
+                                            <td>{{s.totalQty | currency:"":0}}</td>
+                                            <td>{{s.totalPrice | currency:"":0}}</td>
+                                            <td>{{s.staff}}</td>
+                                            <td>{{toFrenchDateString(s.date)}}</td>
+                                            <td><i ng-click="deleteOrders(s.id)" class="material-icons action">delete</i></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- table hiddena and used for printing! -->
+                                <table style="display:none;" id="salesTable">
+                                    <thead>
+                                        <tr class="blue white-text">
+                                            <th>FAC</th>
+                                            <th>Name</th>
+                                            <th>Tel</th>
+                                            <th>Articles</th>
+                                            <th>Qte T</th>
                                             <th>M.V</th>
                                             <th>Vendeur</th>
                                             <th>Date</th>
@@ -122,6 +174,7 @@
                                                     </li>
                                                 </ul>
                                             </td>
+                                            <td>{{s.totalQty}}</td>
                                             <td>{{s.totalPrice | currency:"":0}}</td>
                                             <td>{{s.staff}}</td>
                                             <td>{{toFrenchDateString(s.date)}}</td>
@@ -251,7 +304,7 @@
                         </a>
                         <a href="#!stock-reports/broken_stocks/reports-tab3" class="btn-flat brown-border brown-text">
                             <i class="material-icons left">grid_off</i>
-                            <strong>Stocks Casse</strong>
+                            <strong>Stocks Ecrasse</strong>
                             <span class="right">{{filterItems.broken.length | currency:"":0}}</span>
                         </a>
                     </div>
@@ -286,6 +339,34 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Record changes made to item tables  -->
+        <div id="itemRecordsDiv" class="col s12 tab-view">
+            <div class="row">
+                <div class="col s12">
+                    <h4 class="teal-text">Entrées de produits</h4>
+                    <h6>Affiche toutes les entrées de produits dans l'intervalle</h6>
+                </div>
+                <div class="col s12">
+                    <table id="itemRecords">
+                        <thead>
+                            <th>Qte</th>
+                            <th>Date</th>
+                            <th>Personnel</th>
+                        </thead>
+                        <tbody ng-repeat="s in stocksEntries track by $index">
+                            <tr>
+                                <th colspan="3">{{toBrandName(s.brand)}} {{s.model}}</th>
+                            </tr>
+                            <tr ng-repeat="d in s.details track by $index">
+                                <td>{{d.qty}}</td>
+                                <td>{{toFrenchDateString(d.date,true)}}</td>
+                                <td>{{d.staff}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -427,7 +508,7 @@
             </div>
         </div>
         <!-- Export to excel or pdf-->
-        <div id="tableExport" class="modal modal-fixed-footer" style="height:350px;">
+        <div id="tableExport" class="modal modal-fixed-footer" style="height:440px;">
             <div class="modal-content" ng-init="selectedTableExport = 'itemsLogs';selectedTypeExport='excel'">
                 <h5>Exporter Tableaux</h5>
                 <div class="input-field" style="margin-top:2.6rem;">
@@ -435,6 +516,7 @@
                     <select ng-model="selectedTableExport" style="margin-top:5px;" class="browser-default">
                         <option value="itemsLogs">Variation de stock</option>
                         <option value="salesTable">Ventes effectuer</option>
+                        <option value="itemRecords">Entrées de produits</option>
                     </select>
                 </div>
                 <div class="input-field" style="margin-top:2.6rem;">
@@ -444,6 +526,11 @@
                     </select>
                     <label for="" class="active">Choisir type</label>
                 </div>
+                <!-- Excel sheet name -->
+                <div ng-show="selectedTypeExport == 'excel'" class="input-field fade" style="margin-top:2.6rem;">
+                        <label for="" class="fixed">Nom de la feuille</label>
+                        <input class="browser-default" type="text" name="" id="" ng-model="sheetName">
+                    </div>
             </div>
             <div class="modal-footer green darken-4">
                 <a href="javascript:void(0)" class="white-text modal-close waves-effect waves-grey btn-flat">Annuler</a>
