@@ -1,5 +1,7 @@
 const { ipcRenderer,shell,remote } = require('electron');
-  const {Menu, MenuItem} = remote
+  const {Menu, MenuItem} = remote;
+  //menu items
+  
 
 const { Notify,Alert }  = require('./js/modules/Notifications');
 //funtion to controll custom tittle bar

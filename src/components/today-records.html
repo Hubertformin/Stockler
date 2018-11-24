@@ -26,7 +26,15 @@
         </div>
         <div class="body">
             <div class="row inner">
-                <div class="col s4 offset-s8">
+                <div class="col s8" style="padding:15px 10px 5px;">
+                    <button
+                    ng-click="printTodayOrders(todaysOrders)"
+                     class="btn-flat teal-border teal-text">
+                        <i class="material-icons left">local_printshop</i>
+                        Imprimer
+                    </button>
+                </div>
+                <div class="col s4">
                     <input class="browser-default" type="search" placeholder="Recherche..." onkeyup="searchTable(event,'#salesTable',6)" class="right">
                 </div>
             </div>

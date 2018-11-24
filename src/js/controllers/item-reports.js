@@ -59,12 +59,13 @@ Stockler.controller('stocks-reportsCtr',($scope,$routeParams)=>{
         $scope.salesItems.sort(function (a, b) {
             return (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0);
         });*/
-        jQuery('button.excel').on('click',()=>{
+        /*jQuery('button.excel').on('click',()=>{
             console.log('okay');
             var url='data:application/vnd.ms-excel,' + encodeURIComponent($('#all_table').html()) 
             location.href=url
             return false;
-        })
+        })*/
+        console.log($scope.filterItems)
         $scope.$apply();
     }).catch(err=>{
         notifications.error('Erreur de base de donnees');

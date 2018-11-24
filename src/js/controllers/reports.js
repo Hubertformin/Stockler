@@ -618,7 +618,8 @@ Stockler.controller('reportsCtr', ($scope,$filter,$routeParams) => {
                                 //
                                 $scope.db.syncImport.put({
                                     id:1,
-                                    date:logsData.exportDate,
+                                    date: Date.now(),
+                                    exportDate:logsData.exportDate,
                                     range:[logsData.minDate,logsData.maxDate]
                                 })
                             })

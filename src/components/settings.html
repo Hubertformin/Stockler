@@ -52,6 +52,16 @@
                             </select>
                         </dd>
                     </dl>
+                    <hr>
+                    <div>
+                            <p>Sauvegarde automatique de la base de données
+                                <label>
+                                    <input type="checkbox" checked>
+                                    <span class="lever"></span>
+                                </label>
+                            </p>
+                            <hr>
+                        </div>
                 </div>
             </div>
             <!-- Sync-->
@@ -74,9 +84,9 @@
                                 <input  class="browser-default inline" ng-model="settings.sync.freq" type="number" maxlength="2" style="padding:10px 15px;width:50px;"> heur(s)
                                 <hr>
                             </div>
-                            <div class="col s12">
+                            <!--<div class="col s12">
                                 <h5>Dernière synchronisation</h5>
-                            </div>
+                            </div>-->
                         </div>
                     </div>
                     <!--<div class="row">
@@ -126,7 +136,10 @@
                 <div class="show-body">
                     <dl>
                         <dt>Deniere importation</dt>
-                        <dd>Lundi septembere 14 2018</dd>
+                        <dd>{{settings.sync.import.lastSync}}</dd>
+                        <dd style="text-align:center;font-weight:600;border-bottom:1px solid #000;">Interval</dd>
+                        <dd><strong>Du: </strong>{{toFrenchDateString(settings.sync.import.range[0])}} </dd>
+                        <dd><strong>A: </strong>{{toFrenchDateString(settings.sync.import.range[1])}}</dd>
                     </dl>
                 </div>
             </div>
@@ -208,7 +221,7 @@
     <button class="close btn-flat grey-border grey-text waves-effect waves-grey">
         Annuler
     </button>
-    <button class="btn-flat blue-border blue-text waves-effect waves-blue">
+    <button ng-click="saveSettings()" class="btn-flat blue-border blue-text waves-effect waves-blue">
         Okay
     </button>
 </div>

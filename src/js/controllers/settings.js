@@ -3,29 +3,12 @@ Stockler.controller('settingsCtr',($scope,$http)=>{
     const printers = JSON.parse(ipcRenderer.sendSync('synchronous-message'));
     const fs = require('fs');
     //console.log(printers);
-    fs.open('bin/config.json','a',(err,fd)=>{
-        if (err.code === 'ENOENT') {
-            console.error('myfile does not exist');
-            return;
-          }
-    })
-
-    $scope.settings = {
-        general:{
-            mode:'admin'
-        },
-        sync:{
-            url:'http://sync.web1337.net/users/emelie-telecom/',
-            freq:1
-        },
-        printers:{
-            active:false,
-            default:printers.filter(el=>{
-                return el.isDefault == true;
-            }),
-            All:printers
-        }
-    }
+    //context menu
+    var list = document.getElementsByClassName;
+    jQuery('.printers').on('contextmenu', (e) => {
+        e.preventDefault()
+        console.log('okay');
+    }, false)
     //db transaction
     $scope.syncImport = {};
     $scope.db.transaction('rw',$scope.db.syncImport,()=>{
@@ -35,10 +18,95 @@ Stockler.controller('settingsCtr',($scope,$http)=>{
     })
     .then(()=>{
         $scope.$apply();
-        console.log(typeof $scope.syncImport)
+    }).then(()=>{
+        //settings array
+    $scope.settings = {
+        general:{
+            mode:'admin'
+        },
+        sync:{
+            url:'http://sync.web1337.net/users/emelie-telecom/',
+            freq:1,
+            import:{
+                lastSync:$scope.frenchTimeAgo($scope.syncImport.date),
+                range:$scope.syncImport.range
+            }
+        },
+        printers:{
+            active:false,
+            default:printers.filter(el=>{
+                return el.isDefault == true;
+            }),
+            All:printers
+        }
+    }
+    $scope.defaultSettings = $scope.settings;
+    //putting default printer in sessionStorage
+    sessionStorage.setItem('printer',$scope.settings.printers.default[0].name);
+    //console.log($scope.settings.printers.default);
+
+
+    fs.readFile('bin/config.json',(err,fd)=>{
+        if (err) {
+            fs.exists('bin', (exists) => {
+                if(exists){
+                    fs.writeFile('bin/config.json',JSON.stringify($scope.defaultSettings),(err)=>{
+                        if (err) {console.error(err);return;}
+                    })
+                }else{
+                    fs.mkdir('bin', { recursive: true }, (err) => {
+                        if (err) {console.error(err);return;}
+                        fs.writeFile('bin/config.json',JSON.stringify($scope.defaultSettings),(err)=>{
+                            if (err) {console.error(err);return;}
+                        })
+                    });
+                }
+              });
+            return;
+          }
+          //parssong to settings
+          $scope.settings = JSON.parse(fd);
+          $scope.settings.sync.import.lastSync = $scope.frenchTimeAgo($scope.syncImport.date);
+          $scope.settings.sync.import.range = $scope.syncImport.range;
     })
+    })
+    
+    //settings.js
+    $scope.toFrenchDateString = (date, t = false) => {
+            var d = new Date(date),
+            months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'],
+            days = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+        if (t === true) {
+            var hour = (d.getHours() < 10) ? `0${d.getHours()}` : d.getHours(),
+                min = (d.getMinutes() < 10) ? `0${d.getMinutes()}` : d.getMinutes();
+            return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()} ${d.getFullYear()} - ${hour}:${min}`
+        }
+        return `${days[d.getDay()]} ${months[d.getMonth()]} ${d.getDate()} ${d.getFullYear()}`
+    }
 
-
+    $scope.saveSettings = ()=>{
+        //console.log($scope.settings);
+        fs.exists('bin', (exists) => {
+            if(exists){
+                fs.writeFile('bin/config.json',JSON.stringify($scope.settings),(err)=>{
+                    if (err) {console.error(err);return;}
+                    //Notify settings
+                    jQuery('#settings').fadeOut("fast");
+                    notifications.info('Paramètres sauvegardés!')
+                })
+            }else{
+                fs.mkdir('bin', { recursive: true }, (err) => {
+                    if (err) {console.error(err);return;}
+                    fs.writeFile('bin/config.json',JSON.stringify($scope.settings),(err)=>{
+                        if (err) {console.error(err);return;}
+                         //Notify settings
+                        jQuery('#settings').fadeOut("fast");
+                        notifications.info('Paramètres sauvegardés!')
+                    })
+                });
+            }
+          });
+    }
     /*$scope.timeAgo = (time)=>{
         var now = Date.now(),ago = Number(time),
             diff = now - ago;

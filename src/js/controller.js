@@ -1,9 +1,6 @@
 //Requiring modules
 //1. export
 var TableToExcel = require('./js/modules/TableToExcel');
-//2 print
-//const remote = require('electron').remote;
-const print = remote.require('electron-thermal-printer');
 //declaring
 var Stockler = angular.module('StocklerApp',['ngRoute','ngAnimate']);
 //routing
@@ -43,7 +40,7 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
         items:'++id,brand,&model,qty,orderedQty,staff,price,date,status,lowStockQty,brokenStatus',
         sales:'++id,&inv,name,phone,date,*items,totalQty,totalPrice,staff',
         syncRemote:'&id,date',
-        syncImport:'&id,date,range',
+        syncImport:'&id,date,exportDate,range',
         itemRecords:'++id,brand,model,qty,date'
     });
     //excel
@@ -55,13 +52,14 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
     $scope.brand = [];
     $scope.items = [];
     $scope.sales = [];
+    $scope.itemRecords = [];
     $scope.notificatonMsg = [];
     $scope.currentUser = '';
     $scope.sync = {
         online:'',
         import:''
     }
-    $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,()=>{
+    $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,$scope.db.itemRecords,$scope.db.syncImport,$scope.db.syncRemote, ()=>{
         $scope.db.users.toArray()
         .then((data)=>{
             $scope.users = data;
@@ -81,6 +79,15 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
             $scope.sales = data;
          });
         //
+        $scope.db.itemRecords.toArray()
+            .then(data=>{
+                $scope.itemRecords = data;
+            })
+        //
+        $scope.db.syncImport.toArray()
+        .then(data=>{
+            $scope.sync.import = data[0];
+        })
     })
     .then(()=>{
         //hide splash screen
@@ -88,7 +95,16 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
         //console.log($scope.items);
         //show manager or login depending on user length
         if($scope.users.length == 0){
-            jQuery('#manager').show();
+            Restore().then(restored=>{
+                if(restored){
+                    jQuery('#login').show();
+                    return;
+                }
+            }).catch(err=>{
+                //console.error(err);
+                jQuery('#manager').show();
+            })
+            
         }else{
             if(sessionStorage.getItem('user') === null){
                 jQuery('#login').show();
@@ -195,6 +211,13 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
             }
             delete exist;
         }
+        //back up
+        Backup()
+        .then(data=>{
+            console.log('Db-backedUp');
+        }).catch(err=>{
+            console.error(err);
+        })
         return obj;
     });
     $scope.db.items.hook('updating',(mod,pk,obj)=>{
@@ -215,6 +238,14 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
             }
         }
         
+    });
+    $scope.db.items.hook('deleting',(mod,pk,obj)=>{
+        $scope.filterItems = {
+            lowStock:[],
+            broken:[],
+            inactive:[],
+            active:[]
+        };
     });
     
 
@@ -353,8 +384,13 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
             return 3;
         }
     }
-    //printer
+    /**
+     * Printers
+     */
     var p2 = require('electron').remote.require('electron-thermal-printer');
+    var dprinter = sessionStorage.getItem('printer');
+    var printer = (typeof dprinter === 'string')?dprinter:'EPSON TM-T20II Receipt';
+    //console.log(printer);
     $scope.printOrders = (data)=>{
         data.date = new Date(data.date);
         //console.log(data.inv);
@@ -383,8 +419,8 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
         //printing....
         p2.print58m( {
             data: print_data,
-            preview:true,
-            deviceName: 'EPSON TM-T20II Receipt',
+            preview:false,
+            deviceName:printer,
             timeoutPerLine: 400
         }).then((data)=>{
             if(data){
@@ -396,6 +432,159 @@ Stockler.controller('mainCtr',($scope,$filter)=>{
             notifications.error("Print error: Make sure printer is connected to PC<br>-Check if printer drivers are up-to-date");
         })
     }
+    //print todays
+    $scope.printTodayOrders = (data)=>{
+        data.date = new Date();
+        const date = `${data.date.getDate()}/${data.date.getMonth()+1}/${data.date.getFullYear()} - ${data.date.getHours()}:${data.date.getMinutes()}`;
+        var print_data = [
+            {type: 'bodyInit', css: {"margin": "0 0 0 0", "width": '250px'}},
+            {type: 'text', value:'Emelie Telecom' , style: `font-size: 24px;font-weight:600;text-align:center;text-decoration:underline;`},
+            {type: 'text', value: date, style: `font-size: 14px;text-align:center;`},
+            {type: 'text', value:'Ventes quotidiennes' , style: `font-size: 16px;margin-top:10px;font-weight:600;text-align:center;border-bottom:2px solid #000;`},
+            {type: 'text', value: `Commandes : ${data.sales.length}`, style: `font-size: 18px;margin-top:10px;padding:10px;font-weight:600;`},
+            {type: 'text', value: `Articles :${data.totalQty}`, style: `font-size: 18px;margin-top:10px;padding:10px;border-bottom:1px solid #000;font-weight:600;`},
+            {type: 'text', value: `M.V : ${$filter('currency')(data.totalPrice, "FCFA ", 0)}`, style: `font-size: 18px;margin-top:10px;padding:10px;border-bottom:1px solid #000;font-weight:600;`},
+            {type: 'text', value: `<strong>Vendeur: </strong> ${$scope.currentUser.name}`, style: `text-align:center;font-size: 16px`},
+            {type: 'text', value: '@Emelie Telecom', style: `text-align:center;font-size: 12px`}
+      ]
+        //printing....
+        p2.print58m( {
+            data: print_data,
+            preview:false,
+            deviceName: printer,
+            timeoutPerLine: 400
+        }).then((data)=>{
+            if(data){
+                notifications.info('Added to printing que');
+            }else{
+                notifications.warning('Failed to print!')
+            }
+        }).catch(err=>{
+            notifications.error("Print error: Make sure printer is connected to PC<br>-Check if printer drivers are up-to-date");
+        })
+    }
+    /**
+     * @function BackUp function to backup data
+     * @param {Data} 
+     */
+    //backup function
+    var fs = require('fs');
+    function Backup(){
+        return new Promise((resolve,reject)=>{
+            var backupData = {
+                date:Date.now(),
+                data:{
+                    brand:$scope.brand,
+                    items:$scope.items,
+                    users:$scope.users,
+                    sales:$scope.sales,
+                    itemRecords:$scope.itemRecords,
+                    syncImport:$scope.sync.import
+                    
+                }
+            }
+            //encrypt
+            const backupData_string = JSON.stringify(backupData);
+            const fileCryptr = new Cryptr('ssHubertFormin');
+            const encryptedFileData = fileCryptr.encrypt(backupData_string);
+            //const decryptedString = cryptr.decrypt(encryptedString);
+            //save
+            fs.exists('bin', (exists) => {
+                if(exists){
+                    fs.writeFile('bin/db.bk',encryptedFileData,(err)=>{
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        //Notify settings
+                        resolve(true);
+                    })
+                }else{
+                    fs.mkdir('bin', { recursive: true }, (err) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        fs.writeFile('bin/db.bk',encryptedFileData,(err)=>{
+                            if (err) {
+                                reject(err);
+                                return;
+                            }
+                             //Notify settings
+                             resolve(true);
+                        })
+                    });
+                }
+              });
+        })
+    }
+
+    function Restore() {
+        return new Promise((resolve,reject)=>{
+            fs.readFile('bin/db.bk', (err, data) => {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+                try{
+                    //decrypt
+                    const fileCryptr = new Cryptr('ssHubertFormin');
+                    const FileData = fileCryptr.decrypt(data);
+                    //data
+                    const bk = JSON.parse(FileData);
+                    //adding to database
+                    $scope.db.transaction('rw',$scope.db.users,$scope.db.brand,$scope.db.items,$scope.db.sales,$scope.db.itemRecords,$scope.db.syncImport,$scope.db.syncRemote, ()=>{
+                        $scope.db.users.bulkPut(bk.data.users)
+                        $scope.db.users.toArray()
+                        .then((data)=>{
+                            $scope.users = data;
+                         });
+                        //brand
+                        $scope.db.brand.bulkPut(bk.data.brand)
+                        $scope.db.brand.toArray()
+                            .then((data)=>{
+                                $scope.brand = data;
+                            })
+                        //items
+                        $scope.db.items.bulkPut(bk.data.items)
+                        $scope.db.items.toArray()
+                        .then((data)=>{
+                            $scope.items = data;
+                         });
+                        //sales
+                        $scope.db.sales.bulkPut(bk.data.sales)
+                        $scope.db.sales.toArray()
+                        .then((data)=>{
+                            $scope.sales = data;
+                         });
+                        //item records
+                        $scope.db.itemRecords.bulkPut(bk.data.itemRecords)
+                        $scope.db.itemRecords.toArray()
+                            .then(data=>{
+                                $scope.itemRecords = data;
+                            })
+                        //sync Import
+                        $scope.db.syncImport.put(bk.data.syncImport)
+                        $scope.db.syncImport.toArray()
+                        .then(data=>{
+                            $scope.sync.import = data[0];
+                        })
+                    }).then(()=>{
+                        $scope.$apply();
+                        resolve(true);
+                    }).catch(err=>{
+                        reject(err);
+                    })
+                }
+                catch(e) {
+                    reject(e);
+                }
+            });
+        })
+    }
+    
+    
+    
     
 
 
